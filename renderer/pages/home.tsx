@@ -10,7 +10,7 @@ function Home() {
       <Header />
       <main className="grid grid-flow-row-dense grid-cols-6 bg-white text-black text-center">
         <div className="col-span-1 block space-y-10 pt-10">
-          <div>Хиты1</div>
+          <div>Хиты</div>
           <div>Сеты</div>
           <div>Лестеры</div>
           <div>Лонгеры</div>

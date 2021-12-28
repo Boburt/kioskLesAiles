@@ -25,10 +25,10 @@ if (isProd) {
 
   if (isProd) {
     await mainWindow.loadURL("app://./home.html");
+    mainWindow.maximize();
     setInterval(() => {
       autoUpdater.checkForUpdates();
     }, 60000);
-    mainWindow.webContents.openDevTools();
     autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName) => {
       const dialogOpts = {
         type: "info",
