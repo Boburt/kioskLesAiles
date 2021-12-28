@@ -1,14 +1,20 @@
-import React from 'react';
-import type { AppProps } from 'next/app';
+import React from "react";
+import type { AppProps } from "next/app";
 
-import '../styles/globals.css';
+import { ManagedUIContext } from "@components/ui/context";
+
+import "@assets/fonts.css";
+
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <React.Fragment>
-      <Component {...pageProps} />
-    </React.Fragment>
-  )
+    <ManagedUIContext pageProps={pageProps}>
+      <React.Fragment>
+        <Component {...pageProps} />
+      </React.Fragment>
+    </ManagedUIContext>
+  );
 }
 
-export default MyApp
+export default MyApp;

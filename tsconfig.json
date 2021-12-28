@@ -1,27 +1,40 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "jsx": "preserve",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "baseUrl": ".",
+    "target": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "paths": {
+      "@lib/*": ["lib/*"],
+      "@utils/*": ["utils/*"],
+      "@config/*": ["config/*"],
+      "@assets/*": ["assets/*"],
+      "@components/*": ["components/*"],
+      "@components_new/*": ["components_new/*"],
+      "@commerce": ["framework/commerce"],
+      "@commerce/*": ["framework/commerce/*"],
+      "@framework": ["framework/local"],
+      "@framework/*": ["framework/local/*"]
+    }
   },
+  "include": ["next-env.d.ts", "**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
   "exclude": [
     "node_modules",
-    "renderer/next.config.js",
-    "app",
-    "dist"
+    "./framework/bigcommerce",
+    "./framework/shopify",
+    "./framework/swell",
+    "./framework/vendure",
+    "./framework/saleor"
   ]
 }
