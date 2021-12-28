@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "LesAilesKiosk",
+  "name": "LesKiosk",
   "description": "My application description",
   "version": "1.0.0",
   "author": "LesAilesKiosk",
@@ -8,10 +8,7 @@
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
-    "postinstall": "electron-builder install-app-deps",
-    "dist": "electron-builder",
-    "ship": "electron-builder -p always",
-    "ship:all": "electron-builder -mwl --x64 --ia32 -p always"
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.5",
