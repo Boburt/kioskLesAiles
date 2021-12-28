@@ -13,10 +13,6 @@
     "ship": "electron-builder -p always",
     "ship:all": "electron-builder -mwl --x64 --ia32 -p always"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Boburt/lesAislesKiosk.git"
-  },
   "dependencies": {
     "@heroicons/react": "^1.0.5",
     "@tailwindcss/aspect-ratio": "^0.4.0",
