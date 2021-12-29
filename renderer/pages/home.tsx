@@ -2,16 +2,15 @@ import React from "react";
 import Link from "next/link";
 import Prodcart from "../components/mainProductCart";
 import { Ru, Uz, Us } from "react-flags-select";
-import { GetServerSidePropsContext } from "next";
+import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
 import commerce from "@lib/api/commerce";
 
-export async function getServerSideProps({
+export async function getStaticProps({
   preview,
   locale,
   locales,
-  query,
-}: GetServerSidePropsContext) {
-  const config = { locale, locales, queryParams: query };
+}: GetStaticPropsContext) {
+  const config = { locale, locales };
   const productsPromise = commerce.getAllProducts({
     variables: { first: 6 },
     config,
