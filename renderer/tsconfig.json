@@ -1,20 +1,19 @@
 {
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@lib/*": ["lib/*"],
-      "@utils/*": ["utils/*"],
-      "@config/*": ["config/*"],
-      "@assets/*": ["assets/*"],
-      "@components/*": ["components/*"],
-      "@components_new/*": ["components_new/*"],
-      "@commerce": ["framework/commerce"],
-      "@commerce/*": ["framework/commerce/*"],
-      "@framework": ["framework/local"],
-      "@framework/*": ["framework/local/*"]
-    }
-  },
-  "extends": "../tsconfig.json",
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  // "compilerOptions": {
+  //   "baseUrl": "./",
+  //   "paths": {
+  //     "@lib/*": ["lib/*"],
+  //     "@utils/*": ["utils/*"],
+  //     "@config/*": ["config/*"],
+  //     "@assets/*": ["assets/*"],
+  //     "@components/*": ["components/*"],
+  //     "@components_new/*": ["components_new/*"],
+  //     "@commerce": ["framework/commerce"],
+  //     "@commerce/*": ["framework/commerce/*"],
+  //     "@framework": ["framework/local"],
+  //     "@framework/*": ["framework/local/*"]
+  //   }
+  // },
+  "extends": "../tsconfig.json"
+  // "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

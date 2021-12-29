@@ -1,3 +1,4 @@
+require("dotenv").config();
 module.exports = {
   locales: ["ru", "uz"],
   defaultLocale: "ru",
