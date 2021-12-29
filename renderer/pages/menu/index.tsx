@@ -5,6 +5,7 @@ import Prodcart from "@components/mainProductCart";
 import Header from "@components/Header";
 import { GetServerSidePropsContext } from "next";
 import commerce from "@lib/api/commerce";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps({
   preview,
@@ -62,6 +63,7 @@ function Menu({
   categories: any[];
 }) {
   console.log(categories);
+  const router = useRouter();
   return (
     <>
       <Header />
