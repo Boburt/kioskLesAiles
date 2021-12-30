@@ -191,12 +191,12 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       };
     }
 
-    await mutate(basketResult, false);
-    setIsLoadingBasket(false);
-    setQuantity(1);
-    if (window.innerWidth < 768) {
-      closeModal();
-    }
+    // await mutate(basketResult, false);
+    // setIsLoadingBasket(false);
+    // setQuantity(1);
+    // if (window.innerWidth < 768) {
+    //   closeModal();
+    // }
   };
 
   const totalPrice = useMemo(() => {
@@ -267,7 +267,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         totalPrice: basket.data.total,
       };
 
-      await mutate(basketResult, false);
+      // await mutate(basketResult, false);
       setIsCartLoading(false);
     }
   };
@@ -297,7 +297,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         totalPrice: basket.data.total,
       };
 
-      await mutate(basketResult, false);
+      // await mutate(basketResult, false);
       setIsCartLoading(false);
     }
   };
