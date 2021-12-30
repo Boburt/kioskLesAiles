@@ -1,6 +1,6 @@
-appId: com.example.nextron
-productName: My Nextron App
-copyright: Copyright © 2018 Yoshihide Shiono
+appId: com.hq.leskiosk
+productName: Lesailes
+copyright: Copyright © 2021 Havoqand People
 directories:
   output: dist
   buildResources: resources
