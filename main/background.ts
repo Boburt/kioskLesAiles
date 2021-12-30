@@ -1,6 +1,10 @@
 import { app, autoUpdater, dialog } from "electron";
 import serve from "electron-serve";
+import { writeFile } from "fs";
 import { createWindow } from "./helpers";
+import fetch from "node-fetch";
+import path from "path";
+require("dotenv").config();
 require("update-electron-app")();
 
 const isProd: boolean = process.env.NODE_ENV === "production";
@@ -16,6 +20,27 @@ if (isProd) {
 }
 
 (async () => {
+  try {
+    const langPromise = ["ru", "uz"].map(async (lang: string) => {
+      const res = await fetch(
+        `${process.env.API_URL}/api/get_langs?lang=${lang}`
+      );
+      const { result } = await res.json();
+      console.log(result);
+      // async write result to file
+      const file = path.join(__dirname, `../renderer/i18n/${lang}.json`);
+      const data = JSON.stringify(result);
+      writeFile(file, data, (err) => {
+        if (err) {
+          throw err;
+        }
+      });
+    });
+
+    await Promise.all(langPromise);
+  } catch (error) {
+    console.log(error);
+  }
   await app.whenReady();
 
   const mainWindow = createWindow("main", {
