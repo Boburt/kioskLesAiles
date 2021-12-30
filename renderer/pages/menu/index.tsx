@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import Prodcart from "@components/mainProductCart";
 import Header from "@components/Header";
 import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
 import commerce from "@lib/api/commerce";
 import { useRouter } from "next/router";
+import CategoriesMenu from "@components/CategoriesMenu";
+import defaultChannel from "@lib/defaultChannel";
+import ProductListSectionTitle from "@components/ProductListSectionTitle";
+import ProductItemNew from "@components/ProductItemNew";
+import { Product } from "@commerce/types/product";
+import dynamic from "next/dynamic";
+import Footer from "@components/footer";
 
 export async function getStaticProps({
   preview,
@@ -61,29 +67,125 @@ function Menu({
   products: any[];
   categories: any[];
 }) {
-  console.log(categories);
   const router = useRouter();
+  const { locale } = router;
+  const [channelName, setChannelName] = useState("chopar");
+  const [isStickySmall, setIsStickySmall] = useState(false);
+
+  const getChannel = async () => {
+    const channelData = await defaultChannel();
+    setChannelName(channelData.name);
+
+    console.log(categories);
+  };
+  const readyProducts = useMemo(() => {
+    return products
+      .map((prod: any) => {
+        if (prod.half_mode) {
+          return null;
+        }
+        if (prod.variants && prod.variants.length) {
+          prod.variants = prod.variants.map((v: any, index: number) => {
+            if (index === 1) {
+              v.active = true;
+            } else {
+              v.active = false;
+            }
+
+            return v;
+          });
+        } else if (prod.items && prod.items.length) {
+          prod.items = prod.items.map((item: any) => {
+            item.variants = item.variants.map((v: any, index: number) => {
+              if (index === 1) {
+                v.active = true;
+              } else {
+                v.active = false;
+              }
+
+              return v;
+            });
+
+            return item;
+          });
+        }
+        return prod;
+      })
+      .filter((prod: any) => prod != null);
+  }, [products]);
+
+  const halfModeProds = useMemo(() => {
+    return products
+      .map((prod: any) => {
+        if (!prod.half_mode) {
+          return null;
+        }
+        if (prod.variants && prod.variants.length) {
+          prod.variants = prod.variants.map((v: any, index: number) => {
+            if (index === 1) {
+              v.active = true;
+            } else {
+              v.active = false;
+            }
+
+            return v;
+          });
+        } else if (prod.items && prod.items.length) {
+          prod.items = prod.items.map((item: any) => {
+            item.variants = item.variants.map((v: any, index: number) => {
+              if (index === 1) {
+                v.active = true;
+              } else {
+                v.active = false;
+              }
+
+              return v;
+            });
+
+            return item;
+          });
+        }
+        return prod;
+      })
+      .filter((prod: any) => prod != null);
+  }, [products]);
   return (
     <>
       <Header />
       <main className="grid grid-flow-row-dense grid-cols-6 bg-white text-black text-center">
         <div className="col-span-1 block space-y-10 pt-10">
-          <div>Хиты</div>
-          <div>Сеты</div>
-          <div>Лестеры</div>
-          <div>Лонгеры</div>
-          <div>Бургеры</div>
-          <div>Курица</div>
-          <div>Снеки</div>
-          <div>Салаты</div>
-          <div>Дисерты</div>
-          <div>Напитки</div>
-          <div>Соусы</div>
+          <CategoriesMenu categories={categories} channelName={channelName} />
         </div>
         <div className="col-span-5">
-          <Prodcart />
+          <div className="container mx-auto">
+            <div className="">
+              <div className="col-span-3 md:hidden"></div>
+              <div className="">
+                {readyProducts.map((sec: any) => (
+                  <div key={sec.id} id={`productSection_${sec.id}`}>
+                    <ProductListSectionTitle
+                      title={
+                        sec?.attribute_data?.name[channelName][locale || "ru"]
+                      }
+                    />
+                    <div className="grid md:grid-cols-4 grid-cols-2  gap-3 px-4 md:px-0 md:space-y-0">
+                      {sec.items.map((prod: any) => (
+                        <ProductItemNew
+                          product={prod}
+                          key={prod.id}
+                          channelName={channelName}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </main>
+
+      <Footer />
     </>
   );
 }
