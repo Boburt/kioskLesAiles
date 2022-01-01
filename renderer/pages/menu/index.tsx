@@ -12,6 +12,7 @@ import ProductItemNew from "@components/ProductItemNew";
 import { Product } from "@commerce/types/product";
 import dynamic from "next/dynamic";
 import Footer from "@components/footer";
+import Layout from "@components/Layout";
 
 export async function getStaticProps({
   preview,
@@ -151,43 +152,40 @@ function Menu({
   }, [products]);
   return (
     <>
-      <Header />
-      <main className="grid grid-flow-row-dense grid-cols-6 bg-white text-black text-center">
-        <div className="col-span-1 block space-y-10 pt-10">
-          <CategoriesMenu categories={categories} channelName={channelName} />
-        </div>
-        <div className="col-span-5">
-          <div className="container mx-auto">
+      <div className="col-span-1 block space-y-10 pt-10">
+        <CategoriesMenu categories={categories} channelName={channelName} />
+      </div>
+      <div className="col-span-5">
+        <div className="container mx-auto">
+          <div className="">
+            <div className="col-span-3 md:hidden"></div>
             <div className="">
-              <div className="col-span-3 md:hidden"></div>
-              <div className="">
-                {readyProducts.map((sec: any) => (
-                  <div key={sec.id} id={`productSection_${sec.id}`}>
-                    <ProductListSectionTitle
-                      title={
-                        sec?.attribute_data?.name[channelName][locale || "ru"]
-                      }
-                    />
-                    <div className="grid md:grid-cols-4 grid-cols-2  gap-3 px-4 md:px-0 md:space-y-0">
-                      {sec.items.map((prod: any) => (
-                        <ProductItemNew
-                          product={prod}
-                          key={prod.id}
-                          channelName={channelName}
-                        />
-                      ))}
-                    </div>
+              {readyProducts.map((sec: any) => (
+                <div key={sec.id} id={`productSection_${sec.id}`}>
+                  <ProductListSectionTitle
+                    title={
+                      sec?.attribute_data?.name[channelName][locale || "ru"]
+                    }
+                  />
+                  <div className="grid md:grid-cols-4 grid-cols-2  gap-3 px-4 md:px-0 md:space-y-0">
+                    {sec.items.map((prod: any) => (
+                      <ProductItemNew
+                        product={prod}
+                        key={prod.id}
+                        channelName={channelName}
+                      />
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      </main>
-
-      <Footer />
+      </div>
     </>
   );
 }
+
+Menu.Layout = Layout;
 
 export default Menu;

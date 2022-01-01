@@ -5,13 +5,14 @@ import Image from "next/image";
 import { Link } from "react-scroll";
 import dynamic from "next/dynamic";
 import SimpleBar from "simplebar-react";
+import { useSelectedLanguage } from "next-export-i18n";
 
 const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
   categories = [],
   channelName = "",
 }) => {
-  const { locale = "ru", pathname } = useRouter();
-
+  const { lang: locale } = useSelectedLanguage();
+  console.log(locale);
   const [fixed, changeState] = useState(false);
 
   const categoriesFixing = () => {

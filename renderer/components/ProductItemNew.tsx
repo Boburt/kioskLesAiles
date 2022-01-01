@@ -18,7 +18,12 @@ import {
   ProductPrice,
 } from "@commerce/types/product";
 import { useRouter } from "next/router";
-import useTranslation from "next-translate/useTranslation";
+import {
+  useTranslation,
+  useLanguageQuery,
+  LanguageSwitcher,
+  useSelectedLanguage,
+} from "next-export-i18n";
 import axios from "axios";
 import Cookies from "js-cookie";
 import getConfig from "next/config";
@@ -56,15 +61,16 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     15,
     "abcdefghijklmnopqrstuvwxyz1234567890"
   );
-  // const { mutate, data, isEmpty } = useCart({
-  //   cartId,
-  // });
+  const { mutate, data, isEmpty } = useCart({
+    cartId,
+  });
 
   const [activeModifiers, setActiveModifiers] = useState([] as number[]);
   let [isOpen, setIsOpen] = useState(false);
   let completeButtonRef = useRef(null);
   const router = useRouter();
-  const { locale } = router;
+
+  const { lang: locale } = useSelectedLanguage();
   const [isCartLoading, setIsCartLoading] = useState(false);
 
   function closeModal() {
