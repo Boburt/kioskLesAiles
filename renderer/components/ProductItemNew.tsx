@@ -341,7 +341,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   return (
     <>
       <div
-        className={`py-3  md:py-3 overflow-hidden bg-white rounded-[15px] hover:shadow-xl group items-center justify-between flex flex-col shadow-lg`}
+        className={`py-3 w-60 h-80 overflow-hidden bg-white rounded-xl group items-center justify-between flex flex-col shadow-lg`}
         id={`prod-${store.id}`}
       >
         <div>
@@ -352,7 +352,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 width={275}
                 height={275}
                 alt={store?.attribute_data?.name[channelName][locale || "ru"]}
-                className="transform motion-safe:group-hover:scale-105 transition duration-500 cursor-pointer"
+                className="w-60 h-44 rounded-t-xl"
                 onClick={() => {
                   setOpen(true);
                 }}
@@ -370,7 +370,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         </div>
         <div className="flex flex-col flex-grow w-full md:px-5 px-3">
           <div
-            className="mt-4 font-bold md:text-2xl flex-grow cursor-pointer"
+            className="mt-4 text-lg text-left flex-grow"
             onClick={() => {
               setOpen(true);
             }}
