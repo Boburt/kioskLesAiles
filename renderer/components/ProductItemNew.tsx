@@ -518,7 +518,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <div className="inline-block align-bottom bg-white md:pt-12 pb-8 md:px-8 px-3 md:rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle h-full md:h-auto">
+                <div className="inline-block bg-white px-3 items-center shadow-xl transform h-full">
                   <div
                     className="md:hidden bg-gray-100 rounded-lg p-3 w-max my-5"
                     onClick={() => setOpen(false)}
@@ -531,8 +531,15 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   >
                     <XIcon className="w-5" />
                   </div>
-                  <div className="md:flex md:w-max overflow-y-auto md:h-auto h-[calc(90vh-24px)]">
+                  <div className="overflow-y-auto h-[calc(90vh-24px)]">
                     <div>
+                      <div className="font-bold text-black text-2xl my-5">
+                        {
+                          store?.attribute_data?.name[channelName][
+                            locale || "ru"
+                          ]
+                        }
+                      </div>
                       <img
                         src={store.image}
                         width={mobWidthImg}
@@ -545,16 +552,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         className="m-auto transform motion-safe:group-hover:scale-105 transition duration-500"
                       />
                     </div>
-                    <div className="flex flex-col md:ml-8 ">
-                      <div className="font-bold text-2xl mt-10 md:mt-0">
-                        {
-                          store?.attribute_data?.name[channelName][
-                            locale || "ru"
-                          ]
-                        }
-                      </div>
+                    <div className="">
                       <div
-                        className="max-w-md mt-7 text-xs md:text-xl flex-grow"
+                        className="mt-7 text-xs text-black"
                         dangerouslySetInnerHTML={{
                           __html: store?.attribute_data?.description
                             ? store?.attribute_data?.description[channelName][
@@ -564,7 +564,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         }}
                       ></div>
                       <div className="flex items-center justify-between pt-5">
-                        <div className=" font-bold text-2xl md:text-3xl">
+                        {/* <div className=" font-bold text-black text-2xl md:text-3xl">
                           {currency(store.price, {
                             pattern: "# !",
                             separator: " ",
@@ -572,7 +572,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                             symbol: `${locale == "uz" ? "so'm" : "сум"}`,
                             precision: 0,
                           }).format()}
-                        </div>
+                        </div> */}
                         {/*productLine ? (
                           <div className="w-36 ml-14 bg-gray-200 rounded-lg flex items-center p-1">
                             <div className="items-center flex justify-around bg-white text-gray-500 rounded-md p-1 ">

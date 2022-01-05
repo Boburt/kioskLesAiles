@@ -167,7 +167,7 @@ function Menu({
                       sec?.attribute_data?.name[channelName][locale || "ru"]
                     }
                   />
-                  <div className="grid md:grid-cols-4 grid-cols-2  gap-3 px-4 md:px-0 md:space-y-0">
+                  <div className="grid grid-cols-3  gap-3 px-4">
                     {sec.items.map((prod: any) => (
                       <ProductItemNew
                         product={prod}

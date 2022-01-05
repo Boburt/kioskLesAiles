@@ -3,10 +3,10 @@ import Link from "next/link";
 
 function Footer() {
   return (
-    <div className="flex items-center w-full">
-      <div className="flex text-center bg-teal-500 py-6 w-full">
-        <div className="h-full text-2xl text-white bg-indigo-600">Отменить</div>
-        <div className="h-full bg-black pt-6 text-2xl">К оплате</div>
+    <div className="flex h-32">
+      <div className="flex text-center bg-teal-500 w-full h-full">
+        <div className="text-2xl text-white bg-black px-60 py-12">Отменить</div>
+        <div className="w-full bg-green-400 text-2xl py-12">К оплате</div>
       </div>
     </div>
   );
