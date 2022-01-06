@@ -5,7 +5,7 @@ import { ManagedUIContext } from "@components/ui/context";
 
 import "@assets/fonts.css";
 
-import "../styles/globals.css";
+import "../styles/output.css";
 
 const Noop: FC = ({ children }) => <>{children}</>;
 

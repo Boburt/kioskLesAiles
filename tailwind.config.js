@@ -9,10 +9,10 @@ module.exports = {
   },
   purge: {
     content: [
-      "./public/**/*.html",
-      "./components/**/*.{js,ts,jsx,tsx}",
-      "./components_new/**/*.{js,ts,jsx,tsx}",
-      "./pages/**/*.{js,ts,jsx,tsx}",
+      "./renderer/public/**/*.html",
+      "./renderer/components/**/*.{js,ts,jsx,tsx}",
+      "./renderer/components_new/**/*.{js,ts,jsx,tsx}",
+      "./renderer/pages/**/*.{js,ts,jsx,tsx}",
     ],
     options: {
       safelist: {
