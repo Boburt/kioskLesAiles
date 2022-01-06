@@ -12,7 +12,7 @@ import CurrentTime from "./ui/CurrentTime";
 function Header() {
   return (
     <div className="flex text-center h-28">
-      <nav className="flex items-center bg-teal-500 py-6 bg-pink-700 w-full">
+      <nav className="flex items-center py-6 bg-primary w-full">
         <div className="flex items-center flex-shrink-0 text-white mx-6">
           <Link href={"/home"}>
             <img src="/assets/logo_for_header.png" />
