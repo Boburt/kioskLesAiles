@@ -51,6 +51,7 @@ module.exports = {
       },
       primary: "#fc004a",
       secondary: "#2F5E8E",
+      productBg: '#f8f5f5'
     },
   },
   variants: {

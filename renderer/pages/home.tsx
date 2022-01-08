@@ -81,7 +81,7 @@ function Home() {
           <img src="/assets/home_big_logo.png" />
         </div>
         <div className="pt-48">
-          <h2 className="uppercase text-6xl text-center">
+          <h2 className="uppercase text-6xl text-center text-white">
             выберите способ <br /> где вы хотите поесть
           </h2>
         </div>

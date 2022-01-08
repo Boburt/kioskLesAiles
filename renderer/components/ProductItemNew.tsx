@@ -347,18 +347,15 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   return (
     <>
       <div
-        className={`py-3 w-60 h-80 overflow-hidden bg-white rounded-xl group items-center justify-between flex flex-col shadow-lg`}
+        className={`py-3 overflow-hidden bg-productBg rounded-xl group items-center justify-between flex flex-col shadow-lg`}
         id={`prod-${store.id}`}
       >
-        <div>
-          <div className="text-center overflow-hidden">
+        <div className=" h-44 overflow-hidden w-full">
             {store.image ? (
               <img
                 src={store.image}
-                width={275}
-                height={275}
                 alt={store?.attribute_data?.name[channelName][locale || "ru"]}
-                className="w-60 h-44 rounded-t-xl"
+                className="h-44 transform motion-safe:group-hover:scale-105 transition duration-500 mx-auto"
                 onClick={() => {
                   setOpen(true);
                 }}
@@ -366,20 +363,17 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             ) : (
               <img
                 src="/no_photo.svg"
-                width={250}
-                height={250}
                 alt={store?.attribute_data?.name[channelName][locale || "ru"]}
-                className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
+                className="transform motion-safe:group-hover:scale-105 transition duration-500 mx-auto"
               />
             )}
-          </div>
         </div>
         <div className="flex flex-col flex-grow w-full md:px-5 px-3">
           <div
-            className="mt-4 text-lg text-left flex-grow"
-            onClick={() => {
-              setOpen(true);
-            }}
+            className="mt-4 text-left flex-grow text-3xl"
+            // onClick={() => {
+            //   setOpen(true);
+            // }}
           >
             {store?.attribute_data?.name[channelName][locale || "ru"]}
           </div>
@@ -414,71 +408,14 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 </div>
               )}
             </div> */}
-          <div className=" mt-2 justify-between items-center">
-            <span className="md:text-xl md:w-auto text-primary md:px-0 md:py-0 font-medium">
-              {currency(prodPriceDesktop, {
-                pattern: "# !",
-                separator: " ",
-                decimal: ".",
-                symbol: `${locale == "uz" ? "so'm" : "сум"}`,
-                precision: 0,
-              }).format()}
+          <div className="flex mt-2 justify-between items-center">
+            <span className="md:w-auto text-primary md:px-0 md:py-0 text-3xl font-medium">
+              {prodPriceDesktop}
             </span>
+            <div className="flex justify-between items-center w-14 h-14 text-white rounded-full bg-primary">
+              <PlusIcon className="w-8 h-8 m-auto" />
+            </div>
           </div>
-
-          {/*productLine ? (
-            <div className="rounded-lg flex items-center p-1 w-full mt-2 bg-primary text-white ">
-              <div className="items-center flex justify-around  p-1 ">
-                <MinusIcon
-                  className="cursor-pointer w-7 text-white"
-                  onClick={() => decreaseQuantity(productLine)}
-                />
-              </div>
-              <div className="flex-grow text-center font-medium text-2xl">
-                {productLine.quantity}
-              </div>
-              <div className=" items-center flex justify-around p-1">
-                <PlusIcon
-                  className="cursor-pointer w-7 text-white"
-                  onClick={() => increaseQuantity(productLine.id)}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-between items-center mt-3">
-              <div>350 гр</div>
-              <button
-                className="bg-primary focus:outline-none outline-none rounded-xl md:w-10 w-8 text-white uppercase md:inline-flex items-center"
-                onClick={handleSubmit}
-                disabled={isLoadingBasket}
-              >
-                {isLoadingBasket ? (
-                  <svg
-                    className="animate-spin text-white flex-grow text-center"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                ) : (
-                  <PlusIcon className="md:w-10 w-8 rounded-full" />
-                )}
-              </button>
-            </div>
-          )*/}
         </div>
         <Transition.Root show={open} as={Fragment}>
           <Dialog
@@ -518,22 +455,22 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <div className="inline-block bg-white px-3 items-center shadow-xl transform h-full">
+                <div className="inline-block bg-white px-3 items-center shadow-xl transform">
                   <div
-                    className="md:hidden bg-gray-100 rounded-lg p-3 w-max my-5"
+                    className="hidden bg-gray-100 rounded-lg p-3 w-max my-5"
                     onClick={() => setOpen(false)}
                   >
                     <ChevronDownIcon className="w-5" />
                   </div>
                   <div
-                    className="absolute cursor-pointer text-gray-400 hidden md:block p-3 right-4 rounded-lg top-5 w-max"
+                    className="absolute text-gray-400 hidden md:block p-3 right-4 rounded-lg top-5 w-max"
                     onClick={() => setOpen(false)}
                   >
                     <XIcon className="w-5" />
                   </div>
                   <div className="overflow-y-auto h-[calc(90vh-24px)]">
                     <div>
-                      <div className="font-bold text-black text-2xl my-5">
+                      <div className="font-bold text-black text-6xl my-5 px-60">
                         {
                           store?.attribute_data?.name[channelName][
                             locale || "ru"
@@ -552,9 +489,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         className="m-auto transform motion-safe:group-hover:scale-105 transition duration-500"
                       />
                     </div>
-                    <div className="">
+                    <div className=" text-black text-4xl">
                       <div
-                        className="mt-7 text-xs text-black"
+                        className="mt-7"
                         dangerouslySetInnerHTML={{
                           __html: store?.attribute_data?.description
                             ? store?.attribute_data?.description[channelName][
@@ -611,19 +548,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                           </div>
                         )*/}
                       </div>
-                      <div className="md:ml-auto md:w-96 hidden md:block">
-                        {/*productLine ? (
-                          <button className="text-lg font-medium md:bg-primary bg-green-500 rounded-lg py-5 px-32 text-white mt-8 outline-none w-full">
-                            Добавлено
-                          </button>
-                        ) : (
-                          <button
-                            className="text-lg font-medium md:bg-primary bg-green-500 rounded-lg py-5 px-32 text-white mt-8 outline-none w-full"
-                            onClick={popapAddToBasket}
-                          >
-                            В корзину
-                          </button>
-                        )*/}
+                      <div className="items-baseline">
+                        <button
+                          className="text-xl font-medium bg-primary rounded-lg py-5 text-white outline-none w-full"
+                          onClick={popapAddToBasket}
+                        >
+                          Добавить
+                        </button>
                       </div>
                     </div>
                   </div>

@@ -13,6 +13,7 @@ import { Product } from "@commerce/types/product";
 import dynamic from "next/dynamic";
 import Footer from "@components/footer";
 import Layout from "@components/Layout";
+import { useUI } from "@components/ui/context";
 
 export async function getStaticProps({
   preview,
@@ -72,15 +73,20 @@ function Menu({
   const { locale } = router;
   const [channelName, setChannelName] = useState("chopar");
   const [isStickySmall, setIsStickySmall] = useState(false);
+  const { categoryId, setCategoryId } = useUI();
 
   const getChannel = async () => {
     const channelData = await defaultChannel();
     setChannelName(channelData.name);
 
-    console.log(categories);
   };
   const readyProducts = useMemo(() => {
-    return products
+    let resProds = products;
+    if (categoryId) {
+      resProds = products.filter((section: any) => section.id == categoryId)
+    }
+
+    return resProds
       .map((prod: any) => {
         if (prod.half_mode) {
           return null;
@@ -113,7 +119,7 @@ function Menu({
         return prod;
       })
       .filter((prod: any) => prod != null);
-  }, [products]);
+  }, [products, categoryId]);
 
   const halfModeProds = useMemo(() => {
     return products
@@ -150,24 +156,32 @@ function Menu({
       })
       .filter((prod: any) => prod != null);
   }, [products]);
+
+
+  useEffect(() => {
+    if (!categoryId) {
+      setCategoryId(categories[0].id)
+    }
+  }, []);
+
   return (
     <>
-      <div className="col-span-1 block space-y-10 pt-10">
+      <div className="w-48 fixed left-0 pt-10 space-y-10 overflow-y-auto h-[calc(100vh-290px)]">
         <CategoriesMenu categories={categories} channelName={channelName} />
       </div>
-      <div className="col-span-5">
-        <div className="container mx-auto">
+      <div className="col-span-5 ml-48">
+        <div className="container mx-auto px-10">
           <div className="">
             <div className="col-span-3 md:hidden"></div>
             <div className="">
               {readyProducts.map((sec: any) => (
-                <div key={sec.id} id={`productSection_${sec.id}`}>
+                <div key={`productSection_${sec.id}`} id={`productSection_${sec.id}`}>
                   <ProductListSectionTitle
                     title={
                       sec?.attribute_data?.name[channelName][locale || "ru"]
                     }
                   />
-                  <div className="grid grid-cols-3  gap-3 px-4">
+                  <div className="grid grid-cols-3  gap-3">
                     {sec.items.map((prod: any) => (
                       <ProductItemNew
                         product={prod}

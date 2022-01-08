@@ -11,7 +11,7 @@ import CurrentTime from "./ui/CurrentTime";
 
 function Header() {
   return (
-    <div className="flex text-center h-28">
+    <div className="flex text-center top-0 fixed w-full h-28">
       <nav className="flex items-center py-6 bg-primary w-full">
         <div className="flex items-center flex-shrink-0 text-white mx-6">
           <Link href={"/home"}>

@@ -6,7 +6,7 @@ type TitleProps = {
 
 const ProductListSectionTitle: FC<TitleProps> = ({ title = "" }) => {
   return (
-    <h3 className="text-gray-800 py-1 text-4xl w-max mb-10 ml-4 md:ml-0 mt-10">
+    <h3 className="text-gray-800 py-1 text-6xl w-max mb-10 ml-4 md:ml-0 mt-10 font-serif">
       {title}
     </h3>
   );

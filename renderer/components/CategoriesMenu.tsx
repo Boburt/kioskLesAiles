@@ -6,46 +6,28 @@ import { Link } from "react-scroll";
 import dynamic from "next/dynamic";
 import SimpleBar from "simplebar-react";
 import { useSelectedLanguage } from "next-export-i18n";
+import { useUI } from "@components/ui/context";
 
 const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
   categories = [],
   channelName = "",
 }) => {
   const { lang: locale } = useSelectedLanguage();
-  console.log(locale);
-  const [fixed, changeState] = useState(false);
-
-  const categoriesFixing = () => {
-    window.pageYOffset > 700 ? changeState(true) : changeState(false);
-  };
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.addEventListener("scroll", categoriesFixing);
-    }
-    return () => {
-      window.removeEventListener("scroll", categoriesFixing);
-    };
-  }, []);
+  const { categoryId, setCategoryId } = useUI();
 
   return (
-    <div className="mt-6 items-center space-y-3">
+    <div className="text-center items-center space-y-3">
       {categories.map((item: any) => {
         return (
-          <div className="text-black w-44 h-28" key={item.id}>
-            <img src="/assets/img_cat_menu.png" className="mx-auto" />
-            <Link
-              to={`productSection_${item.id}`}
-              spy={true}
-              smooth={true}
-              activeClass="text-primary rounded-lg"
-              offset={-100}
-              className=""
-            >
-              <div className="p-3 leading-4">
-                {item?.attribute_data?.name[channelName][locale || "ru"]}
-              </div>
-            </Link>
+          <div
+            className={`text-black w-44 h-28 cursor-pointer rounded-r-2xl ${categoryId == item.id ? 'bg-primary' : ''}`}
+            key={item.id}
+            onClick={() => setCategoryId(item.id)}
+          >
+            <img src="/assets/img_cat_menu.png" className="mx-auto pt-1" />
+            <div className={`p-3 leading-4 text-2xl ${categoryId == item.id ? 'text-white' : ''}`}>
+              {item?.attribute_data?.name[channelName][locale || "ru"]}
+            </div>
           </div>
         );
       })}

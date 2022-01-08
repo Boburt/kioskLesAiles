@@ -2,7 +2,7 @@
   "private": true,
   "name": "LesKiosk",
   "description": "My application description",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "author": "LesAilesKiosk",
   "main": "app/background.js",
   "scripts": {
@@ -74,6 +74,7 @@
     "react-hook-form": "^7.8.8",
     "react-merge-refs": "^1.1.0",
     "react-number-format": "^4.8.0",
+    "react-otp-input": "^2.4.0",
     "react-phone-number-input": "^3.1.27",
     "react-scroll": "^1.8.2",
     "react-select": "^4.3.1",

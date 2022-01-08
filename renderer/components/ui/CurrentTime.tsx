@@ -10,8 +10,10 @@ const CurrentTime = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="w-44 h-full bg-black pt-6 text-2xl">
-      {DateTime.fromJSDate(time).toFormat("HH:mm dd.MM.yyyy")}
+    <div className="w-44 h-full bg-black text-white pt-6 text-2xl">
+      <div className="text-3xl">{DateTime.fromJSDate(time).toFormat("HH:mm")}</div>
+      <div className="text-base">{DateTime.fromJSDate(time).toFormat("dd.MM.yyyy")}</div>
+      
     </div>
   );
 };
