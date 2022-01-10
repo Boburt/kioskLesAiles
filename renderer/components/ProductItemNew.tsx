@@ -325,6 +325,14 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     addToBasket();
     setOpen(false);
   };
+  const productLine = useMemo(() => {
+    if (!isEmpty) {
+      return data.lineItems.find(
+        (lineItem: any) => lineItem?.variant?.product?.id == store.id
+      )
+    }
+    return null
+  }, [data])
 
   // const productLine = useMemo(() => {
   //   if (!isEmpty) {
@@ -412,9 +420,64 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             <span className="md:w-auto text-primary md:px-0 md:py-0 text-3xl font-medium">
               {prodPriceDesktop}
             </span>
-            <div className="flex justify-between items-center w-14 h-14 text-white rounded-full bg-primary">
-              <PlusIcon className="w-8 h-8 m-auto" />
+            <div className="w-36">
+            {productLine ? (
+            <div className="rounded-lg flex items-center w-full mt-2 bg-primary text-white ">
+              <div className="items-center flex justify-around  p-1 ">
+                <MinusIcon
+                  className="cursor-pointer w-7 text-white"
+                  onClick={() => decreaseQuantity(productLine)}
+                />
+              </div>
+              <div className="flex-grow text-center font-medium text-2xl">
+                {productLine.quantity}
+              </div>
+              <div className=" items-center flex justify-around p-1">
+                <PlusIcon
+                  className="cursor-pointer w-7 text-white"
+                  onClick={() => increaseQuantity(productLine.id)}
+                />
+              </div>
             </div>
+          ) : (
+            <div className="flex justify-between items-center mt-3">
+              <button
+                className="bg-primary focus:outline-none outline-none rounded-xl md:w-10 w-8 text-white uppercase md:inline-flex items-center"
+                onClick={handleSubmit}
+                disabled={isLoadingBasket}
+              >
+                {isLoadingBasket ? (
+                  <svg
+                    className="animate-spin text-white flex-grow text-center"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                ) : (
+                  <PlusIcon className="w-8 rounded-full" />
+                )}
+              </button>
+            </div>
+          )}
+          </div>
+            {/* <div className="flex justify-between items-center w-14 h-14 text-white rounded-full bg-primary">
+              <PlusIcon className="w-8 h-8 m-auto" />
+            </div> */}
+            
           </div>
         </div>
         <Transition.Root show={open} as={Fragment}>
