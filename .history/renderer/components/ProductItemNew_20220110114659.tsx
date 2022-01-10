@@ -490,8 +490,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       />
                     </div>
                     <div className="text-black text-4xl">
-                      {store.attribute_data.description && (
-                        <div className="font-bold font-serif text-black text-4xl my-5 pt-10 px-60">Содержание</div>
+                      {store?.attribute_data?.description ? (
+                      <div className="font-bold font-serif text-black text-4xl my-5 pt-10 px-60">Содержание</div>
                       )}
                       <div
                         className="mt-7 text-2x1 grid grid-cols-3 gap-4"
