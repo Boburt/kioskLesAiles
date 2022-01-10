@@ -345,6 +345,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     }
   }
   return (
+    console.log(store)
     <>
       <div
         className={`py-3 overflow-hidden bg-productBg rounded-xl group items-center justify-between flex flex-col shadow-lg`}

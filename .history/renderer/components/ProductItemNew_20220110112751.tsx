@@ -366,7 +366,8 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 alt={store?.attribute_data?.name[channelName][locale || "ru"]}
                 className="transform motion-safe:group-hover:scale-105 transition duration-500 mx-auto"
               />
-            )}
+            )
+            console.log(store)}
         </div>
         <div className="flex flex-col flex-grow w-full md:px-5 px-3">
           <div

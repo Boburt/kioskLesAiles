@@ -344,6 +344,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       mobHeightImg = 250;
     }
   }
+  console.log(store)
   return (
     <>
       <div

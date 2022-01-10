@@ -470,7 +470,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                   </div>
                   <div className="overflow-y-auto">
                     <div>
-                      <div className="font-bold font-serif text-black text-6xl my-5 pt-10 px-60">
+                      <div className="font-bold text-black text-6xl my-5 pt-10 px-60">
                         {
                           store?.attribute_data?.name[channelName][
                             locale || "ru"
@@ -490,9 +490,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                       />
                     </div>
                     <div className="text-black text-4xl">
-                      <div className="font-bold font-serif text-black text-4xl my-5 pt-10 px-60">Содержание</div>
+                      <div>Содержание</div>
                       <div
-                        className="mt-7 text-2x1 grid grid-cols-3 gap-4"
+                        className="mt-7"
                         dangerouslySetInnerHTML={{
                           __html: store?.attribute_data?.description
                             ? store?.attribute_data?.description[channelName][

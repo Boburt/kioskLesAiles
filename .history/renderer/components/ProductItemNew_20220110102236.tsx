@@ -455,7 +455,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <div className="inline-block mt-24 object-center bg-white items-center shadow-xl transform">
+                <div className="inline-block bg-white items-center shadow-xl transform">
                   <div
                     className="hidden bg-gray-100 rounded-lg p-3 w-max my-5"
                     onClick={() => setOpen(false)}
@@ -466,11 +466,11 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     className="absolute text-white hidden md:block p-3 right-0 fixed bg-primary top-0 w-max"
                     onClick={() => setOpen(false)}
                   >
-                    <XIcon className="w-10" />
+                    <XIcon className="w-5" />
                   </div>
                   <div className="overflow-y-auto">
                     <div>
-                      <div className="font-bold font-serif text-black text-6xl my-5 pt-10 px-60">
+                      <div className="font-bold text-black text-6xl my-5 pt-10 px-60">
                         {
                           store?.attribute_data?.name[channelName][
                             locale || "ru"
@@ -489,10 +489,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         className="m-auto transform motion-safe:group-hover:scale-105 transition duration-500"
                       />
                     </div>
-                    <div className="text-black text-4xl">
-                      <div className="font-bold font-serif text-black text-4xl my-5 pt-10 px-60">Содержание</div>
+                    <div className=" text-black text-4xl">
                       <div
-                        className="mt-7 text-2x1 grid grid-cols-3 gap-4"
+                        className="mt-7"
                         dangerouslySetInnerHTML={{
                           __html: store?.attribute_data?.description
                             ? store?.attribute_data?.description[channelName][

@@ -352,6 +352,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       >
         <div className=" h-44 overflow-hidden w-full">
             {store.image ? (
+              console.log(store);
               <img
                 src={store.image}
                 alt={store?.attribute_data?.name[channelName][locale || "ru"]}
