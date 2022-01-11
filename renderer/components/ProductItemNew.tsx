@@ -468,7 +468,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     ></path>
                   </svg>
                 ) : (
-                  <PlusIcon className="w-8 rounded-full" />
+                  <div className="flex justify-between items-center w-14 h-14 text-white rounded-full bg-primary">
+              <PlusIcon className="w-8 h-8 m-auto" />
+            </div>
                 )}
               </button>
             </div>

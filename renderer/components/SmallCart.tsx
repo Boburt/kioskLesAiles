@@ -56,9 +56,9 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   const router = useRouter();
   const { locale } = router;
   let cartId: string | null = null;
-  if (typeof window !== undefined) {
-    cartId = localStorage.getItem("basketId");
-  }
+  // if (typeof window !== undefined) {
+  //   cartId = localStorage.getItem("basketId");
+  // }
 
   const { data, isLoading, isEmpty, mutate } = useCart({
     cartId,
@@ -440,23 +440,20 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   };
   return (
     <>
-      <div>
-        {isCartLoading && (
-          <div className="h-full w-full absolute flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]"></div>
-        )}
+      <div className="pb-48 flex flex-row">
         {!isEmpty && (
-          <div className="divide-y border-b bg-white p-5 rounded-2xl">
-            <SimpleBar style={{ maxHeight: 320 }}>
+          <div className=" bg-white">
+            
               {data &&
                 data?.lineItems.map((lineItem: any) => (
-                  <div key={lineItem.id} className="py-3 pr-2">
+                  <div key={lineItem.id} className="">
                     <div>
                       {lineItem.child &&
                       lineItem.child.length &&
                       lineItem.child[0].variant?.product?.id !=
                         lineItem?.variant?.product?.box_id ? (
-                        <div className="h-11 w-11 flex relative">
-                          <div className="w-5 relative overflow-hidden">
+                        <div className="flex">
+                          <div className="">
                             <div>
                               <Image
                                 src={
@@ -467,11 +464,11 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                 width="40"
                                 height="40"
                                 layout="fixed"
-                                className="absolute rounded-full"
+                                className="rounded-full"
                               />
                             </div>
                           </div>
-                          <div className="w-5 relative overflow-hidden">
+                          <div className="w-5">
                             <div className="absolute right-0">
                               <Image
                                 src={
@@ -503,7 +500,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                               />
                             </div>
                           </div>
-                          <div className="font-medium ml-3 mx-1 w-7/12">
+                          {/* <div className="font-medium ml-3 mx-1 w-7/12">
                             {lineItem.child && lineItem.child.length > 1
                               ? `${
                                   lineItem?.variant?.product?.attribute_data
@@ -523,7 +520,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                   .join(" + ")}`
                               : lineItem?.variant?.product?.attribute_data
                                   ?.name[channelName][locale || "ru"]}
-                          </div>
+                          </div> */}
                           <div>
                             <XIcon
                               className="cursor-pointer h-4 text-black w-4"
@@ -533,7 +530,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex">
                       <div className=" font-medium">
                         {lineItem.child && lineItem.child.length
                           ? currency(
@@ -556,7 +553,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                             }).format()}
                       </div>
                       <div className="w-20 ml-14 bg-gray-200 rounded-lg flex items-center p-1">
-                        <div className="items-center flex justify-around bg-white text-gray-500 rounded-md p-1 ">
+                        <div className="items-center flex bg-white text-gray-500 rounded-md p-1 ">
                           <MinusIcon
                             className="cursor-pointer w-4 "
                             onClick={() => decreaseQuantity(lineItem)}
@@ -575,314 +572,16 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                     </div>
                   </div>
                 ))}
-            </SimpleBar>
-            {!isEmpty && (
-              <div className="flex items-center justify-between pt-4">
-                <div className="text-sm">{tr("basket_order_price")}</div>
-                <div className="text-xl font-medium">
-                  {currency(data.totalPrice, {
-                    pattern: "# !",
-                    separator: " ",
-                    decimal: ".",
-                    symbol: `${locale == "uz" ? "so'm" : "сум"}`,
-                    precision: 0,
-                  }).format()}
-                </div>
-              </div>
-            )}
-            <button
-              className="bg-green-500 rounded-xl w-full text-white py-4 mt-5"
-              onClick={goToCheckout}
-            >
-              Оформить заказ
-            </button>
+            
+            
+            
           </div>
         )}
       </div>
-      <Transition appear show={showSignInModal} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-50 overflow-y-auto"
-          onClose={closeModal}
-          initialFocus={authButtonRef}
-        >
-          <div className="min-h-screen px-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            </Transition.Child>
-
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <div className="align-middle inline-block overflow-hidden w-full">
-                <div className="md:inline-flex my-8 items-start">
-                  <div className="align-middle bg-white inline-block overflow-hidden md:px-16 px-6 py-10 rounded-2xl shadow-xl text-center transform transition-all max-w-2xl">
-                    <button
-                      className="absolute focus:outline-none hidden md:block outline-none right-4 text-gray-500 top-5 transform"
-                      onClick={closeModal}
-                    >
-                      <XIcon className=" cursor-pointer w-4 h-4" />
-                    </button>
-                    <Dialog.Title as="h3" className="leading-6 text-3xl">
-                      {tr("auth")}
-                    </Dialog.Title>
-                    {submitError && (
-                      <div className="bg-red-200 p-5 font-bold text-red-600 my-6">
-                        {submitError}
-                      </div>
-                    )}
-                    {user && (
-                      <div className="mt-10 bg-green-200 font-bold text-green-800 p-4">
-                        {tr("successfully_logged")} {user.user.name}!
-                      </div>
-                    )}
-                    {!user && isShowPasswordForm && (
-                      <div>
-                        <form
-                          onSubmit={handlePasswordSubmit(submitPasswordForm)}
-                        >
-                          <div className="mt-10">
-                            <label className="text-sm text-gray-400 mb-2 block">
-                              {tr("sms_code")}
-                            </label>
-                            <OtpInput
-                              value={otpCode}
-                              onChange={handleOtpChange}
-                              inputStyle={`${styles.digitField} border border-primary w-16 rounded-3xl h-12 outline-none focus:outline-none text-center`}
-                              isInputNum={true}
-                              containerStyle="grid grid-cols-4 gap-1.5 justify-center"
-                              numInputs={4}
-                            />
-                            {otpShowCode > 0 ? (
-                              <div className="text-xs text-primary mt-3">
-                                {otpTimerText}
-                              </div>
-                            ) : (
-                              <button
-                                className="text-xs text-primary mt-3 outline-none focus:outline-none border-b border-primary pb-0.5"
-                                onClick={(e) => getNewCode(e)}
-                              >
-                                {tr("get_code_again")}
-                              </button>
-                            )}
-                          </div>
-                          <div className="mt-10">
-                            <button
-                              className={`py-3 px-20 text-white font-bold text-xl text-center rounded-xl w-full outline-none focus:outline-none ${
-                                otpCode.length >= 4
-                                  ? "bg-primary"
-                                  : "bg-gray-400"
-                              }`}
-                              disabled={otpCode.length < 4}
-                              ref={authButtonRef}
-                            >
-                              {passwordFormState.isSubmitting ? (
-                                <svg
-                                  className="animate-spin h-5 mx-auto text-center text-white w-5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <circle
-                                    className="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                  ></circle>
-                                  <path
-                                    className="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                  ></path>
-                                </svg>
-                              ) : (
-                                tr("signIn")
-                              )}
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                    )}{" "}
-                    {!user && !isShowPasswordForm && (
-                      <>
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                          <div className="mt-10">
-                            <label className="text-sm text-gray-400 mb-2 block">
-                              {tr("personal_phone")}
-                            </label>
-                            <div className="relative">
-                              <Controller
-                                render={({ field: { onChange, value } }) => (
-                                  <Input
-                                    defaultCountry="UZ"
-                                    country="UZ"
-                                    international
-                                    withCountryCallingCode
-                                    value={value}
-                                    className="border border-primary focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
-                                    onChange={(e: any) => onChange(e)}
-                                    onKeyDown={(e: any) => {
-                                      if (e.key == "Enter") {
-                                        e.preventDefault();
-                                        handleSubmit(onSubmit)();
-                                      }
-                                    }}
-                                  />
-                                )}
-                                rules={{
-                                  required: true,
-                                }}
-                                key="phone"
-                                name="phone"
-                                control={control}
-                              />
-                              {authPhone && (
-                                <button
-                                  className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                                  onClick={() => {
-                                    resetField("phone");
-                                  }}
-                                >
-                                  <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                                </button>
-                              )}
-                            </div>
-                          </div>
-
-                          {showUserName && (
-                            <div className="mt-10">
-                              <label className="text-sm text-gray-400 mb-2 block">
-                                {tr("your_name")}
-                              </label>
-                              <div className="relative">
-                                <input
-                                  type="text"
-                                  {...register("name")}
-                                  className="border border-primary focus:outline-none outline-none px-6 py-3 rounded-full text-sm w-full"
-                                />
-                                {authName && (
-                                  <button
-                                    className="absolute focus:outline-none inset-y-0 outline-none right-4 text-gray-400"
-                                    onClick={() => {
-                                      resetField("name");
-                                    }}
-                                  >
-                                    <XIcon className="cursor-pointer h-5 text-gray-400 w-5" />
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                          <div className="mt-10">
-                            <button
-                              className={`py-3 md:px-20 text-white font-bold text-xl text-center rounded-xl w-full outline-none focus:outline-none ${
-                                formState.isValid ? "bg-primary" : "bg-gray-400"
-                              }`}
-                              disabled={!formState.isValid}
-                              ref={authButtonRef}
-                            >
-                              {formState.isSubmitting ? (
-                                <svg
-                                  className="animate-spin h-5 mx-auto text-center text-white w-5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <circle
-                                    className="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                  ></circle>
-                                  <path
-                                    className="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                  ></path>
-                                </svg>
-                              ) : (
-                                tr("get_code")
-                              )}
-                            </button>
-                          </div>
-                        </form>
-                        {/*<div className="mt-5 text-gray-400 text-sm">
-                              Нажимая получить код я принимаю условия{' '}
-                              <a
-                                href="/privacy"
-                                onClick={showPrivacy}
-                                className="text-primary block"
-                                target="_blank"
-                              >
-                                пользовательского соглашения
-                              </a>
-                                </div>*/}
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </Transition.Child>
-          </div>
-        </Dialog>
-      </Transition>
-      <Transition appear show={isShowPrivacy} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={closePrivacy}
-          initialFocus={privacyButtonRef}
-        >
-          <div className="min-h-screen px-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            </Transition.Child>
-
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-          </div>
-        </Dialog>
-      </Transition>
+      
+      
     </>
   );
 };
 
-export default memo(SmallCart);
+export default SmallCart;

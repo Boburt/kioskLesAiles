@@ -748,6 +748,11 @@ video {
   bottom: 0px;
 }
 
+.inset-x-auto {
+  left: auto;
+  right: auto;
+}
+
 .top-0 {
   top: 0px;
 }
@@ -774,6 +779,10 @@ video {
 
 .bottom-0 {
   bottom: 0px;
+}
+
+.bottom-20 {
+  bottom: 5rem;
 }
 
 .z-50 {
@@ -911,6 +920,18 @@ video {
   margin-top: 6rem;
 }
 
+.mb-9 {
+  margin-bottom: 2.25rem;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
 .block {
   display: block;
 }
@@ -921,6 +942,10 @@ video {
 
 .flex {
   display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
 }
 
 .grid {
@@ -1077,8 +1102,16 @@ video {
   width: 2.5rem;
 }
 
+.w-72 {
+  width: 18rem;
+}
+
 .max-w-2xl {
   max-width: 42rem;
+}
+
+.max-w-4xl {
+  max-width: 56rem;
 }
 
 .flex-shrink-0 {
@@ -1096,6 +1129,11 @@ video {
 
 .translate-y-0 {
   --tw-translate-y: 0px;
+  transform: var(--tw-transform);
+}
+
+.translate-x-0 {
+  --tw-translate-x: 0px;
   transform: var(--tw-transform);
 }
 
@@ -1155,6 +1193,10 @@ video {
 
 .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.flex-row {
+  flex-direction: row;
 }
 
 .flex-col {
@@ -1254,6 +1296,12 @@ video {
   --tw-divide-y-reverse: 0;
   border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
   border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+}
+
+.divide-x-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(2px * var(--tw-divide-x-reverse));
+  border-left-width: calc(2px * calc(1 - var(--tw-divide-x-reverse)));
 }
 
 .overflow-hidden {
@@ -1433,6 +1481,10 @@ video {
   padding: 3.5rem;
 }
 
+.p-10 {
+  padding: 2.5rem;
+}
+
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
@@ -1556,6 +1608,22 @@ video {
 
 .pt-48 {
   padding-top: 12rem;
+}
+
+.pb-36 {
+  padding-bottom: 9rem;
+}
+
+.pb-48 {
+  padding-bottom: 12rem;
+}
+
+.pl-2 {
+  padding-left: 0.5rem;
+}
+
+.pb-3 {
+  padding-bottom: 0.75rem;
 }
 
 .text-left {
@@ -1864,6 +1932,10 @@ video {
 
   .md\:block {
     display: block;
+  }
+
+  .md\:flex {
+    display: flex;
   }
 
   .md\:inline-flex {
