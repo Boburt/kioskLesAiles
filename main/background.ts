@@ -47,8 +47,8 @@ if (isProd) {
     width: 1000,
     height: 600,
     frame: false,
-    fullscreen: true,
-    autoHideMenuBar: true
+    fullscreen: isProd,
+    autoHideMenuBar: isProd,
   });
 
   if (isProd) {
