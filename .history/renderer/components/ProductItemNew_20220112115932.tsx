@@ -416,13 +416,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 </div>
               )}
             </div> */}
-          <div className="flex mt-5 justify-between items-center">
+          <div className="flex mt-2 justify-between items-center">
             <span className="md:w-auto text-primary md:px-0 md:py-0 text-3xl font-medium">
               {prodPriceDesktop}
             </span>
             <div className="w-20">
             {productLine ? (
-            <div className="rounded-full h-14 flex items-center w-full bg-primary text-white ">
+            <div className="rounded-lg flex items-center w-full mt-2 bg-primary text-white ">
               <div className="items-center flex justify-around  p-1 ">
                 <MinusIcon
                   className="cursor-pointer w-7 text-white"
@@ -440,9 +440,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               </div>
             </div>
           ) : (
-            <div className="flex justify-between items-center ml-auto w-max">
+            <div className="flex justify-between items-center mt-3">
               <button
-                className="bg-primary focus:outline-none outline-none rounded-full w-14 h-14 text-white uppercase md:inline-flex items-center"
+                className="bg-primary focus:outline-none outline-none rounded-xl md:w-10 w-8 text-white uppercase md:inline-flex items-center"
                 onClick={handleSubmit}
                 disabled={isLoadingBasket}
               >
@@ -468,7 +468,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     ></path>
                   </svg>
                 ) : (
-                  <div className="flex justify-between items-center w-14 h-10 text-white rounded-full bg-primary">
+                  <div className="flex justify-between items-center w-14 h-14 text-white rounded-full bg-primary">
               <PlusIcon className="w-8 h-8 m-auto" />
             </div>
                 )}

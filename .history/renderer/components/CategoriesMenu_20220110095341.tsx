@@ -20,7 +20,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
       {categories.map((item: any) => {
         return (
           <div
-            className={`text-black w-44 cursor-pointer rounded-r-2xl ${categoryId == item.id ? 'bg-primary' : ''}`}
+            className={`text-black w-44 h-28 cursor-pointer rounded-r-2xl ${categoryId == item.id ? 'bg-primary' : ''}`}
             key={item.id}
             onClick={() => setCategoryId(item.id)}
           >
