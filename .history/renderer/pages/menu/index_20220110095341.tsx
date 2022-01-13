@@ -169,7 +169,7 @@ function Menu({
       <div className="w-48 fixed left-0 pt-10 space-y-10 overflow-y-auto h-[calc(100vh-290px)]">
         <CategoriesMenu categories={categories} channelName={channelName} />
       </div>
-      <div className="col-span-5 ml-48 mb-10">
+      <div className="col-span-5 ml-48">
         <div className="container mx-auto px-10">
           <div className="">
             <div className="col-span-3 md:hidden"></div>
