@@ -41,7 +41,7 @@ function Header() {
         </div>
       </nav>
       <div className="flex items-center">
-        <div className="h-full font-sans text-2xl px-4 text-white bg-indigo-600 w-44 pt-6">
+        <div className="h-full text-2xl px-4 text-white bg-indigo-600 w-44 pt-6">
           Личный Кабинет
         </div>
         <CurrentTime />

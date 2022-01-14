@@ -416,13 +416,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                 </div>
               )}
             </div> */}
-          <div className="flex mt-5 justify-between items-center">
+          <div className="flex mt-2 justify-between items-center">
             <span className="md:w-auto text-primary md:px-0 md:py-0 text-3xl font-medium">
               {prodPriceDesktop}
             </span>
             <div className="w-20">
             {productLine ? (
-            <div className="rounded-full h-14 flex items-center w-full bg-primary text-white ">
+            <div className="rounded-lg flex items-center w-full bg-primary text-white ">
               <div className="items-center flex justify-around  p-1 ">
                 <MinusIcon
                   className="cursor-pointer w-7 text-white"

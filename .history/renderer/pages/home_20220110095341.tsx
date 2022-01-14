@@ -5,12 +5,57 @@ import { Ru, Uz, Us } from "react-flags-select";
 import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
 import commerce from "@lib/api/commerce";
 
+export async function getStaticProps({
+  preview,
+  locale,
+  locales,
+}: GetStaticPropsContext) {
+  const config = { locale, locales };
+  const productsPromise = commerce.getAllProducts({
+    variables: { first: 6 },
+    config,
+    preview,
+    // Saleor provider only
+    ...({ featured: true } as any),
+  });
+  const pagesPromise = commerce.getAllPages({ config, preview });
+  const siteInfoPromise = commerce.getSiteInfo({ config, preview });
+  const { products }: { products: any[] } = await productsPromise;
+  const { pages } = await pagesPromise;
+  const {
+    categories,
+    brands,
+    topMenu,
+    footerInfoMenu,
+    socials,
+    cities,
+    // currentCity,
+  } = await siteInfoPromise;
+  //   if (!currentCity) {
+  //     return {
+  //       notFound: true,
+  //     };
+  //   }
 
+  return {
+    props: {
+      products,
+      categories,
+      brands,
+      pages,
+      topMenu,
+      footerInfoMenu,
+      socials,
+      cities,
+      //   currentCity,
+    },
+  };
+}
 
 function Home() {
   return (
     <>
-      <div className="bg-primary grid grid-flow-row auto-rows-max font-serif h-[calc(100vh-1px)]">
+      <div className="bg-primary grid grid-flow-row auto-rows-max font-serif">
         <div className="flex ml-auto space-x-3 pt-10 pr-10">
           <div className="flex items-center text-sm px-4 py-2 leading-none border rounded-xl text-black border-white hover:border-transparent hover:text-teal-500 hover:bg-gray-500 mt-4 lg:mt-0 bg-white space-x-2">
             <Ru className="w-4 h-4 rounded-full" />
