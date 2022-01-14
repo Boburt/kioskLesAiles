@@ -15,6 +15,8 @@ import Footer from "@components/footer";
 import Layout from "@components/Layout";
 import { useUI } from "@components/ui/context";
 
+
+
 export async function getStaticProps({
   preview,
   locale,
@@ -196,6 +198,7 @@ function Menu({
           </div>
         </div>
       </div>
+      
     </>
   );
 }

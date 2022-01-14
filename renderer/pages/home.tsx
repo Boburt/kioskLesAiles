@@ -5,52 +5,7 @@ import { Ru, Uz, Us } from "react-flags-select";
 import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
 import commerce from "@lib/api/commerce";
 
-export async function getStaticProps({
-  preview,
-  locale,
-  locales,
-}: GetStaticPropsContext) {
-  const config = { locale, locales };
-  const productsPromise = commerce.getAllProducts({
-    variables: { first: 6 },
-    config,
-    preview,
-    // Saleor provider only
-    ...({ featured: true } as any),
-  });
-  const pagesPromise = commerce.getAllPages({ config, preview });
-  const siteInfoPromise = commerce.getSiteInfo({ config, preview });
-  const { products }: { products: any[] } = await productsPromise;
-  const { pages } = await pagesPromise;
-  const {
-    categories,
-    brands,
-    topMenu,
-    footerInfoMenu,
-    socials,
-    cities,
-    // currentCity,
-  } = await siteInfoPromise;
-  //   if (!currentCity) {
-  //     return {
-  //       notFound: true,
-  //     };
-  //   }
 
-  return {
-    props: {
-      products,
-      categories,
-      brands,
-      pages,
-      topMenu,
-      footerInfoMenu,
-      socials,
-      cities,
-      //   currentCity,
-    },
-  };
-}
 
 function Home() {
   return (
