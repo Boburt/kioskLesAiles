@@ -197,9 +197,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       };
     }
 
-    // await mutate(basketResult, false);
-    // setIsLoadingBasket(false);
-    // setQuantity(1);
+    await mutate(basketResult, false);
+    setIsLoadingBasket(false);
+    setQuantity(1);
     // if (window.innerWidth < 768) {
     //   closeModal();
     // }
@@ -273,7 +273,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         totalPrice: basket.data.total,
       };
 
-      // await mutate(basketResult, false);
+      await mutate(basketResult, false);
       setIsCartLoading(false);
     }
   };
@@ -303,7 +303,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         totalPrice: basket.data.total,
       };
 
-      // await mutate(basketResult, false);
+      await mutate(basketResult, false);
       setIsCartLoading(false);
     }
   };
@@ -329,19 +329,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
     if (!isEmpty) {
       return data.lineItems.find(
         (lineItem: any) => lineItem?.variant?.product?.id == store.id
-      )
+      );
     }
-    return null
-  }, [data])
-
-  // const productLine = useMemo(() => {
-  //   if (!isEmpty) {
-  //     return data.lineItems.find(
-  //       (lineItem: any) => lineItem?.variant?.product?.id == store.id
-  //     );
-  //   }
-  //   return null;
-  // }, [data]);
+    return null;
+  }, [data]);
 
   let mobWidthImg = 390;
   let mobHeightImg = 390;
@@ -359,22 +350,22 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
         id={`prod-${store.id}`}
       >
         <div className=" h-44 overflow-hidden w-full">
-            {store.image ? (
-              <img
-                src={store.image}
-                alt={store?.attribute_data?.name[channelName][locale || "ru"]}
-                className="h-44 transform motion-safe:group-hover:scale-105 transition duration-500 mx-auto"
-                onClick={() => {
-                  setOpen(true);
-                }}
-              />
-            ) : (
-              <img
-                src="/no_photo.svg"
-                alt={store?.attribute_data?.name[channelName][locale || "ru"]}
-                className="transform motion-safe:group-hover:scale-105 transition duration-500 mx-auto"
-              />
-            )}
+          {store.image ? (
+            <img
+              src={store.image}
+              alt={store?.attribute_data?.name[channelName][locale || "ru"]}
+              className="h-44 transform motion-safe:group-hover:scale-105 transition duration-500 mx-auto"
+              onClick={() => {
+                setOpen(true);
+              }}
+            />
+          ) : (
+            <img
+              src="/no_photo.svg"
+              alt={store?.attribute_data?.name[channelName][locale || "ru"]}
+              className="transform motion-safe:group-hover:scale-105 transition duration-500 mx-auto"
+            />
+          )}
         </div>
         <div className="flex flex-col flex-grow w-full md:px-5 px-3">
           <div
@@ -420,66 +411,65 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             <span className="md:w-auto text-primary md:px-0 md:py-0 text-3xl font-medium">
               {prodPriceDesktop}
             </span>
-            <div className="w-20">
-            {productLine ? (
-            <div className="rounded-full h-14 flex items-center w-full bg-primary text-white ">
-              <div className="items-center flex justify-around  p-1 ">
-                <MinusIcon
-                  className="cursor-pointer w-7 text-white"
-                  onClick={() => decreaseQuantity(productLine)}
-                />
-              </div>
-              <div className="flex-grow text-center font-medium text-2xl">
-                {productLine.quantity}
-              </div>
-              <div className=" items-center flex justify-around p-1">
-                <PlusIcon
-                  className="cursor-pointer w-7 text-white"
-                  onClick={() => increaseQuantity(productLine.id)}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-between items-center ml-auto w-max">
-              <button
-                className="bg-primary focus:outline-none outline-none rounded-full w-14 h-14 text-white uppercase md:inline-flex items-center"
-                onClick={handleSubmit}
-                disabled={isLoadingBasket}
-              >
-                {isLoadingBasket ? (
-                  <svg
-                    className="animate-spin text-white flex-grow text-center"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
+            <div className="w-28">
+              {productLine ? (
+                <div className="rounded-full h-14 flex items-center w-full bg-primary text-white ">
+                  <div className="items-center flex justify-around  p-1 ">
+                    <MinusIcon
+                      className="cursor-pointer w-7 text-white"
+                      onClick={() => decreaseQuantity(productLine)}
+                    />
+                  </div>
+                  <div className="flex-grow text-center font-medium text-2xl">
+                    {productLine.quantity}
+                  </div>
+                  <div className=" items-center flex justify-around p-1">
+                    <PlusIcon
+                      className="cursor-pointer w-7 text-white"
+                      onClick={() => increaseQuantity(productLine.id)}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="flex justify-between items-center ml-auto w-max">
+                  <button
+                    className="bg-primary focus:outline-none outline-none rounded-full w-14 h-14 text-white uppercase md:inline-flex items-center"
+                    onClick={handleSubmit}
+                    disabled={isLoadingBasket}
                   >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                ) : (
-                  <div className="flex justify-between items-center w-14 h-10 text-white rounded-full bg-primary">
-              <PlusIcon className="w-8 h-8 m-auto" />
+                    {isLoadingBasket ? (
+                      <svg
+                        className="animate-spin text-white flex-grow text-center"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          stroke-width="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                    ) : (
+                      <div className="flex justify-between items-center w-14 h-10 text-white rounded-full bg-primary">
+                        <PlusIcon className="w-8 h-8 m-auto" />
+                      </div>
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
-                )}
-              </button>
-            </div>
-          )}
-          </div>
             {/* <div className="flex justify-between items-center w-14 h-14 text-white rounded-full bg-primary">
               <PlusIcon className="w-8 h-8 m-auto" />
             </div> */}
-            
           </div>
         </div>
         <Transition.Root show={open} as={Fragment}>
@@ -556,7 +546,9 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                     </div>
                     <div className="text-black text-4xl">
                       {store.attribute_data.description && (
-                        <div className="font-bold font-serif text-black text-4xl my-5 pt-10 px-60">Содержание</div>
+                        <div className="font-bold font-serif text-black text-4xl my-5 pt-10 px-60">
+                          Содержание
+                        </div>
                       )}
                       <div
                         className="mt-7 text-2x1 grid grid-cols-3 gap-4"

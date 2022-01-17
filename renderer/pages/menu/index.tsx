@@ -15,7 +15,9 @@ import Footer from "@components/footer";
 import Layout from "@components/Layout";
 import { useUI } from "@components/ui/context";
 
-
+const CartWithNoSSR = dynamic(() => import("@components/SmallCart"), {
+  ssr: false,
+});
 
 export async function getStaticProps({
   preview,
@@ -80,12 +82,11 @@ function Menu({
   const getChannel = async () => {
     const channelData = await defaultChannel();
     setChannelName(channelData.name);
-
   };
   const readyProducts = useMemo(() => {
     let resProds = products;
     if (categoryId) {
-      resProds = products.filter((section: any) => section.id == categoryId)
+      resProds = products.filter((section: any) => section.id == categoryId);
     }
 
     return resProds
@@ -159,10 +160,9 @@ function Menu({
       .filter((prod: any) => prod != null);
   }, [products]);
 
-
   useEffect(() => {
     if (!categoryId) {
-      setCategoryId(categories[0].id)
+      setCategoryId(categories[0].id);
     }
   }, []);
 
@@ -177,7 +177,10 @@ function Menu({
             <div className="col-span-3 md:hidden"></div>
             <div className="">
               {readyProducts.map((sec: any) => (
-                <div key={`productSection_${sec.id}`} id={`productSection_${sec.id}`}>
+                <div
+                  key={`productSection_${sec.id}`}
+                  id={`productSection_${sec.id}`}
+                >
                   <ProductListSectionTitle
                     title={
                       sec?.attribute_data?.name[channelName][locale || "ru"]
@@ -198,7 +201,9 @@ function Menu({
           </div>
         </div>
       </div>
-      
+      {/* <div>
+      <CartWithNoSSR channelName={channelName} />
+    </div> */}
     </>
   );
 }

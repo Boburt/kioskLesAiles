@@ -10,7 +10,12 @@ import React, {
 import useCart from "@framework/cart/use-cart";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import Image from "next/image";
-import { XIcon, MinusIcon, PlusIcon } from "@heroicons/react/solid";
+import {
+  XIcon,
+  MinusIcon,
+  PlusIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/solid";
 import currency from "currency.js";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -26,7 +31,7 @@ import { createPopper } from "@popperjs/core";
 import Hashids from "hashids";
 import SimpleBar from "simplebar-react";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const { publicRuntimeConfig } = getConfig();
@@ -466,22 +471,45 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   };
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 5,
     slidesToScroll: 1,
     initialSlide: 0,
-    arrows: true
+    arrows: true,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
   };
+  function SampleNextArrow(props: any) {
+    const { className, style, onClick } = props;
+    return (
+      <img
+        src="/rightArrow.webp"
+        className={className}
+        style={{ ...style, display: "block", height: "40px" }}
+        onClick={onClick}
+      />
+    );
+  }
+
+  function SamplePrevArrow(props: any) {
+    const { className, style, onClick } = props;
+    return (
+      <img
+        src="/leftArrow.webp"
+        className={className}
+        style={{ ...style, display: "block", height: "40px" }}
+        onClick={onClick}
+      />
+    );
+  }
   return (
     <>
       <div
-        onMouseEnter={() => openPopover()}
-        onMouseLeave={() => closePopover()}
         className={
           (data && data.lineItems ? "" : " hidden") +
-          "z-50 fixed bottom-0 transform translate-x-0 inset-x-auto w-full"
+          " bottom-0 w-full fixed bg-white"
         }
         ref={popoverRef}
       >
@@ -510,147 +538,156 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
           </div>
         )}
         {!isEmpty && (
-          <div className="divide-x border-b bg-white">
-            <div className="flex  text-xl items-center justify-between mb-9">
-              <div className="flex">
+          <div className="">
+            <div className="flex  text-xl border-b border-primary font-sans">
+              <div className="flex bg-primary rounded-tr-xl text-white">
+                <ShoppingCartIcon className="h-5 my-auto text-white pr-1" />
                 Мой заказ
-                <div className="text-primary font-bold ml-1">
+                <div className="text-white font-bold px-2">
                   {" "}
                   x{data && data.lineItems ? data?.lineItems.length : 0}
                 </div>
               </div>
             </div>
-
-            <Slider {...settings}>
-              {data &&
-                data?.lineItems.map((lineItem: any) => (
-                  <div key={lineItem.id} className="flex py-3 pr-2">
-                    <div>
-                      {lineItem.child &&
-                      lineItem.child.length &&
-                      lineItem.child[0].variant?.product?.id !=
-                        lineItem?.variant?.product?.box_id ? (
-                        <div className="h-11 w-11 flex relative">
-                          <div className="w-5 relative overflow-hidden">
-                            <div>
-                              <Image
-                                src={
-                                  lineItem?.variant?.product?.assets?.length
-                                    ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                    : "/no_photo.svg"
-                                }
-                                width="40"
-                                height="40"
-                                layout="fixed"
-                                className="absolute rounded-full"
-                              />
+            <div className="mx-10">
+              <Slider {...settings}>
+                {data &&
+                  data?.lineItems.map((lineItem: any) => (
+                    <div key={lineItem.id} className="flex py-3 pr-2">
+                      <div>
+                        {lineItem.child &&
+                        lineItem.child.length &&
+                        lineItem.child[0].variant?.product?.id !=
+                          lineItem?.variant?.product?.box_id ? (
+                          <div className="h-11 w-11 flex relative">
+                            <div className="w-5 relative overflow-hidden">
+                              <div>
+                                <Image
+                                  src={
+                                    lineItem?.variant?.product?.assets?.length
+                                      ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                      : "/no_photo.svg"
+                                  }
+                                  width="40"
+                                  height="40"
+                                  layout="fixed"
+                                  className="absolute rounded-full"
+                                />
+                              </div>
+                            </div>
+                            <div className="w-5 relative overflow-hidden">
+                              <div className="absolute right-0">
+                                <Image
+                                  src={
+                                    lineItem?.child[0].variant?.product?.assets
+                                      ?.length
+                                      ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
+                                      : "/no_photo.svg"
+                                  }
+                                  width="40"
+                                  height="40"
+                                  layout="fixed"
+                                  className="rounded-full"
+                                />
+                              </div>
                             </div>
                           </div>
-                          <div className="w-5 relative overflow-hidden">
-                            <div className="absolute right-0">
-                              <Image
-                                src={
-                                  lineItem?.child[0].variant?.product?.assets
-                                    ?.length
-                                    ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
-                                    : "/no_photo.svg"
-                                }
-                                width="40"
-                                height="40"
-                                layout="fixed"
-                                className="rounded-full"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex mb-2 items-center">
-                          <div className="rounded-lg bg-gray-200  flex items-center p-1">
+                        ) : (
+                          <div className="mb-2 items-center">
                             <div className="flex">
-                              <Image
-                                src={
-                                  lineItem?.variant?.product?.assets?.length
-                                    ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                    : "/no_photo.svg"
-                                }
-                                width={52}
-                                height={52}
-                              />
+                              <div className="mx-auto flex">
+                                <div>
+                                  <XIcon
+                                    className="h-4 text-primary w-4 right-0 top-0"
+                                    onClick={() => destroyLine(lineItem.id)}
+                                  />
+                                </div>
+                                <Image
+                                  src={
+                                    lineItem?.variant?.product?.assets?.length
+                                      ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                      : "/no_photo.svg"
+                                  }
+                                  width={132}
+                                  height={100}
+                                />
+                                <div className="items-center justify-between mt-1">
+                                  <div className=" items-center flex justify-around bg-primary text-white rounded-full p-1">
+                                    <PlusIcon
+                                      className="w-6"
+                                      onClick={() =>
+                                        increaseQuantity(lineItem.id)
+                                      }
+                                    />
+                                  </div>
+                                  <div className="flex-grow text-center text-primary font-medium text-xl">
+                                    {lineItem.quantity}
+                                  </div>
+                                  <div className="items-center flex justify-around bg-primary text-white rounded-full p-1 ">
+                                    <MinusIcon
+                                      className="w-6"
+                                      onClick={() => decreaseQuantity(lineItem)}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="font-medium text-center text-lg w-32 h-20 flex mx-auto items-center">
+                              {lineItem.child && lineItem.child.length > 1
+                                ? `${
+                                    lineItem?.variant?.product?.attribute_data
+                                      ?.name[channelName][locale || "ru"]
+                                  } + ${lineItem?.child
+                                    .filter(
+                                      (v: any) =>
+                                        lineItem?.variant?.product?.box_id !=
+                                        v?.variant?.product?.id
+                                    )
+                                    .map(
+                                      (v: any) =>
+                                        v?.variant?.product?.attribute_data
+                                          ?.name[channelName][locale || "ru"]
+                                    )
+                                    .join(" + ")}`
+                                : lineItem?.variant?.product?.attribute_data
+                                    ?.name[channelName][locale || "ru"]}
                             </div>
                           </div>
-                          <div className="font-medium ml-3 mx-1 w-7/12">
-                            {lineItem.child && lineItem.child.length > 1
-                              ? `${
-                                  lineItem?.variant?.product?.attribute_data
-                                    ?.name[channelName][locale || "ru"]
-                                } + ${lineItem?.child
-                                  .filter(
-                                    (v: any) =>
-                                      lineItem?.variant?.product?.box_id !=
-                                      v?.variant?.product?.id
-                                  )
-                                  .map(
-                                    (v: any) =>
-                                      v?.variant?.product?.attribute_data?.name[
-                                        channelName
-                                      ][locale || "ru"]
-                                  )
-                                  .join(" + ")}`
-                              : lineItem?.variant?.product?.attribute_data
-                                  ?.name[channelName][locale || "ru"]}
-                          </div>
-                          <div>
-                            <XIcon
-                              className="cursor-pointer h-4 text-black w-4"
-                              onClick={() => destroyLine(lineItem.id)}
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className=" font-medium">
-                        {lineItem.child && lineItem.child.length
-                          ? currency(
-                              (+lineItem.total + +lineItem.child[0].total) *
-                                lineItem.quantity,
-                              {
-                                pattern: "# !",
-                                separator: " ",
-                                decimal: ".",
-                                symbol: `${locale == "uz" ? "so'm" : "сум"}`,
-                                precision: 0,
-                              }
-                            ).format()
-                          : currency(lineItem.total * lineItem.quantity, {
-                              pattern: "# !",
-                              separator: " ",
-                              decimal: ".",
-                              symbol: `${locale == "uz" ? "so'm" : "сум"}`,
-                              precision: 0,
-                            }).format()}
+                        )}
                       </div>
-                      <div className="w-20 ml-14 bg-gray-200 rounded-lg flex items-center p-1">
-                        <div className="items-center flex justify-around bg-white text-gray-500 rounded-md p-1 ">
-                          <MinusIcon
-                            className="cursor-pointer w-4 "
-                            onClick={() => decreaseQuantity(lineItem)}
-                          />
-                        </div>
-                        <div className="flex-grow text-center text-gray-500 font-medium">
-                          {lineItem.quantity}
-                        </div>
-                        <div className=" items-center flex justify-around bg-white text-gray-500 rounded-md p-1">
-                          <PlusIcon
-                            className="cursor-pointer w-4 "
-                            onClick={() => increaseQuantity(lineItem.id)}
-                          />
+                      <div className="text-center">
+                        <div className=" font-medium text-primary">
+                          {
+                            lineItem.child && lineItem.child.length
+                              ? (+lineItem.total + +lineItem.child[0].total) *
+                                lineItem.quantity
+                              : // currency(
+                                //     (+lineItem.total + +lineItem.child[0].total) *
+                                //       lineItem.quantity,
+                                //     {
+                                //       pattern: "# !",
+                                //       separator: " ",
+                                //       decimal: ".",
+                                //       symbol: `${locale == "uz" ? "so'm" : "сум"}`,
+                                //       precision: 0,
+                                //     }
+                                //   ).format()
+                                lineItem.total * lineItem.quantity
+                            // currency(lineItem.total * lineItem.quantity, {
+                            //     pattern: "# !",
+                            //     separator: " ",
+                            //     decimal: ".",
+                            //     symbol: `${locale == "uz" ? "so'm" : "сум"}`,
+                            //     precision: 0,
+                            //   }
+                            //).format()
+                          }
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-            </Slider>
+                  ))}
+              </Slider>
+            </div>
             {/* {!isEmpty && (
               <div className="flex items-center justify-between pt-4">
                 <div className="text-sm">{tr('basket_order_price')}</div>
@@ -665,36 +702,36 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                 </div>
               </div>
             )} */}
-
-            <div className="flex h-32 fixed bottom-0 w-full">
-              <div className="flex text-center bg-teal-500 w-full h-full">
-                <div
-                  className="text-2xl text-white bg-black px-60 py-12"
-                  onClick={clearBasket}
-                >
-                  Отменить
-                </div>
-                <div
-                  className="w-full bg-green-400 text-2xl py-12"
-                  onClick={goToCheckout}
-                >
-                  К оплате
-                  {
-                    " " + data.totalPrice
-                    // currency(data.totalPrice, {
-                    //   pattern: '# !',
-                    //   separator: ' ',
-                    //   decimal: '.',
-                    //   symbol: `${locale == 'uz' ? "so'm" : 'сум'}`,
-                    //   precision: 0,
-                    // }).format()
-                  }
-                </div>
-              </div>
-            </div>
           </div>
         )}
+        <div className="flex h-32 bottom-0 w-full">
+          <div className="flex text-center bg-teal-500 w-full h-full">
+            <div
+              className="text-2xl text-white bg-black px-60 py-12"
+              //onClick={clearBasket}
+            >
+              Отменить
+            </div>
+            <div
+              className="w-full bg-green-400 text-2xl py-12"
+              //onClick={goToCheckout}
+            >
+              К оплате:{" "}
+              {
+                !isEmpty && data.totalPrice
+                // currency(data.totalPrice, {
+                //   pattern: "# !",
+                //   separator: " ",
+                //   decimal: ".",
+                //   symbol: `${locale == "uz" ? "so'm" : "сум"}`,
+                //   precision: 0,
+                // }).format())
+              }
+            </div>
+          </div>
+        </div>
       </div>
+
       <Transition appear show={showSignInModal} as={Fragment}>
         <Dialog
           as="div"
