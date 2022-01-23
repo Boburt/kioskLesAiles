@@ -16,16 +16,22 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
   const { categoryId, setCategoryId } = useUI();
 
   return (
-    <div className="text-center items-center space-y-3">
+    <div className="text-center items-center space-y-3 h-[calc(100vh-550px)]">
       {categories.map((item: any) => {
         return (
           <div
-            className={`text-black w-44 cursor-pointer rounded-r-2xl ${categoryId == item.id ? 'bg-primary' : ''}`}
+            className={`text-black w-44 cursor-pointer rounded-r-2xl ${
+              categoryId == item.id ? "bg-primary" : ""
+            }`}
             key={item.id}
             onClick={() => setCategoryId(item.id)}
           >
             <img src="/assets/img_cat_menu.png" className="mx-auto pt-1" />
-            <div className={`p-3 leading-4 text-2xl ${categoryId == item.id ? 'text-white' : ''}`}>
+            <div
+              className={`p-3 leading-4 text-2xl ${
+                categoryId == item.id ? "text-white" : ""
+              }`}
+            >
               {item?.attribute_data?.name[channelName][locale || "ru"]}
             </div>
           </div>

@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
   useCallback,
+  useEffect,
 } from "react";
 import useCart from "@framework/cart/use-cart";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
@@ -21,7 +22,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import getConfig from "next/config";
 import { useRouter } from "next/router";
-import useTranslation from "next-translate/useTranslation";
 import { useUI } from "@components/ui/context";
 import { Dialog, Transition } from "@headlessui/react";
 import OtpInput from "react-otp-input";
@@ -33,7 +33,18 @@ import SimpleBar from "simplebar-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import {
+  useTranslation,
+  useLanguageQuery,
+  LanguageSwitcher,
+} from "next-export-i18n";
 import { ChevronDownIcon } from "@heroicons/react/outline";
+import {
+  Product,
+  ProductOptionValues,
+  ProductPrice,
+} from "@commerce/types/product";
+import { Link } from "react-scroll";
 
 const { publicRuntimeConfig } = getConfig();
 axios.defaults.withCredentials = true;
@@ -59,7 +70,7 @@ type SmallCartProps = {
 };
 
 const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
-  const { t: tr } = useTranslation("common");
+  const { t: tr } = useTranslation();
 
   const router = useRouter();
   const { locale } = router;
@@ -88,6 +99,20 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   const [isCartLoading, setIsCartLoading] = useState(false);
   const cancelButtonRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const [recomendedItems, setRecomendedItems] = useState([]);
+  const [isLoadingRecomended, setLoadingRecomended] = useState(false);
+
+  // const prodPriceDesktop = useMemo(() => {
+  //   let price: number = parseInt(store.price, 0) || 0;
+  //   if (store.variants && store.variants.length > 0) {
+  //     const activeValue: any = store.variants.find(
+  //       (item) => item.active == true
+  //     );
+  //     if (activeValue) price += parseInt(activeValue.price, 0);
+  //   }
+
+  //   return price;
+  // }, [store.price, store.variants]);
 
   const {
     user,
@@ -106,7 +131,8 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   };
 
   const closeModal = () => {
-    setShowSignInModal(false);
+    setOpen(false);
+    router.push(`/cart`);
   };
 
   const {
@@ -469,6 +495,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
 
       await mutate(basketResult, false);
       setIsCartLoading(false);
+      fetchRecomendedItems();
     }
   };
 
@@ -495,6 +522,120 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
     );
   }
 
+  const fetchRecomendedItems = async () => {
+    if (cartId) {
+      const { data } = await axios.get(
+        `${webAddress}/api/baskets/related/${cartId}`
+      );
+      if (data.data && data.data.length) {
+        setRecomendedItems(data.data);
+      }
+    }
+  };
+  useEffect(() => {
+    fetchConfig();
+    fetchRecomendedItems();
+    return;
+  }, []);
+
+  const checkRecommended = async () => {
+    setLoadingRecomended(true);
+    if (cartId) {
+      const { data } = await axios.get(
+        `${webAddress}/api/baskets/related/${cartId}`
+      );
+      if (data.data && data.data.length) {
+        setLoadingRecomended(false);
+
+        setRecomendedItems(data.data);
+        setOpen(true);
+      } else {
+        setLoadingRecomended(false);
+        router.push("/cart/");
+      }
+    }
+  };
+
+  const addToBasket = async (selectedProdId: number) => {
+    let modifierProduct: any = null;
+    let selectedModifiers: any = null;
+    await setCredentials();
+
+    let basketId = localStorage.getItem("basketId");
+    const otpToken = Cookies.get("opt_token");
+
+    let basketResult = {};
+
+    if (basketId) {
+      const { data: basketData } = await axios.post(
+        `${webAddress}/api/baskets-lines`,
+        {
+          basket_id: basketId,
+          variants: [
+            {
+              id: selectedProdId,
+              quantity: 1,
+              modifiers: null,
+              additionalSale: true,
+            },
+          ],
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${otpToken}`,
+          },
+          withCredentials: true,
+        }
+      );
+      basketResult = {
+        id: basketData.data.id,
+        createdAt: "",
+        currency: { code: basketData.data.currency },
+        taxesIncluded: basketData.data.tax_total,
+        lineItems: basketData.data.lines,
+        lineItemsSubtotalPrice: basketData.data.sub_total,
+        subtotalPrice: basketData.data.sub_total,
+        totalPrice: basketData.data.total,
+      };
+    } else {
+      const { data: basketData } = await axios.post(
+        `${webAddress}/api/baskets`,
+        {
+          variants: [
+            {
+              id: selectedProdId,
+              quantity: 1,
+              modifiers: null,
+              additionalSale: true,
+            },
+          ],
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${otpToken}`,
+          },
+          withCredentials: true,
+        }
+      );
+      localStorage.setItem("basketId", basketData.data.encoded_id);
+      basketResult = {
+        id: basketData.data.id,
+        createdAt: "",
+        currency: { code: basketData.data.currency },
+        taxesIncluded: basketData.data.tax_total,
+        lineItems: basketData.data.lines,
+        lineItemsSubtotalPrice: basketData.data.sub_total,
+        subtotalPrice: basketData.data.sub_total,
+        totalPrice: basketData.data.total,
+      };
+    }
+
+    await mutate(basketResult, false);
+    fetchRecomendedItems();
+  };
+
   function SamplePrevArrow(props: any) {
     const { className, style, onClick } = props;
     return (
@@ -509,10 +650,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   return (
     <>
       <div
-        className={
-          (data && data.lineItems ? "" : " hidden") +
-          " bottom-0 w-full fixed bg-white"
-        }
+        className={(!isEmpty ? "" : " hidden") + " w-full fixed bg-white"}
         ref={popoverRef}
       >
         {isCartLoading && (
@@ -706,6 +844,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
             )} */}
           </div>
         )}
+
         <div className="flex h-32 bottom-0 w-full">
           <div className="flex text-center bg-teal-500 w-full h-full">
             <div
@@ -716,7 +855,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
             </div>
             <div
               className="w-full bg-green-400 text-2xl py-12"
-              //onClick={goToCheckout}
+              onClick={() => checkRecommended()}
             >
               К оплате:{" "}
               {
@@ -732,64 +871,136 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
             </div>
           </div>
         </div>
-      </div>
-      <Transition.Root show={open} as={Fragment}>
-        <Dialog
-          as="div"
-          static
-          className="fixed z-50 inset-0"
-          initialFocus={cancelButtonRef}
-          open={open}
-          onClose={setOpen}
-        >
-          <div className="flex items-end justify-center h-full md:pt-4 md:px-4 md:pb-20 text-center sm:block sm:p-0">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            </Transition.Child>
 
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-              <div className="inline-block mt-24 object-center bg-white items-center shadow-xl transform">
-                <div
-                  className="hidden bg-gray-100 rounded-lg p-3 w-max my-5"
-                  onClick={() => setOpen(false)}
-                >
-                  <ChevronDownIcon className="w-5" />
+        <Transition.Root show={open} as={Fragment}>
+          <Dialog
+            as="div"
+            static
+            className="fixed z-50 inset-0"
+            initialFocus={cancelButtonRef}
+            open={open}
+            onClose={setOpen}
+          >
+            <div className="flex items-end justify-center h-full md:pt-4 md:px-4 md:pb-20 text-center sm:block sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+              </Transition.Child>
+
+              {/* This element is to trick the browser into centering the modal contents. */}
+              <span className="hidden " aria-hidden="true">
+                &#8203;
+              </span>
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 "
+              >
+                <div className="bg-white">
+                  <div className="bg-white my-96 shadow-xl transform mx-28">
+                    <div
+                      className="absolute text-white hidden md:block p-3 right-0 bg-primary top-0 w-max"
+                      onClick={() => setOpen(false)}
+                    >
+                      <XIcon className="w-10" />
+                    </div>
+                    <div
+                      className="font-serif text-6xl pt-14 pb-16 px-48"
+                      ref={cancelButtonRef}
+                    >
+                      {tr("recomended_to_your_order")}
+                    </div>
+                    {recomendedItems.length > 0 && (
+                      <div className="px-11 shadow-md rounded-2xl grid grid-cols-3 pb-28">
+                        {recomendedItems.map((item: any) => (
+                          <div
+                            className="rounded-2xl px-5 py-2 text-center m-2 "
+                            onClick={() => addToBasket(item.id)}
+                            key={item.name}
+                          >
+                            <div className="flex-grow flex items-center flex-col justify-center">
+                              <div className="h-44">
+                                {item.image ? (
+                                  <img
+                                    src={item.image}
+                                    width={245}
+                                    height={184}
+                                    alt={
+                                      item?.attribute_data?.name[channelName][
+                                        locale || "ru"
+                                      ]
+                                    }
+                                    className="transform motion-safe:group-hover:scale-105 transition duration-500"
+                                  />
+                                ) : (
+                                  <img
+                                    src="/no_photo.svg"
+                                    width={245}
+                                    height={184}
+                                    alt={
+                                      item?.attribute_data?.name[channelName][
+                                        locale || "ru"
+                                      ]
+                                    }
+                                    className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
+                                  />
+                                )}
+                              </div>
+
+                              <div className="text-2xl leading-5 font-bold mb-3 h-16 pt-6 text-center font-sans">
+                                {
+                                  item?.attribute_data?.name[channelName][
+                                    locale || "ru"
+                                  ]
+                                }
+                              </div>
+                            </div>
+                            <div
+                              className="text-3xl text-primary font-normal"
+                              //onClick={() => addToBasket(item.id)}
+                            >
+                              {currency(parseInt(item.price, 0) || 0, {
+                                pattern: "# !",
+                                separator: " ",
+                                decimal: ".",
+                                symbol: `${locale == "uz" ? "so'm" : "сум"}`,
+                                precision: 0,
+                              }).format()}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="flex items-baseline fixed w-full">
+                      <button
+                        className="text-4xl font-medium bg-gray-300 py-5 text-black outline-none w-full h-36 font-sans"
+                        onClick={() => closeModal()}
+                      ></button>
+                      <button
+                        className="text-4xl font-medium bg-primary py-5 text-white outline-none w-full h-36 font-sans"
+                        onClick={() => closeModal()}
+                      >
+                        Готово
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div
-                  className="absolute text-white hidden md:block p-3 right-0 bg-primary top-0 w-max"
-                  onClick={() => setOpen(false)}
-                >
-                  <XIcon className="w-10" />
-                </div>
-                <div className="overflow-y-auto"></div>
-              </div>
-            </Transition.Child>
-          </div>
-        </Dialog>
-      </Transition.Root>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition.Root>
+      </div>
     </>
   );
 };

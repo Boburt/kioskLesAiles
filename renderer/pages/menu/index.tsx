@@ -168,10 +168,10 @@ function Menu({
 
   return (
     <>
-      <div className="w-48 fixed left-0 pt-10 space-y-10 overflow-y-auto h-[calc(100vh-290px)]">
+      <div className="w-48 fixed left-0 pt-10 space-y-10 overflow-y-auto ">
         <CategoriesMenu categories={categories} channelName={channelName} />
       </div>
-      <div className="col-span-5 ml-48 mb-10">
+      <div className="col-span-5 ml-48 mb-40">
         <div className="container mx-auto px-10">
           <div className="">
             <div className="col-span-3 md:hidden"></div>
@@ -201,9 +201,10 @@ function Menu({
           </div>
         </div>
       </div>
-      {/* <div>
-      <CartWithNoSSR channelName={channelName} />
-    </div> */}
+      <div className="bottom-0">
+        <CartWithNoSSR channelName={channelName} />
+      </div>
+      <div></div>
     </>
   );
 }

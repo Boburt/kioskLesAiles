@@ -28,7 +28,7 @@ if (isProd) {
       const { result } = await res.json();
       console.log(result);
       // async write result to file
-      const file = path.join(__dirname, `../renderer/i18n/${lang}.json`);
+      const file = path.join(__dirname, `../i18n/${lang}.json`);
       const data = JSON.stringify(result);
       writeFile(file, data, (err) => {
         if (err) {

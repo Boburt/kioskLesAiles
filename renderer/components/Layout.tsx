@@ -13,7 +13,6 @@ import { APILinkItem } from "@commerce/types/headerMenu";
 import { SocialIcons } from "@commerce/types/socialIcons";
 import { City } from "@commerce/types/cities";
 import Header from "./Header";
-import Footer from "./footer";
 
 interface Props {
   pageProps: {
@@ -45,10 +44,9 @@ const Layout: FC<Props> = ({
   return (
     <CommerceProvider locale={locale}>
       <Header />
-      <main className=" bg-white text-black mt-28 overflow-y-auto h-[calc(100vh-450px)]">
+      <main className=" bg-white text-black mt-28 overflow-y-auto h-[calc(100vh-240px)]">
         {children}
       </main>
-      <Footer />
     </CommerceProvider>
   );
 };
