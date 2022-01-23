@@ -409,7 +409,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             </div> */}
           <div className="flex mt-5 justify-between items-center">
             <span className="md:w-auto text-primary md:px-0 md:py-0 text-3xl font-medium">
-              {prodPriceDesktop}
+              {currency(prodPriceDesktop, {
+                pattern: "# !",
+                separator: " ",
+                decimal: ".",
+                symbol: `${locale == "uz" ? "" : ""}`,
+                precision: 0,
+              }).format()}
             </span>
             <div className="w-28">
               {productLine ? (

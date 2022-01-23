@@ -14,6 +14,11 @@ import dynamic from "next/dynamic";
 import Footer from "@components/footer";
 import Layout from "@components/Layout";
 import { useUI } from "@components/ui/context";
+import { useTranslation } from "next-export-i18n";
+import currency from "currency.js";
+import { useCarousel } from "@webeetle/react-headless-hooks";
+import { chunk } from "lodash";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/solid";
 
 const CartWithNoSSR = dynamic(() => import("@components/SmallCart"), {
   ssr: false,
@@ -73,6 +78,7 @@ function Menu({
   products: any[];
   categories: any[];
 }) {
+  const { t: tr } = useTranslation("common");
   const router = useRouter();
   const { locale } = router;
   const [channelName, setChannelName] = useState("chopar");
@@ -166,6 +172,44 @@ function Menu({
     }
   }, []);
 
+  const secMinPrice = useMemo(() => {
+    let minPrice = 0;
+    const currentCategory = readyProducts[0];
+    if (currentCategory) {
+      minPrice = Math.min(
+        ...currentCategory.items.map((store: any) => {
+          let price: number = parseInt(store.price, 0) || 0;
+          if (store.variants && store.variants.length > 0) {
+            const activeValue: any = store.variants.find(
+              (item: any) => item.active == true
+            );
+            if (activeValue) price += parseInt(activeValue.price, 0);
+          }
+
+          return price;
+        })
+      );
+    }
+    return minPrice;
+  }, [readyProducts]);
+
+  const secSlides = useMemo(() => {
+    let category = readyProducts[0];
+    let res: any[] = [];
+    if (category) {
+      res = chunk(category.items, 12);
+    }
+
+    return res;
+  }, [readyProducts]);
+
+  const {
+    currentSlide,
+    goToSlide,
+    triggerGoToPrevSlide,
+    triggerGoToNextSlide,
+  } = useCarousel({ maxSlide: secSlides.length, loop: false });
+
   return (
     <>
       <div className="w-48 fixed left-0 pt-10 space-y-10 overflow-y-auto h-[calc(100vh-290px)]">
@@ -181,20 +225,63 @@ function Menu({
                   key={`productSection_${sec.id}`}
                   id={`productSection_${sec.id}`}
                 >
-                  <ProductListSectionTitle
-                    title={
-                      sec?.attribute_data?.name[channelName][locale || "ru"]
-                    }
-                  />
-                  <div className="grid grid-cols-3  gap-3">
-                    {sec.items.map((prod: any) => (
-                      <ProductItemNew
-                        product={prod}
-                        key={prod.id}
-                        channelName={channelName}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <ProductListSectionTitle
+                        title={
+                          sec?.attribute_data?.name[channelName][locale || "ru"]
+                        }
                       />
-                    ))}
+                      <div>
+                        {locale == "ru" && tr("price_from")}
+                        <span className="md:w-auto text-primary md:px-0 md:py-0 text-4xl font-serif font-medium">
+                          {currency(secMinPrice, {
+                            pattern: "# !",
+                            separator: " ",
+                            decimal: ".",
+                            symbol: `${locale == "uz" ? "" : ""}`,
+                            precision: 0,
+                          }).format()}
+                        </span>
+                        {locale == "uz" && tr("price_from")}
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span
+                        className={`bg-greenPrimary p-3 rounded-l-3xl ${
+                          currentSlide == 1 ? "hidden" : ""
+                        }`}
+                        {...triggerGoToPrevSlide}
+                      >
+                        <ArrowLeftIcon className="w-14 h-14 text-white" />
+                      </span>
+                      <span
+                        className={`bg-greenPrimary p-3 rounded-r-3xl ${
+                          currentSlide == secSlides.length ? "hidden" : ""
+                        }`}
+                        {...triggerGoToNextSlide}
+                      >
+                        <ArrowRightIcon className="w-14 h-14 text-white" />
+                      </span>
+                    </div>
                   </div>
+                  {secSlides.map((slide: any, index: number) => (
+                    <div
+                      key={`productSection_${sec.id}_${index}`}
+                      data-current-slide={currentSlide}
+                      className={`grid grid-cols-3 gap-3 ${
+                        index + 1 == currentSlide ? "" : "hidden"
+                      }`}
+                    >
+                      {slide.map((item: any) => (
+                        <ProductItemNew
+                          key={`productSection_${sec.id}_${index}_${item.id}`}
+                          product={item}
+                          channelName={channelName}
+                        />
+                      ))}
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
