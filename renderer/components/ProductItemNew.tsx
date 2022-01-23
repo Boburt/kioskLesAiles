@@ -346,10 +346,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   return (
     <>
       <div
-        className={`py-3 overflow-hidden bg-productBg rounded-xl group items-center justify-between flex flex-col shadow-lg`}
+        className={`py-3 overflow-hidden h-[312px] bg-productBg rounded-xl group items-center justify-between flex flex-col shadow-lg`}
         id={`prod-${store.id}`}
       >
-        <div className=" h-44 overflow-hidden w-full">
+        <div className=" h-[170px] overflow-hidden w-full">
           {store.image ? (
             <img
               src={store.image}
@@ -409,7 +409,13 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
             </div> */}
           <div className="flex mt-5 justify-between items-center">
             <span className="md:w-auto text-primary md:px-0 md:py-0 text-3xl font-medium">
-              {prodPriceDesktop}
+              {currency(prodPriceDesktop, {
+                pattern: "# !",
+                separator: " ",
+                decimal: ".",
+                symbol: `${locale == "uz" ? "" : ""}`,
+                precision: 0,
+              }).format()}
             </span>
             <div className="w-28">
               {productLine ? (

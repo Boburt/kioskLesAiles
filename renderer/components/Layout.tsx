@@ -44,7 +44,7 @@ const Layout: FC<Props> = ({
   return (
     <CommerceProvider locale={locale}>
       <Header />
-      <main className=" bg-white text-black mt-28 overflow-y-auto h-[calc(100vh-240px)]">
+      <main className=" bg-white text-black mt-[6.6rem] overflow-y-auto h-[calc(100vh-106px)]">
         {children}
       </main>
     </CommerceProvider>

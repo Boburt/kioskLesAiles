@@ -11,8 +11,8 @@ import CurrentTime from "./ui/CurrentTime";
 
 function Header() {
   return (
-    <div className="flex text-center top-0 fixed w-full h-28">
-      <nav className="flex items-center py-6 bg-primary w-full">
+    <div className="flex text-center top-0 fixed w-full ">
+      <nav className="flex items-center bg-primary w-full h-[106px]">
         <div className="flex items-center flex-shrink-0 text-white mx-6">
           <Link href={"/home"}>
             <img src="/assets/logo_for_header.png" />
@@ -41,8 +41,8 @@ function Header() {
         </div>
       </nav>
       <div className="flex items-center">
-        <div className="h-full font-sans text-2xl px-4 text-white bg-indigo-600 w-44 pt-6">
-          Личный Кабинет
+        <div className="bg-indigo-600 flex flex-col font-sans h-[106px] justify-around px-4 py-[5px] text-2xl text-center text-white w-44">
+          <div>Личный Кабинет</div>
         </div>
         <CurrentTime />
       </div>

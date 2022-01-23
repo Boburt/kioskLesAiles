@@ -101,6 +101,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   const [open, setOpen] = useState(false);
   const [recomendedItems, setRecomendedItems] = useState([]);
   const [isLoadingRecomended, setLoadingRecomended] = useState(false);
+  const [isBasketLoading, setIsBasketLoading] = useState(false);
 
   // const prodPriceDesktop = useMemo(() => {
   //   let price: number = parseInt(store.price, 0) || 0;
@@ -559,6 +560,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   const addToBasket = async (selectedProdId: number) => {
     let modifierProduct: any = null;
     let selectedModifiers: any = null;
+    setIsBasketLoading(true);
     await setCredentials();
 
     let basketId = localStorage.getItem("basketId");
@@ -634,6 +636,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
 
     await mutate(basketResult, false);
     fetchRecomendedItems();
+    setIsBasketLoading(false);
   };
 
   function SamplePrevArrow(props: any) {
@@ -772,7 +775,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                 </div>
                               </div>
                             </div>
-                            <div className="font-medium text-center text-lg w-32 h-20 flex mx-auto items-center">
+                            <div className="font-medium h-16 items-center leading-5 mx-auto pt-2 text-center w-32">
                               {lineItem.child && lineItem.child.length > 1
                                 ? `${
                                     lineItem?.variant?.product?.attribute_data
@@ -845,29 +848,33 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
           </div>
         )}
 
-        <div className="flex h-32 bottom-0 w-full">
+        <div className="flex bottom-0 w-full">
           <div className="flex text-center bg-teal-500 w-full h-full">
             <div
-              className="text-2xl text-white bg-black px-60 py-12"
+              className="text-2xl text-white bg-black px-[150px]  h-[120px] flex flex-col justify-around"
               //onClick={clearBasket}
             >
-              Отменить
+              <div className="text-[40px] font-medium">Отменить</div>
             </div>
             <div
-              className="w-full bg-green-400 text-2xl py-12"
+              className="w-full bg-greenPrimary text-white text-2xl h-[120px] flex flex-col justify-around"
               onClick={() => checkRecommended()}
             >
-              К оплате:{" "}
-              {
-                !isEmpty && data.totalPrice
-                // currency(data.totalPrice, {
-                //   pattern: "# !",
-                //   separator: " ",
-                //   decimal: ".",
-                //   symbol: `${locale == "uz" ? "so'm" : "сум"}`,
-                //   precision: 0,
-                // }).format())
-              }
+              <div className="flex items-end mx-auto space-x-4">
+                <div className="text-[40px] font-medium">к оплате:</div>{" "}
+                <div className="text-[50px] font-medium">
+                  {
+                    !isEmpty && data.totalPrice
+                    // currency(data.totalPrice, {
+                    //   pattern: "# !",
+                    //   separator: " ",
+                    //   decimal: ".",
+                    //   symbol: `${locale == "uz" ? "so'm" : "сум"}`,
+                    //   precision: 0,
+                    // }).format())
+                  }
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -908,7 +915,31 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                 leaveTo="opacity-0 translate-y-4 "
               >
                 <div className="bg-white">
-                  <div className="bg-white my-96 shadow-xl transform mx-28">
+                  <div className="bg-white my-96 relative shadow-xl transform mx-28">
+                    {isBasketLoading && (
+                      <div className="h-full w-full absolute z-50 flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]">
+                        <svg
+                          className="animate-spin text-primary h-14"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                      </div>
+                    )}
                     <div
                       className="absolute text-white hidden md:block p-3 right-0 bg-primary top-0 w-max"
                       onClick={() => setOpen(false)}
@@ -982,11 +1013,13 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                         ))}
                       </div>
                     )}
-                    <div className="flex items-baseline fixed w-full">
+                    <div className="flex fixed w-full">
                       <button
                         className="text-4xl font-medium bg-gray-300 py-5 text-black outline-none w-full h-36 font-sans"
                         onClick={() => closeModal()}
-                      ></button>
+                      >
+                        Нет, спасибо
+                      </button>
                       <button
                         className="text-4xl font-medium bg-primary py-5 text-white outline-none w-full h-36 font-sans"
                         onClick={() => closeModal()}
