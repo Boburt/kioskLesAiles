@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import useTranslation from "next-translate/useTranslation";
 import getConfig from "next/config";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import Hashids from "hashids";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -18,6 +18,13 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Layout from "@components/Layout";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/solid";
+
+import { chunk } from "lodash";
+import { useCarousel } from "@webeetle/react-headless-hooks";
+import { Dialog, Transition } from "@headlessui/react";
+import Cashback from "@components/Cashback";
+import SignInModal from "@components/SignInModal";
 
 export async function getStaticProps({
   preview,
@@ -79,7 +86,7 @@ function Cart() {
     setChannelName(channelData.name);
   };
 
-  const { activeCity } = useUI();
+  const { activeCity, locationData } = useUI();
   useEffect(() => {
     getChannel();
   }, []);
@@ -332,10 +339,14 @@ function Cart() {
     await mutate(basketResult, false);
     fetchRecomendedItems();
   };
+  const [open, setOpen] = useState(false);
 
   const goToCheckout = (e: any) => {
     e.preventDefault();
-    router.push(`/${activeCity.slug}/order/`);
+    if (locationData.deliveryType == "table") {
+      router.push("/pickuplocator");
+    } else {
+    }
   };
 
   const clearBasket = async () => {
@@ -422,6 +433,85 @@ function Cart() {
     ],
   };
 
+  // const readyProducts = useMemo(() => {
+  //   let resProds = products;
+  //   if (categoryId) {
+  //     resProds = products.filter((section: any) => section.id == categoryId);
+  //   }
+
+  //   return resProds
+  //     .map((prod: any) => {
+  //       if (prod.half_mode) {
+  //         return null;
+  //       }
+  //       if (prod.variants && prod.variants.length) {
+  //         prod.variants = prod.variants.map((v: any, index: number) => {
+  //           if (index === 1) {
+  //             v.active = true;
+  //           } else {
+  //             v.active = false;
+  //           }
+
+  //           return v;
+  //         });
+  //       } else if (prod.items && prod.items.length) {
+  //         prod.items = prod.items.map((item: any) => {
+  //           item.variants = item.variants.map((v: any, index: number) => {
+  //             if (index === 1) {
+  //               v.active = true;
+  //             } else {
+  //               v.active = false;
+  //             }
+
+  //             return v;
+  //           });
+
+  //           return item;
+  //         });
+  //       }
+  //       return prod;
+  //     })
+  //     .filter((prod: any) => prod != null);
+  // }, [products, categoryId]);
+
+  // const secMinPrice = useMemo(() => {
+  //   let minPrice = 0;
+  //   const currentCategory = readyProducts[0];
+  //   if (currentCategory) {
+  //     minPrice = Math.min(
+  //       ...currentCategory.items.map((store: any) => {
+  //         let price: number = parseInt(store.price, 0) || 0;
+  //         if (store.variants && store.variants.length > 0) {
+  //           const activeValue: any = store.variants.find(
+  //             (item: any) => item.active == true
+  //           );
+  //           if (activeValue) price += parseInt(activeValue.price, 0);
+  //         }
+
+  //         return price;
+  //       })
+  //     );
+  //   }
+  //   return minPrice;
+  // }, [readyProducts]);
+
+  // const secSlides = useMemo(() => {
+  //   let category = readyProducts[0];
+  //   let res: any[] = [];
+  //   if (category) {
+  //     res = chunk(category.items, 12);
+  //   }
+
+  //   return res;
+  // }, [readyProducts]);
+
+  // const {
+  //   currentSlide,
+  //   goToSlide,
+  //   triggerGoToPrevSlide,
+  //   triggerGoToNextSlide,
+  // } = useCarousel({ maxSlide: secSlides.length, loop: false });
+
   return (
     <>
       {isCartLoading && (
@@ -462,15 +552,17 @@ function Cart() {
       )}
       {!isEmpty && (
         <>
-          <div className=" p-5  text-xl mt-5 bg-white ">
-            <div className="flex justify-between items-center">
-              <div className="text-3xl">{tr("basket")} </div>
+          <div className="mt-12 h-[calc(100vh-490px)]">
+            <div className="text-center">
+              <div className="text-6xl font-serif font-bold mx-64">
+                Подтвердите заказ перед оплатой
+              </div>
               {/* <div className="text-gray-400 text-sm flex cursor-pointer">
             Очистить всё <TrashIcon className=" w-5 h-5 ml-1" />
           </div> */}
             </div>
-            <Slider {...settings}></Slider>
-            <div className="mt-10 gap-4 gap-y-24 grid grid-cols-3">
+
+            <div className="mt-14 gap-4 gap-y-24 grid grid-cols-3">
               {data &&
                 data?.lineItems.map((lineItem: any) => (
                   <div className="m-auto" key={lineItem.id}>
@@ -673,79 +765,50 @@ function Cart() {
                   </div>
                 ))}
             </div>
-            <Slider />
           </div>
-
-          <div className="rounded-2xl md:bg-gray-200 md:flex items-center justify-between md:px-10 px-5 md:py-16">
-            {/* <div className="md:w-72">
-                <form onSubmit={handleSubmit(onSubmit)} className="relative">
-                  <input
-                    type="text"
-                    placeholder={tr('promocode')}
-                    {...register('discount_code')}
-                    className="bg-gray-100 focus:outline-none outline-none px-5 py-2 rounded-full text-lg w-full"
-                  />
-                  <button className="absolute focus:outline-none outline-none right-1 top-1">
-                    <Image src="/discount_arrow.png" width={37} height={37} />
-                  </button>
-                </form>
-              </div> */}
-            <div className="flex font-bold items-center justify-between bg-gray-200 rounded-xl p-4 md:p-0">
-              <div className="text-lg">{tr("basket_order_price")}</div>
-              <div className="ml-7 md:text-3xl text-xl text-medium">
-                {currency(data.totalPrice, {
-                  pattern: "# !",
-                  separator: " ",
-                  decimal: ".",
-                  symbol: `${locale == "uz" ? "so'm" : "сум"}`,
-                  precision: 0,
-                }).format()}
-              </div>
-            </div>
-            <button
-              className={`bg-green-600 md:text-xl rounded-2xl text-white md:w-64 w-full py-5 px-12 font-medium md:mt-0 mt-5 `}
-              onClick={goToCheckout}
+          {/* <div className="flex items-center space-x-2">
+            <span
+              className={`bg-greenPrimary p-3 rounded-l-3xl ${
+                currentSlide == 1 ? "hidden" : ""
+              }`}
+              {...triggerGoToPrevSlide}
             >
-              {tr("checkout")}
-            </button>
-          </div>
-          <style global jsx>{`
-            .slick-prev:before,
-            .slick-next:before {
-              color: #fc004a;
-            }
-            .slick-prev:before {
-              font-size: 33px;
-              margin-left: -48px;
-            }
-            .slick-next:before {
-              font-size: 33px;
-              margin-left: 24px;
-            }
-            .slick-track {
-              display: flex;
-            }
-            .slick-track .slick-slide {
-              display: flex;
-              height: auto;
-              align-items: center;
-              justify-content: center;
-            }
-            .slick-track .slick-slide > div {
-              height: 100%;
-            }
-
-            /* the slides */
-            .slick-slide {
-              margin: 0 5px;
-            }
-            /* the parent */
-            .slick-list {
-              margin: 0 -10px;
-            }
-          `}</style>
+              <ArrowLeftIcon className="w-14 h-14 text-white" />
+            </span>
+            <span
+              className={`bg-greenPrimary p-3 rounded-r-3xl ${
+                currentSlide == secSlides.length ? "hidden" : ""
+              }`}
+              {...triggerGoToNextSlide}
+            >
+              <ArrowRightIcon className="w-14 h-14 text-white" />
+            </span>
+          </div> */}
         </>
       )}
+      <div className="bottom-0 fixed flex mb-40 right-24 items-center">
+        <span className="text-4xl font-medium font-sans">Итого:</span>
+        <span className="ml-5 text-7xl font-sans font-semibold">
+          {/* {data.totalPrice} */}
+        </span>
+      </div>
+      <div className="flex fixed bottom-0 w-full">
+        <div className="flex text-center w-full h-full">
+          <div className=" text-white bg-black px-[160px]  h-[120px] flex flex-col justify-around">
+            <div className="text-4xl font-medium">Изменить заказ</div>
+          </div>
+          <div
+            className="w-full bg-greenPrimary text-white text-2xl h-[120px] flex flex-col justify-around"
+            onClick={() => setOpen(true)}
+          >
+            <div className="flex items-end mx-auto space-x-4">
+              <div className="text-[40px] font-medium">Да, заказ верен</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Cashback />
+      <SignInModal channelName={locale} />
     </>
   );
 }

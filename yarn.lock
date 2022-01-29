@@ -6537,6 +6537,11 @@ kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
+kioskboard@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/kioskboard/-/kioskboard-2.0.0.tgz#559594c4de5d3c2c2908e80d426aad4af83dc6ea"
+  integrity sha512-eEu9TdfMQ4IjT2NTfUQpCu8Ni7FLVYUJ06jWr9lZefuAm4B5def6VrJtzsmfMaUM0aCXVuN6VNtTEC5eVPyHXA==
+
 latest-version@5.1.0, latest-version@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/latest-version/-/latest-version-5.1.0.tgz#119dfe908fe38d15dfa43ecd13fa12ec8832face"

@@ -4,10 +4,35 @@ import Prodcart from "../components/mainProductCart";
 import { Ru, Uz, Us } from "react-flags-select";
 import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
 import commerce from "@lib/api/commerce";
-
-
+import { useUI } from "@components/ui/context";
+import { useRouter } from "next/router";
 
 function Home() {
+  const {
+    user,
+    setUserData,
+    locationData,
+    setLocationData,
+    cities,
+    activeCity,
+    setActiveCity,
+    openSignInModal,
+    addressId,
+    setStopProducts,
+    stopProducts,
+  } = useUI();
+
+  const router = useRouter();
+  const { locale } = router;
+
+  const setDeliveryType = (deliveryType = "pickup") => {
+    setLocationData({
+      ...locationData,
+      deliveryType,
+    });
+    router.push("/menu");
+  };
+
   return (
     <>
       <div className="bg-primary grid grid-flow-row auto-rows-max font-serif h-[calc(100vh-1px)]">
@@ -41,18 +66,20 @@ function Home() {
           </h2>
         </div>
         <div className="flex m-auto mt-20 space-x-10 mb-20">
-          <Link href={"/menu"}>
-            <div className="items-center p-14 w-80 flex flex-col text-center rounded-3xl text-black bg-white">
-              <img src="/restaurant.png" className="mt-8" />
-              <div className="text-5xl mt-10">В зале</div>
-            </div>
-          </Link>
-          <Link href={"/menu"}>
-            <div className="items-center p-14 w-80 flex flex-col text-center rounded-3xl text-black bg-white">
-              <img src="/takeaway.png" className="mt-8" />
-              <div className="text-5xl mt-10">С собой</div>
-            </div>
-          </Link>
+          <div
+            className="items-center p-14 w-80 flex flex-col text-center rounded-3xl text-black bg-white"
+            onClick={() => setDeliveryType("table")}
+          >
+            <img src="/restaurant.png" className="mt-8" />
+            <div className="text-5xl mt-10">В зале</div>
+          </div>
+          <div
+            className="items-center p-14 w-80 flex flex-col text-center rounded-3xl text-black bg-white"
+            onClick={() => setDeliveryType("pickup")}
+          >
+            <img src="/takeaway.png" className="mt-8" />
+            <div className="text-5xl mt-10">С собой</div>
+          </div>
         </div>
       </div>
     </>

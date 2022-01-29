@@ -74,7 +74,7 @@ export interface LocationData {
   entrance: string;
   door_code?: string;
   floor?: string;
-  deliveryType: "pickup" | "deliver";
+  deliveryType: "pickup" | "table";
   location?: number[];
   terminalId?: number;
   terminalData?: AnyObject;
@@ -192,9 +192,9 @@ type Action =
       type: "SET_ADDRESS_ID";
       value: number;
     }
-    | {
-      type: 'SET_CATEGORY_ID';
-      value: number
+  | {
+      type: "SET_CATEGORY_ID";
+      value: number;
     };
 
 type MODAL_VIEWS =
@@ -369,8 +369,8 @@ function uiReducer(state: State, action: Action) {
     case "SET_CATEGORY_ID": {
       return {
         ...state,
-        categoryId: action.value
-      }
+        categoryId: action.value,
+      };
     }
   }
 }
@@ -530,7 +530,7 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
       showAddressMobile,
       hideAddressMobile,
       setAddressId,
-      setCategoryId
+      setCategoryId,
     }),
     [state]
   );
