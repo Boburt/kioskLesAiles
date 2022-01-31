@@ -20,6 +20,7 @@ import { useCarousel } from "@webeetle/react-headless-hooks";
 import { chunk } from "lodash";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/solid";
 import ProductSection from "@components/ProductSection";
+import useCart from "@framework/cart/use-cart";
 
 const CartWithNoSSR = dynamic(() => import("@components/SmallCart"), {
   ssr: false,
@@ -85,6 +86,14 @@ function Menu({
   const [channelName, setChannelName] = useState("chopar");
   const [isStickySmall, setIsStickySmall] = useState(false);
   const { categoryId, setCategoryId } = useUI();
+  let cartId: string | null = null;
+
+  if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
+    cartId = localStorage.getItem("basketId");
+  }
+  const { data, isLoading, isEmpty, mutate } = useCart({
+    cartId,
+  });
 
   const getChannel = async () => {
     const channelData = await defaultChannel();
@@ -193,10 +202,13 @@ function Menu({
           </div>
         </div>
       </div>
-      <div className="bottom-0 fixed left-0 w-full h-[365px]">
+      <div
+        className={`${
+          isEmpty ? "hidden" : ""
+        } bottom-0 fixed left-0 w-full h-[365px]`}
+      >
         <CartWithNoSSR channelName={channelName} />
       </div>
-      <div></div>
     </>
   );
 }

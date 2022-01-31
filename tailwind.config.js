@@ -53,6 +53,7 @@ module.exports = {
       secondary: "#2F5E8E",
       productBg: "#f8f5f5",
       greenPrimary: "#A4C900",
+      plum: "#7C40C6",
     },
   },
   variants: {
