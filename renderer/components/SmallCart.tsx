@@ -98,7 +98,9 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   const popoverRef = useRef<any>(null);
   const [isCartLoading, setIsCartLoading] = useState(false);
   const cancelButtonRef = useRef(null);
+  const cancelModalButtonRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const [cancelOpen, setCancelOpen] = useState(false);
   const [recomendedItems, setRecomendedItems] = useState([]);
   const [isLoadingRecomended, setLoadingRecomended] = useState(false);
   const [isBasketLoading, setIsBasketLoading] = useState(false);
@@ -134,6 +136,19 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   const closeModal = () => {
     setOpen(false);
     router.push(`/cart`);
+  };
+
+  const openCancelModal = () => {
+    setCancelOpen(true);
+  };
+
+  const closeCancelModal = () => {
+    setCancelOpen(false);
+  };
+
+  const cancelBasket = async () => {
+    await clearBasket();
+    closeCancelModal();
   };
 
   const {
@@ -852,7 +867,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
           <div className="flex text-center bg-teal-500 w-full h-full">
             <div
               className="text-2xl text-white bg-black px-[150px]  h-[120px] flex flex-col justify-around"
-              //onClick={clearBasket}
+              onClick={openCancelModal}
             >
               <div className="text-[40px] font-medium">Отменить</div>
             </div>
@@ -863,32 +878,29 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
               <div className="flex items-end mx-auto space-x-4">
                 <div className="text-[40px] font-medium">к оплате:</div>{" "}
                 <div className="text-[50px] font-medium">
-                  {
-                    !isEmpty && data.totalPrice
-                    // currency(data.totalPrice, {
-                    //   pattern: "# !",
-                    //   separator: " ",
-                    //   decimal: ".",
-                    //   symbol: `${locale == "uz" ? "so'm" : "сум"}`,
-                    //   precision: 0,
-                    // }).format())
-                  }
+                  {!isEmpty &&
+                    data.totalPrice &&
+                    currency(data.totalPrice, {
+                      pattern: "# !",
+                      separator: " ",
+                      decimal: ".",
+                      symbol: ``,
+                      precision: 0,
+                    }).format()}
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <Transition.Root show={open} as={Fragment}>
+        <Transition appear show={open} as={Fragment}>
           <Dialog
             as="div"
-            static
-            className="fixed z-50 inset-0"
+            className="fixed inset-0 z-[100] overflow-y-auto"
             initialFocus={cancelButtonRef}
-            open={open}
-            onClose={setOpen}
+            onClose={() => setOpen(false)}
           >
-            <div className="flex items-end justify-center h-full md:pt-4 md:px-4 md:pb-20 text-center sm:block sm:p-0">
+            <div className="min-h-screen px-4 text-center">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -902,7 +914,10 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
               </Transition.Child>
 
               {/* This element is to trick the browser into centering the modal contents. */}
-              <span className="hidden " aria-hidden="true">
+              <span
+                className="inline-block h-screen align-middle"
+                aria-hidden="true"
+              >
                 &#8203;
               </span>
               <Transition.Child
@@ -914,7 +929,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 "
               >
-                <div className="bg-white">
+                <div className="align-middle inline-block overflow-hidden w-full z-[200]">
                   <div className="bg-white my-96 relative shadow-xl transform mx-28">
                     {isBasketLoading && (
                       <div className="h-full w-full absolute z-50 flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]">
@@ -1032,7 +1047,101 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
               </Transition.Child>
             </div>
           </Dialog>
-        </Transition.Root>
+        </Transition>
+
+        <Transition appear show={cancelOpen} as={Fragment}>
+          <Dialog
+            className="fixed inset-0 z-[100] overflow-y-auto"
+            initialFocus={cancelModalButtonRef}
+            onClose={closeCancelModal}
+          >
+            <div className="min-h-screen px-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+              </Transition.Child>
+
+              {/* This element is to trick the browser into centering the modal contents. */}
+              <span
+                className="inline-block h-screen align-middle "
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 "
+              >
+                <div className="align-middle inline-block overflow-hidden w-full z-[200]">
+                  <div className="bg-primary my-96 relative shadow-xl transform mx-28">
+                    {isBasketLoading && (
+                      <div className="h-full w-full absolute z-50 flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]">
+                        <svg
+                          className="animate-spin text-primary h-14"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                      </div>
+                    )}
+                    <div
+                      className="absolute text-primary hidden md:block p-3 right-0 bg-white top-0 w-max"
+                      onClick={() => closeCancelModal()}
+                    >
+                      <XIcon className="w-10" />
+                    </div>
+                    <div
+                      className="font-serif text-7xl py-64 text-white"
+                      ref={cancelModalButtonRef}
+                    >
+                      {tr("promptBasketClear")}
+                    </div>
+                    <div className="flex fixed w-full">
+                      <button
+                        className="text-5xl font-medium bg-white py-5 text-black outline-none w-full h-36 font-sans"
+                        onClick={() => closeCancelModal()}
+                      >
+                        {tr("no")}
+                      </button>
+                      <button
+                        className="text-5xl font-medium bg-greenPrimary py-5 text-white outline-none w-full h-36 font-sans"
+                        onClick={() => cancelBasket()}
+                      >
+                        {tr("yes")}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition>
       </div>
     </>
   );

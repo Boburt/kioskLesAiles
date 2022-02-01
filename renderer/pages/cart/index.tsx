@@ -87,9 +87,6 @@ function Cart() {
   };
 
   const { activeCity, locationData } = useUI();
-  useEffect(() => {
-    getChannel();
-  }, []);
 
   const { t: tr } = useTranslation("common");
   let cartId: string | null = null;
@@ -102,6 +99,9 @@ function Cart() {
   });
 
   const [isCartLoading, setIsCartLoading] = useState(false);
+
+  const [cashBackFirstStepOpen, setCashBackFirstStepOpen] = useState(false);
+  const cashbackFirstStepRef = useRef(null);
 
   const { register, handleSubmit } = useForm();
   const onSubmit = (data: Object) => console.log(JSON.stringify(data));
@@ -369,7 +369,29 @@ function Cart() {
     }
   };
 
+  const slides = useMemo(() => {
+    let result: any[] = [];
+
+    if (data) {
+      result = chunk(data.lineItems, 9);
+    }
+
+    return result;
+  }, [data]);
+
+  const {
+    currentSlide,
+    goToSlide,
+    triggerGoToPrevSlide,
+    triggerGoToNextSlide,
+    isFirstSlide,
+    isLastSlide,
+  } = useCarousel({ maxSlide: slides.length, loop: false });
+
+  console.log(slides);
+
   useEffect(() => {
+    getChannel();
     fetchConfig();
     fetchRecomendedItems();
     return;
@@ -395,122 +417,6 @@ function Cart() {
       </div>
     );
   }
-
-  const settings = {
-    infinite: false,
-    centerPadding: "20px",
-    arrows: true,
-    slidesToShow: 6,
-    swipeToSlide: true,
-    speed: 500,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          arrows: false,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          arrows: false,
-          dots: true,
-        },
-      },
-    ],
-  };
-
-  // const readyProducts = useMemo(() => {
-  //   let resProds = products;
-  //   if (categoryId) {
-  //     resProds = products.filter((section: any) => section.id == categoryId);
-  //   }
-
-  //   return resProds
-  //     .map((prod: any) => {
-  //       if (prod.half_mode) {
-  //         return null;
-  //       }
-  //       if (prod.variants && prod.variants.length) {
-  //         prod.variants = prod.variants.map((v: any, index: number) => {
-  //           if (index === 1) {
-  //             v.active = true;
-  //           } else {
-  //             v.active = false;
-  //           }
-
-  //           return v;
-  //         });
-  //       } else if (prod.items && prod.items.length) {
-  //         prod.items = prod.items.map((item: any) => {
-  //           item.variants = item.variants.map((v: any, index: number) => {
-  //             if (index === 1) {
-  //               v.active = true;
-  //             } else {
-  //               v.active = false;
-  //             }
-
-  //             return v;
-  //           });
-
-  //           return item;
-  //         });
-  //       }
-  //       return prod;
-  //     })
-  //     .filter((prod: any) => prod != null);
-  // }, [products, categoryId]);
-
-  // const secMinPrice = useMemo(() => {
-  //   let minPrice = 0;
-  //   const currentCategory = readyProducts[0];
-  //   if (currentCategory) {
-  //     minPrice = Math.min(
-  //       ...currentCategory.items.map((store: any) => {
-  //         let price: number = parseInt(store.price, 0) || 0;
-  //         if (store.variants && store.variants.length > 0) {
-  //           const activeValue: any = store.variants.find(
-  //             (item: any) => item.active == true
-  //           );
-  //           if (activeValue) price += parseInt(activeValue.price, 0);
-  //         }
-
-  //         return price;
-  //       })
-  //     );
-  //   }
-  //   return minPrice;
-  // }, [readyProducts]);
-
-  // const secSlides = useMemo(() => {
-  //   let category = readyProducts[0];
-  //   let res: any[] = [];
-  //   if (category) {
-  //     res = chunk(category.items, 12);
-  //   }
-
-  //   return res;
-  // }, [readyProducts]);
-
-  // const {
-  //   currentSlide,
-  //   goToSlide,
-  //   triggerGoToPrevSlide,
-  //   triggerGoToNextSlide,
-  // } = useCarousel({ maxSlide: secSlides.length, loop: false });
 
   return (
     <>
@@ -552,263 +458,325 @@ function Cart() {
       )}
       {!isEmpty && (
         <>
-          <div className="mt-12 h-[calc(100vh-490px)]">
+          <div className="mt-12 px-32 relative">
             <div className="text-center">
-              <div className="text-6xl font-serif font-bold mx-64">
-                Подтвердите заказ перед оплатой
+              <div className="text-7xl font-serif font-bold">
+                {tr("approveCartBeforePay")}
               </div>
-              {/* <div className="text-gray-400 text-sm flex cursor-pointer">
-            Очистить всё <TrashIcon className=" w-5 h-5 ml-1" />
-          </div> */}
             </div>
-
-            <div className="mt-14 gap-4 gap-y-24 grid grid-cols-3">
-              {data &&
-                data?.lineItems.map((lineItem: any) => (
-                  <div className="m-auto" key={lineItem.id}>
-                    <div className="relative">
-                      <div className=" p-2 rounded-md w-max absolute">
-                        <XIcon
-                          className=" text-primary w-8 "
-                          onClick={() => destroyLine(lineItem.id)}
-                        />
-                      </div>
-                      {lineItem.child &&
-                      lineItem.child.length &&
-                      lineItem.child[0].variant?.product?.id !=
-                        lineItem?.variant?.product?.box_id ? (
-                        <div className="">
-                          <div className="">
-                            <div>
-                              <img
-                                src={
-                                  lineItem?.variant?.product?.assets?.length
-                                    ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                    : "/no_photo.svg"
-                                }
-                                width="240"
-                                height="180"
-                                className=""
-                              />
-                            </div>
-                          </div>
-                          <div className="overflow-hidden">
-                            <div className="absolute right-0">
-                              <img
-                                src={
-                                  lineItem?.child[0].variant?.product?.assets
-                                    ?.length
-                                    ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
-                                    : "/no_photo.svg"
-                                }
-                                width="240"
-                                height="180"
-                                className=""
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="">
-                          <img
-                            src={
-                              lineItem?.variant?.product?.assets?.length
-                                ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
-                                : "/no_photo.svg"
-                            }
-                            width={240}
-                            height={180}
-                            className=""
-                          />
-                        </div>
-                      )}
-                      <div className=" flex items-center pt-3">
-                        <div className="items-center flex bg-primary text-white rounded-full p-4">
-                          <MinusIcon
-                            className="w-6"
-                            onClick={() => decreaseQuantity(lineItem)}
-                          />
-                        </div>
-                        <div className="flex-grow text-center text-primary font-medium text-3xl">
-                          {lineItem.quantity}
-                        </div>
-                        <div className=" items-center flex bg-primary text-white rounded-full p-4">
-                          <PlusIcon
-                            className="w-6 "
-                            onClick={() => increaseQuantity(lineItem.id)}
-                          />
-                        </div>
-                      </div>
-                      <div className="m-auto w-36 h-24 text-center items-center py-5">
-                        <div className=" font-medium  text-2xl font-sans">
-                          {lineItem.child && lineItem.child.length > 1
-                            ? `${
-                                lineItem?.variant?.product?.attribute_data
-                                  ?.name[channelName][locale || "ru"]
-                              } + ${lineItem?.child
-                                .filter(
-                                  (v: any) =>
-                                    lineItem?.variant?.product?.box_id !=
-                                    v?.variant?.product?.id
-                                )
-                                .map(
-                                  (v: any) =>
-                                    v?.variant?.product?.attribute_data?.name[
-                                      channelName
-                                    ][locale || "ru"]
-                                )
-                                .join(" + ")}`
-                            : lineItem?.variant?.product?.attribute_data?.name[
-                                channelName
-                              ][locale || "ru"]}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="">
-                      <div className="m-auto text-4xl w-max text-primary">
-                        {lineItem.child && lineItem.child.length
-                          ? lineItem.total +
-                            +lineItem.child[0].total * lineItem.quantity
-                          : lineItem.total * lineItem.quantity}
-                      </div>
-                    </div>
-                    <div className="md:hidden w-full space-y-3">
-                      <div className="flex justify-between">
-                        <div className="md:text-xl font-medium text-base">
-                          {lineItem.child && lineItem.child.length > 1
-                            ? `${
-                                lineItem?.variant?.product?.attribute_data
-                                  ?.name[channelName][locale || "ru"]
-                              } + ${lineItem?.child
-                                .filter(
-                                  (v: any) =>
-                                    lineItem?.variant?.product?.box_id !=
-                                    v?.variant?.product?.id
-                                )
-                                .map(
-                                  (v: any) =>
-                                    v?.variant?.product?.attribute_data?.name[
-                                      channelName
-                                    ][locale || "ru"]
-                                )
-                                .join(" + ")}`
-                            : lineItem?.variant?.product?.attribute_data?.name[
-                                channelName
-                              ][locale || "ru"]}
-                        </div>
-                        <div className="bg-gray-200 p-1 rounded-md w-max md:hidden">
+            {!isFirstSlide && (
+              <div className="absolute left-14 top-1/2">
+                <button
+                  className="text-white p-3 mt-4 rounded-xl"
+                  {...triggerGoToPrevSlide}
+                >
+                  <img src="/cart_stroke_left.png" alt="" />
+                </button>
+              </div>
+            )}
+            {!isLastSlide && (
+              <div className="absolute right-14 top-1/2">
+                <button
+                  className="text-white p-3 mt-4 rounded-xl"
+                  {...triggerGoToNextSlide}
+                >
+                  <img src="/cart_stroke_right.png" alt="" />
+                </button>
+              </div>
+            )}
+            {data &&
+              slides.map((slide: any, index: number) => (
+                <div
+                  key={`slide_${index}`}
+                  data-current-slide={currentSlide}
+                  className={`mt-14 gap-5 gap-y-10 grid grid-cols-3 ${
+                    index + 1 == currentSlide ? "" : "hidden"
+                  }`}
+                >
+                  {slide.map((lineItem: any) => (
+                    <div className="m-auto" key={lineItem.id}>
+                      <div className="relative">
+                        <div className=" p-2 rounded-md w-max absolute">
                           <XIcon
-                            className="cursor-pointer text-gray-400 w-5 "
+                            className=" text-primary w-8 "
                             onClick={() => destroyLine(lineItem.id)}
                           />
                         </div>
-                      </div>
-                      <div className="flex justify-between">
-                        <div className="md:text-xl text-base md:font-medium">
-                          {currency(lineItem.total, {
-                            pattern: "# !",
-                            separator: " ",
-                            decimal: ".",
-                            symbol: `${locale == "uz" ? "so'm" : "сум"}`,
-                            precision: 0,
-                          }).format()}
-                          <div className="text-xs">Цена за 1 шт</div>
-                        </div>
-                        <div className="md:w-32 w-24 md:ml-14 bg-gray-200 rounded-lg flex items-center p-1">
-                          <div className="items-center flex justify-around bg-white text-gray-500 rounded-md p-1 ">
+                        {lineItem.child &&
+                        lineItem.child.length &&
+                        lineItem.child[0].variant?.product?.id !=
+                          lineItem?.variant?.product?.box_id ? (
+                          <div className="">
+                            <div className="">
+                              <div>
+                                <img
+                                  src={
+                                    lineItem?.variant?.product?.assets?.length
+                                      ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                      : "/no_photo.svg"
+                                  }
+                                  width="230"
+                                  height="180"
+                                  className="max-h-[180px]"
+                                />
+                              </div>
+                            </div>
+                            <div className="overflow-hidden">
+                              <div className="absolute right-0">
+                                <img
+                                  src={
+                                    lineItem?.child[0].variant?.product?.assets
+                                      ?.length
+                                      ? `${webAddress}/storage/${lineItem?.child[0].variant?.product?.assets[0]?.location}/${lineItem?.child[0].variant?.product?.assets[0]?.filename}`
+                                      : "/no_photo.svg"
+                                  }
+                                  width="230"
+                                  height="180"
+                                  className="max-h-[180px]"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="">
+                            <img
+                              src={
+                                lineItem?.variant?.product?.assets?.length
+                                  ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
+                                  : "/no_photo.svg"
+                              }
+                              width={230}
+                              height={180}
+                              className="max-h-[180px]"
+                            />
+                          </div>
+                        )}
+                        <div className=" flex items-center pt-3">
+                          <div className="items-center flex bg-primary text-white rounded-full p-4">
                             <MinusIcon
-                              className="cursor-pointer w-4 "
+                              className="w-6"
                               onClick={() => decreaseQuantity(lineItem)}
                             />
                           </div>
-                          <div className="flex-grow text-center text-gray-500 font-medium">
+                          <div className="flex-grow text-center text-primary font-medium text-3xl">
                             {lineItem.quantity}
                           </div>
-                          <div className=" items-center flex justify-around bg-white text-gray-500 rounded-md p-1">
+                          <div className=" items-center flex bg-primary text-white rounded-full p-4">
                             <PlusIcon
-                              className="cursor-pointer w-4 "
+                              className="w-6 "
                               onClick={() => increaseQuantity(lineItem.id)}
                             />
                           </div>
                         </div>
+                        <div className="m-auto w-36 h-24 text-center items-center py-5">
+                          <div className=" font-medium  text-2xl font-sans">
+                            {lineItem.child && lineItem.child.length > 1
+                              ? `${
+                                  lineItem?.variant?.product?.attribute_data
+                                    ?.name[channelName][locale || "ru"]
+                                } + ${lineItem?.child
+                                  .filter(
+                                    (v: any) =>
+                                      lineItem?.variant?.product?.box_id !=
+                                      v?.variant?.product?.id
+                                  )
+                                  .map(
+                                    (v: any) =>
+                                      v?.variant?.product?.attribute_data?.name[
+                                        channelName
+                                      ][locale || "ru"]
+                                  )
+                                  .join(" + ")}`
+                              : lineItem?.variant?.product?.attribute_data
+                                  ?.name[channelName][locale || "ru"]}
+                          </div>
+                        </div>
                       </div>
-                      <div></div>
-
-                      <div className="ml-auto text-base w-max">
-                        {lineItem.child && lineItem.child.length
-                          ? currency(
-                              (+lineItem.total + +lineItem.child[0].total) *
-                                lineItem.quantity,
-                              {
-                                pattern: "# !",
-                                separator: " ",
-                                decimal: ".",
-                                symbol: `${locale == "uz" ? "so'm" : "сум"}`,
-                                precision: 0,
-                              }
-                            ).format()
-                          : currency(lineItem.total * lineItem.quantity, {
-                              pattern: "# !",
-                              separator: " ",
-                              decimal: ".",
-                              symbol: `${locale == "uz" ? "so'm" : "сум"}`,
-                              precision: 0,
-                            }).format()}
-                      </div>
-                      <div className="bg-gray-200 p-2 rounded-md w-max md:block hidden">
-                        <XIcon
-                          className="cursor-pointer text-gray-400 w-5 "
-                          onClick={() => destroyLine(lineItem.id)}
-                        />
+                      <div className="">
+                        <div className="m-auto text-4xl w-max text-primary">
+                          {currency(lineItem.total * lineItem.quantity, {
+                            pattern: "# !",
+                            separator: " ",
+                            decimal: ".",
+                            symbol: ``,
+                            precision: 0,
+                          }).format()}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-            </div>
+                  ))}
+                </div>
+              ))}
           </div>
-          {/* <div className="flex items-center space-x-2">
-            <span
-              className={`bg-greenPrimary p-3 rounded-l-3xl ${
-                currentSlide == 1 ? "hidden" : ""
-              }`}
-              {...triggerGoToPrevSlide}
-            >
-              <ArrowLeftIcon className="w-14 h-14 text-white" />
-            </span>
-            <span
-              className={`bg-greenPrimary p-3 rounded-r-3xl ${
-                currentSlide == secSlides.length ? "hidden" : ""
-              }`}
-              {...triggerGoToNextSlide}
-            >
-              <ArrowRightIcon className="w-14 h-14 text-white" />
-            </span>
-          </div> */}
         </>
       )}
       <div className="bottom-0 fixed flex mb-40 right-24 items-center">
         <span className="text-4xl font-medium font-sans">Итого:</span>
         <span className="ml-5 text-7xl font-sans font-semibold">
-          {/* {data.totalPrice} */}
+          {currency(data.totalPrice, {
+            pattern: "# !",
+            separator: " ",
+            decimal: ".",
+            symbol: ``,
+            precision: 0,
+          }).format()}
         </span>
       </div>
       <div className="flex fixed bottom-0 w-full">
         <div className="flex text-center w-full h-full">
-          <div className=" text-white bg-black px-[160px]  h-[120px] flex flex-col justify-around">
+          <div
+            className=" text-white bg-black px-[160px]  h-[120px] flex flex-col justify-around"
+            onClick={() => {
+              router.push("/menu");
+            }}
+          >
             <div className="text-4xl font-medium">Изменить заказ</div>
           </div>
           <div
             className="w-full bg-greenPrimary text-white text-2xl h-[120px] flex flex-col justify-around"
             onClick={() => setOpen(true)}
           >
-            <div className="flex items-end mx-auto space-x-4">
+            <div
+              className="flex items-end mx-auto space-x-4"
+              onClick={() => {
+                setCashBackFirstStepOpen(true);
+              }}
+            >
               <div className="text-[40px] font-medium">Да, заказ верен</div>
             </div>
           </div>
         </div>
       </div>
-      <Cashback />
-      <SignInModal channelName={locale} />
+
+      <Transition appear show={cashBackFirstStepOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 z-[100] overflow-y-auto"
+          initialFocus={cashbackFirstStepRef}
+          onClose={() => setOpen(false)}
+        >
+          <div className="min-h-screen px-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              enterTo="opacity-100 translate-y-0 sm:scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+              leaveTo="opacity-0 translate-y-4 "
+            >
+              <div className="align-middle inline-block overflow-hidden w-full z-[200]">
+                <div className="bg-plum my-96 relative shadow-xl transform mx-28">
+                  <div
+                    className="absolute text-white hidden md:block p-3 right-0 bg-greenPrimary top-0 w-max"
+                    ref={cashbackFirstStepRef}
+                    onClick={() => setOpen(false)}
+                  >
+                    <XIcon className="w-10" />
+                  </div>
+                  <div className="font-serif text-6xl pt-14 pb-16 px-48">
+                    {tr("recomended_to_your_order")}
+                  </div>
+                  {recomendedItems.length > 0 && (
+                    <div className="px-11 shadow-md rounded-2xl grid grid-cols-3 pb-28">
+                      {recomendedItems.map((item: any) => (
+                        <div
+                          className="rounded-2xl px-5 py-2 text-center m-2 "
+                          onClick={() => addToBasket(item.id)}
+                          key={item.name}
+                        >
+                          <div className="flex-grow flex items-center flex-col justify-center">
+                            <div className="h-44">
+                              {item.image ? (
+                                <img
+                                  src={item.image}
+                                  width={245}
+                                  height={184}
+                                  alt={
+                                    item?.attribute_data?.name[channelName][
+                                      locale || "ru"
+                                    ]
+                                  }
+                                  className="transform motion-safe:group-hover:scale-105 transition duration-500"
+                                />
+                              ) : (
+                                <img
+                                  src="/no_photo.svg"
+                                  width={245}
+                                  height={184}
+                                  alt={
+                                    item?.attribute_data?.name[channelName][
+                                      locale || "ru"
+                                    ]
+                                  }
+                                  className="rounded-full transform motion-safe:group-hover:scale-105 transition duration-500"
+                                />
+                              )}
+                            </div>
+
+                            <div className="text-2xl leading-5 font-bold mb-3 h-16 pt-6 text-center font-sans">
+                              {
+                                item?.attribute_data?.name[channelName][
+                                  locale || "ru"
+                                ]
+                              }
+                            </div>
+                          </div>
+                          <div
+                            className="text-3xl text-primary font-normal"
+                            //onClick={() => addToBasket(item.id)}
+                          >
+                            {currency(parseInt(item.price, 0) || 0, {
+                              pattern: "# !",
+                              separator: " ",
+                              decimal: ".",
+                              symbol: `${locale == "uz" ? "so'm" : "сум"}`,
+                              precision: 0,
+                            }).format()}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="flex fixed w-full">
+                    <button
+                      className="text-4xl font-medium bg-gray-300 py-5 text-black outline-none w-full h-36 font-sans"
+                      onClick={() => setCashBackFirstStepOpen(false)}
+                    >
+                      Нет, спасибо
+                    </button>
+                    <button
+                      className="text-4xl font-medium bg-primary py-5 text-white outline-none w-full h-36 font-sans"
+                      onClick={() => setCashBackFirstStepOpen(false)}
+                    >
+                      Готово
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
     </>
   );
 }
