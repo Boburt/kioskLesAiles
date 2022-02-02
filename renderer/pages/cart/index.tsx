@@ -25,6 +25,7 @@ import { useCarousel } from "@webeetle/react-headless-hooks";
 import { Dialog, Transition } from "@headlessui/react";
 import Cashback from "@components/Cashback";
 import SignInModal from "@components/SignInModal";
+import NumPad from "@components/NumPad";
 
 export async function getStaticProps({
   preview,
@@ -99,6 +100,7 @@ function Cart() {
   });
 
   const [isCartLoading, setIsCartLoading] = useState(false);
+  const [phoneFieldValue, setPhoneFieldValue] = useState("");
 
   const [cashBackFirstStepOpen, setCashBackFirstStepOpen] = useState(false);
   const [cashbackStep, setCashbackStep] = useState("agreement");
@@ -733,27 +735,14 @@ function Cart() {
                         Введите номер телефона
                       </div>
                       <div className="text-5xl font-bold px-32">
-                        <input type="phone" />
+                        <input type="phone" value={phoneFieldValue} />
                       </div>
                       <div className="bg-white text-black font-medium text-4xl font-sans mx-44 p-12 my-12 rounded-2xl">
-                        <div className="grid grid-cols-3 gap-2 text-6xl">
-                          <div className="bg-gray-300 py-7 rounded-xl">1</div>
-                          <div className="bg-gray-300 py-7 rounded-xl">2</div>
-                          <div className="bg-gray-300 py-7 rounded-xl">3</div>
-
-                          <div className="bg-gray-300 py-7 rounded-xl">4</div>
-                          <div className="bg-gray-300 py-7 rounded-xl">5</div>
-                          <div className="bg-gray-300 py-7 rounded-xl">6</div>
-                          <div className="bg-gray-300 py-7 rounded-xl">7</div>
-                          <div className="bg-gray-300 py-7 rounded-xl">8</div>
-                          <div className="bg-gray-300 py-7 rounded-xl">9</div>
-                          <div className="col-span-1">
-                            <div className="bg-gray-300 py-7 rounded-xl">0</div>
-                          </div>
-                          <div className="col-span-2">
-                            <div className="bg-gray-300 py-7 rounded-xl">X</div>
-                          </div>
-                        </div>
+                        <NumPad
+                          onChange={(value: string) =>
+                            setPhoneFieldValue(value)
+                          }
+                        />
                       </div>
                       <div className="">
                         <button
