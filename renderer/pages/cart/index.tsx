@@ -1118,7 +1118,7 @@ function Cart() {
                         </div>
                         <div className="">
                           <Link href="/payment">
-                            <a className="bg-greenPrimary block flex font-medium font-sans h-36 items-center justify-around mt-32 outline-none relative text-4xl text-white w-full">
+                            <a className="bg-greenPrimary flex font-medium font-sans h-36 items-center justify-around mt-32 outline-none relative text-4xl text-white w-full">
                               Перейти к оплате
                             </a>
                           </Link>
