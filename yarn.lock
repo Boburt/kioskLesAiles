@@ -6339,10 +6339,15 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libphonenumber-js@^1.9.34, libphonenumber-js@^1.9.46:
+libphonenumber-js@^1.9.34:
   version "1.9.46"
   resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.9.46.tgz#7ddae167654fb96306209b09e4a05cb7e41e0524"
   integrity sha512-QqTX4UVsGy24njtCgLRspiKpxfRniRBZE/P+d0vQXuYWQ+hwDS6X0ouo0O/SRyf7bhhMCE71b6vAvLMtY5PfEw==
+
+libphonenumber-js@^1.9.47:
+  version "1.9.47"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.9.47.tgz#0cb3d6a3dd8d917d364da48a5355bc3b1d145f5b"
+  integrity sha512-FIWFLJ2jUJi8SCztgd2k/isQHZedh7xuxOVifqFLwG/ogZtdH9TXFK92w/KWFj1lwoadqVedtLO3Jqp0q67PZw==
 
 light-my-request@^4.2.0:
   version "4.7.1"
@@ -8179,10 +8184,10 @@ react-grid-carousel@^1.0.1:
     smoothscroll-polyfill "^0.4.4"
     styled-components "^4.4.1"
 
-react-hook-form@^7.8.8:
-  version "7.25.3"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.25.3.tgz#1475fd52398e905e1f6d88835f96aaa1144635c3"
-  integrity sha512-jL4SByMaC8U3Vhu9s7CwgJBP4M6I3Kpwxib9LrCwWSRPnXDrNQL4uihSTqLLoDICqSUhwwvian9uVYfv+ITtGg==
+react-hook-form@^7.26.0:
+  version "7.26.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.26.0.tgz#270ae0e7a27c01a57011efacd3d692c977eb1c5d"
+  integrity sha512-nSkCyJB5Ey5QUw3AGQp22JP7TNfPdyC4wqfmheH87NNsHhQwCZgGjexXdBfd7SRt4SHoVzbdPvu6kXG5sSs66Q==
 
 react-input-autosize@^3.0.0:
   version "3.0.0"
@@ -8206,7 +8211,7 @@ react-merge-refs@^1.1.0:
   resolved "https://registry.yarnpkg.com/react-merge-refs/-/react-merge-refs-1.1.0.tgz#73d88b892c6c68cbb7a66e0800faa374f4c38b06"
   integrity sha512-alTKsjEL0dKH/ru1Iyn7vliS2QRcBp9zZPGoWxUOvRGWPUYgjo+V01is7p04It6KhgrzhJGnIj9GgX8W4bZoCQ==
 
-react-number-format@^4.8.0:
+react-number-format@^4.9.1:
   version "4.9.1"
   resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-4.9.1.tgz#62b3450b43c911f9227e770a8ea9fa606696e52e"
   integrity sha512-v49XqXv7SpwYZKGkghNJjoDUr6lIUozlPLrObcxre7GfcLx7qD4TCvArn3GozN/Y4FVbLyEYCwJoBCiChdBh5A==
@@ -8218,15 +8223,15 @@ react-otp-input@^2.4.0:
   resolved "https://registry.yarnpkg.com/react-otp-input/-/react-otp-input-2.4.0.tgz#0f0a3de1d8c8d564e2e4fbe5d6b7b56e29e3a6e6"
   integrity sha512-AIgl7u4sS9BTNCxX1xlaS5fPWay/Zml8Ho5LszXZKXrH1C/TiFsTQGmtl13UecQYO3mSF3HUzG2rrDf0sjEFmg==
 
-react-phone-number-input@^3.1.27:
-  version "3.1.45"
-  resolved "https://registry.yarnpkg.com/react-phone-number-input/-/react-phone-number-input-3.1.45.tgz#3ef3a409ddb0cddabe81419aeaa6c7ea3bde8f32"
-  integrity sha512-4rkoTqzp0RvhKR03CApO5obOKxKJrg2uMEWg1ayMoqLF4zg1XFAzfrfkaRZOfUD09Vrod1l7Mzgs8If8ilWCuw==
+react-phone-number-input@^3.1.46:
+  version "3.1.46"
+  resolved "https://registry.yarnpkg.com/react-phone-number-input/-/react-phone-number-input-3.1.46.tgz#f25ba70ff83ffb413c824062c5b46f891ee451bc"
+  integrity sha512-afYl7BMy/0vMqWtzsZBmOgiPdqQAGyPO/Z3auorFs4K/zgFSBq3YoaASleodBkeRO/PygJ4ML8Wnb4Ce+3dlVQ==
   dependencies:
     classnames "^2.2.5"
     country-flag-icons "^1.0.2"
     input-format "^0.3.7"
-    libphonenumber-js "^1.9.46"
+    libphonenumber-js "^1.9.47"
     prop-types "^15.7.2"
 
 react-scroll@^1.8.2:

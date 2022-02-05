@@ -3,7 +3,6 @@ import commerce from "@lib/api/commerce";
 import useCart from "@framework/cart/use-cart";
 import Image from "next/image";
 import { XIcon, MinusIcon, PlusIcon, TrashIcon } from "@heroicons/react/solid";
-import { useForm } from "react-hook-form";
 import useTranslation from "next-translate/useTranslation";
 import getConfig from "next/config";
 import { useRouter } from "next/router";
@@ -11,6 +10,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import Hashids from "hashids";
 import axios from "axios";
 import Cookies from "js-cookie";
+import OtpInput from "react-otp-input";
 import defaultChannel from "@lib/defaultChannel";
 import currency from "currency.js";
 import { useUI } from "@components/ui/context";
@@ -19,6 +19,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Layout from "@components/Layout";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/solid";
+import Input from "react-phone-number-input/input";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
 import { chunk } from "lodash";
 import { useCarousel } from "@webeetle/react-headless-hooks";
@@ -26,6 +28,26 @@ import { Dialog, Transition } from "@headlessui/react";
 import Cashback from "@components/Cashback";
 import SignInModal from "@components/SignInModal";
 import NumPad from "@components/NumPad";
+const NumberFormat = require("react-number-format");
+import styles from "./cart.module.css";
+import DisplayPhone from "@components/DisplayPhone";
+import Link from "next/link";
+
+interface Errors {
+  [key: string]: string;
+}
+
+interface AnyObject {
+  [key: string]: any;
+}
+
+const errors: Errors = {
+  name_field_is_required:
+    "Мы Вас не нашли в нашей системе. Просьба указать своё имя.",
+  opt_code_is_incorrect: "Введённый код неверный или срок кода истёк",
+};
+
+let otpTimerRef: NodeJS.Timeout;
 
 export async function getStaticProps({
   preview,
@@ -87,7 +109,7 @@ function Cart() {
     setChannelName(channelData.name);
   };
 
-  const { activeCity, locationData } = useUI();
+  const { activeCity, locationData, setUserData, user } = useUI();
 
   const { t: tr } = useTranslation("common");
   let cartId: string | null = null;
@@ -104,10 +126,39 @@ function Cart() {
 
   const [cashBackFirstStepOpen, setCashBackFirstStepOpen] = useState(false);
   const [cashbackStep, setCashbackStep] = useState("agreement");
+  const [userBalance, setUserBalance] = useState(0);
+  const [otpCode, setOtpCode] = useState("");
+  const [submitError, setSubmitError] = useState("");
+  const [otpShowCode, setOtpShowCode] = useState(0);
+  const [showUserName, setShowUserName] = useState(false);
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
   const cashbackFirstStepRef = useRef(null);
-
-  const { register, handleSubmit } = useForm();
   const onSubmit = (data: Object) => console.log(JSON.stringify(data));
+
+  const otpTime = useRef(0);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState,
+    getValues,
+    setValue,
+    control,
+  } = useForm<AnyObject>({
+    mode: "onChange",
+  });
+
+  const authPhone = watch("phone");
+
+  const {
+    register: passwordFormRegister,
+    handleSubmit: handlePasswordSubmit,
+    formState: passwordFormState,
+  } = useForm({
+    mode: "onChange",
+  });
 
   const router = useRouter();
   const { locale } = router;
@@ -117,6 +168,156 @@ function Cart() {
     15,
     "abcdefghijklmnopqrstuvwxyz1234567890"
   );
+
+  const startTimeout = () => {
+    otpTimerRef = setInterval(() => {
+      if (otpTime.current > 0) {
+        otpTime.current = otpTime.current - 1;
+        setOtpShowCode(otpTime.current);
+      } else {
+        clearInterval(otpTimerRef);
+      }
+    }, 1000);
+  };
+
+  const handleOtpChange = (otp: string) => {
+    setOtpCode(otp);
+  };
+
+  const getNewCode = (e: React.SyntheticEvent<EventTarget>) => {
+    e.preventDefault();
+    onSubmitPhone({
+      // name: authName,
+      phone: authPhone,
+    });
+  };
+
+  const onSubmitPhone: SubmitHandler<AnyObject> = async (data) => {
+    setSubmitError("");
+    setIsSubmittingForm(true);
+    const csrfReq = await axios(`${webAddress}/api/keldi`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        crossDomain: true,
+      },
+      withCredentials: true,
+    });
+    let { data: res } = csrfReq;
+    const csrf = Buffer.from(res.result, "base64").toString("ascii");
+
+    Cookies.set("X-XSRF-TOKEN", csrf);
+    axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+    axios.defaults.headers.common["X-CSRF-TOKEN"] = csrf;
+    axios.defaults.headers.common["XCSRF-TOKEN"] = csrf;
+    let ress = await axios.post(`${webAddress}/api/send_otp`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    let {
+      data: { error: otpError, data: result, success },
+    }: {
+      data: {
+        error: string;
+        data: AnyObject;
+        success: any;
+      };
+    } = ress;
+
+    if (otpError) {
+      setIsSubmittingForm(false);
+      setSubmitError(errors[otpError]);
+      if (otpError == "name_field_is_required") {
+        setShowUserName(true);
+      }
+    } else if (success) {
+      setIsSubmittingForm(false);
+      success = Buffer.from(success, "base64");
+      success = success.toString();
+      success = JSON.parse(success);
+      Cookies.set("opt_token", success.user_token);
+      localStorage.setItem("opt_token", success.user_token);
+      otpTime.current = result?.time_to_answer;
+      setOtpShowCode(otpTime.current);
+      startTimeout();
+
+      setCashbackStep("pincode");
+      // setIsShowPasswordForm(true);
+      // hideOverlay();
+    }
+  };
+
+  const otpTimerText = useMemo(() => {
+    let text = "Получить новый код через ";
+    const minutes: number = parseInt((otpShowCode / 60).toString(), 0);
+    const seconds: number = otpShowCode % 60;
+    if (minutes > 0) {
+      text += minutes + " мин. ";
+    }
+
+    if (seconds > 0) {
+      text += seconds + " сек.";
+    }
+    return text;
+  }, [otpShowCode]);
+
+  const submitPasswordForm: SubmitHandler<AnyObject> = async (data) => {
+    setSubmitError("");
+    setIsSubmittingForm(true);
+    const otpToken = Cookies.get("opt_token");
+    let ress = await axios.post(
+      `${webAddress}/api/auth_otp`,
+      {
+        phone: authPhone,
+        code: otpCode,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${otpToken}`,
+        },
+        withCredentials: true,
+      }
+    );
+
+    let {
+      data: { result },
+    }: { data: { result: any } } = ress;
+    result = Buffer.from(result, "base64");
+    result = result.toString();
+    result = JSON.parse(result);
+
+    if (result === false) {
+      setSubmitError(errors.opt_code_is_incorrect);
+    } else {
+      clearInterval(otpTimerRef);
+      setUserData(result);
+      await checkUserBalance();
+      setIsSubmittingForm(false);
+      setCashbackStep("success");
+      // setIsShowPasswordForm(false);
+      // if (router.query && router.query.backUrl) {
+      //   let backUrl: string = router.query.backUrl as string;
+      //   router.push(backUrl);
+      // }
+    }
+  };
+
+  const checkUserBalance = async () => {
+    const userToken = Cookies.get("opt_token");
+    const res = await axios.get(`${webAddress}/api/cashback/balance`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userToken}`,
+      },
+      withCredentials: true,
+    });
+
+    setUserBalance(res.data.data.balance);
+  };
 
   const fetchRecomendedItems = async () => {
     if (cartId) {
@@ -391,8 +592,6 @@ function Cart() {
     isLastSlide,
   } = useCarousel({ maxSlide: slides.length, loop: false });
 
-  console.log(slides);
-
   useEffect(() => {
     getChannel();
     fetchConfig();
@@ -614,16 +813,20 @@ function Cart() {
         </>
       )}
       <div className="bottom-0 fixed flex mb-40 right-24 items-center">
-        <span className="text-4xl font-medium font-sans">Итого:</span>
-        <span className="ml-5 text-7xl font-sans font-semibold">
-          {currency(data.totalPrice, {
-            pattern: "# !",
-            separator: " ",
-            decimal: ".",
-            symbol: ``,
-            precision: 0,
-          }).format()}
-        </span>
+        {data && (
+          <>
+            <span className="text-4xl font-medium font-sans">Итого:</span>
+            <span className="ml-5 text-7xl font-sans font-semibold">
+              {currency(data.totalPrice, {
+                pattern: "# !",
+                separator: " ",
+                decimal: ".",
+                symbol: ``,
+                precision: 0,
+              }).format()}
+            </span>
+          </>
+        )}
       </div>
       <div className="flex fixed bottom-0 w-full">
         <div className="flex text-center w-full h-full">
@@ -642,6 +845,7 @@ function Cart() {
             <div
               className="flex items-end mx-auto space-x-4"
               onClick={() => {
+                setCashbackStep("agreement");
                 setCashBackFirstStepOpen(true);
               }}
             >
@@ -656,7 +860,7 @@ function Cart() {
           as="div"
           className="fixed inset-0 z-[100] overflow-y-auto"
           initialFocus={cashbackFirstStepRef}
-          onClose={() => setOpen(false)}
+          onClose={() => setCashBackFirstStepOpen(false)}
         >
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
@@ -692,12 +896,12 @@ function Cart() {
                   <div
                     className="absolute text-white hidden md:block p-3 right-0 bg-greenPrimary top-0 w-max"
                     ref={cashbackFirstStepRef}
-                    onClick={() => setOpen(false)}
+                    onClick={() => setCashBackFirstStepOpen(false)}
                   >
                     <XIcon className="w-10" />
                   </div>
 
-                  {cashbackStep == "typing_phone" && (
+                  {cashbackStep == "agreement" && (
                     <>
                       <div className="text-6xl pt-16 pb-16 px-28">
                         Хотите получить кешбек 5%?
@@ -722,37 +926,205 @@ function Cart() {
                         </button>
                         <button
                           className="text-4xl font-medium bg-greenPrimary py-5 text-white outline-none w-full h-36 font-sans"
-                          onClick={() => setCashbackStep("pincode")}
+                          onClick={() => setCashbackStep("typing_phone")}
                         >
                           Да, хочу
                         </button>
                       </div>
                     </>
                   )}
-                  {cashbackStep == "agreement" && (
-                    <div>
-                      <div className="text-6xl pt-16 pb-16 px-28">
-                        Введите номер телефона
+                  {cashbackStep == "typing_phone" && (
+                    <form onSubmit={handleSubmit(onSubmitPhone)}>
+                      <div>
+                        <div className="text-6xl pt-16 pb-16 px-28">
+                          Введите номер телефона
+                        </div>
+                        <div className="text-5xl font-bold mx-44 px-16 py-7 border bg-white rounded-2xl">
+                          <Controller
+                            render={({ field: { onChange, value } }) => (
+                              <Input
+                                defaultCountry="UZ"
+                                country="UZ"
+                                international
+                                withCountryCallingCode
+                                value={value}
+                                className="text-black focus:outline-none outline-none bg-transparent text-4xl w-full"
+                                onChange={(e: any) => onChange(e)}
+                                onKeyDown={(e: any) => {
+                                  if (e.key == "Enter") {
+                                    e.preventDefault();
+                                    handleSubmit(onSubmitPhone)();
+                                  }
+                                }}
+                              />
+                            )}
+                            rules={{
+                              required: true,
+                            }}
+                            key="phone"
+                            name="phone"
+                            control={control}
+                          />
+                        </div>
+                        <div className="bg-white text-black font-medium text-4xl font-sans mx-44 p-12 my-12 rounded-2xl">
+                          <NumPad
+                            onChange={(value: string) => {
+                              console.log(value);
+                              setValue("phone", "+998" + value);
+                              // setPhoneFieldValue(value);
+                            }}
+                            maxLength={9}
+                          />
+                        </div>
+                        <div className="">
+                          <button
+                            className="text-4xl relative font-medium bg-greenPrimary py-5 text-white outline-none w-full h-36 font-sans"
+                            onClick={handleSubmit(onSubmitPhone)}
+                            disabled={isSubmittingForm}
+                          >
+                            {isSubmittingForm ? (
+                              <div className="h-full w-full absolute flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]">
+                                <svg
+                                  className="animate-spin text-white h-14"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  ></path>
+                                </svg>
+                              </div>
+                            ) : (
+                              "Получить код"
+                            )}
+                          </button>
+                        </div>
                       </div>
-                      <div className="text-5xl font-bold px-32">
-                        <input type="phone" value={phoneFieldValue} />
+                    </form>
+                  )}
+                  {cashbackStep == "pincode" && (
+                    <form onSubmit={handlePasswordSubmit(submitPasswordForm)}>
+                      <div>
+                        <div className="text-6xl pt-16 pb-16 px-28">
+                          Введите код
+                        </div>
+                        <div>
+                          <OtpInput
+                            value={otpCode}
+                            onChange={handleOtpChange}
+                            inputStyle={`${styles.digitField} w-[91px] rounded-3xl h-24 text-black text-4xl outline-none focus:outline-none text-center`}
+                            isInputNum={true}
+                            containerStyle="grid grid-cols-4 gap-1.5 justify-center"
+                            numInputs={4}
+                          />
+                        </div>
+                        {otpShowCode > 0 ? (
+                          <div className="text-xl text-white mt-10">
+                            {otpTimerText}
+                          </div>
+                        ) : (
+                          <button
+                            className="text-xl text-white mt-10 outline-none focus:outline-none border-b pb-0.5"
+                            onClick={(e) => getNewCode(e)}
+                          >
+                            {tr("get_code_again")}
+                          </button>
+                        )}
+                        <div className="bg-white text-black font-medium text-4xl font-sans mx-44 p-12 my-12 rounded-2xl">
+                          <NumPad
+                            onChange={(value: string) => {
+                              setOtpCode(value);
+                            }}
+                            maxLength={4}
+                          />
+                        </div>
+                        <div className="">
+                          <button
+                            className="text-4xl relative font-medium bg-greenPrimary py-5 text-white outline-none w-full h-36 font-sans"
+                            onClick={handlePasswordSubmit(submitPasswordForm)}
+                            disabled={isSubmittingForm}
+                          >
+                            {isSubmittingForm ? (
+                              <div className="h-full w-full absolute flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]">
+                                <svg
+                                  className="animate-spin text-white h-14"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  ></path>
+                                </svg>
+                              </div>
+                            ) : (
+                              "Подтвердить"
+                            )}
+                          </button>
+                        </div>
                       </div>
-                      <div className="bg-white text-black font-medium text-4xl font-sans mx-44 p-12 my-12 rounded-2xl">
-                        <NumPad
-                          onChange={(value: string) =>
-                            setPhoneFieldValue(value)
-                          }
-                        />
+                    </form>
+                  )}
+                  {cashbackStep == "success" && (
+                    <>
+                      <div>
+                        <div className="text-6xl pt-16 pb-5 px-28">
+                          Привет, {user.user.name}!
+                        </div>
+                        <div className="text-4xl mx-auto font-sans">
+                          <DisplayPhone phone={user.user.phone} />
+                        </div>
+                        <div className="mt-16 bg-white rounded-3xl text-black mx-44 text-4xl font-sans py-7">
+                          У Вас{" "}
+                          {currency(userBalance, {
+                            pattern: "# !",
+                            separator: " ",
+                            decimal: ".",
+                            symbol: ``,
+                            precision: 0,
+                          }).format()}{" "}
+                          баллов
+                        </div>
+                        <div className="mt-16 text-4xl mx-44 font-sans">
+                          Накапливайте и оплачивайте баллами на
+                        </div>
+                        <div className="mt-5 mx-44">
+                          <img
+                            src="/modal_content_logo.png"
+                            alt=""
+                            className="mx-auto"
+                          />
+                        </div>
+                        <div className="">
+                          <Link href="/payment">
+                            <a className="bg-greenPrimary block flex font-medium font-sans h-36 items-center justify-around mt-32 outline-none relative text-4xl text-white w-full">
+                              Перейти к оплате
+                            </a>
+                          </Link>
+                        </div>
                       </div>
-                      <div className="">
-                        <button
-                          className="text-4xl font-medium bg-greenPrimary py-5 text-white outline-none w-full h-36 font-sans"
-                          onClick={() => setCashbackStep("typing_phone")}
-                        >
-                          Получить код
-                        </button>
-                      </div>
-                    </div>
+                    </>
                   )}
                 </div>
               </div>
