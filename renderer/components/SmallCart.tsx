@@ -58,9 +58,8 @@ interface AnyObject {
 }
 
 const errors: Errors = {
-  name_field_is_required:
-    "Мы Вас не нашли в нашей системе. Просьба указать своё имя.",
-  opt_code_is_incorrect: "Введённый код неверный или срок кода истёк",
+  name_field_is_required: "",
+  opt_code_is_incorrect: "",
 };
 
 let otpTimerRef: NodeJS.Timeout;
@@ -70,7 +69,9 @@ type SmallCartProps = {
 };
 
 const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
-  const { t: tr } = useTranslation();
+  const { t: tr } = useTranslation("common");
+  errors.name_field_is_required = tr("we_not_found_you");
+  errors.opt_code_is_incorrect = tr("code_has_expired");
 
   const router = useRouter();
   const { locale } = router;
@@ -175,7 +176,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
   };
 
   const otpTimerText = useMemo(() => {
-    let text = "Получить новый код через ";
+    let text = tr("get_new_code");
     const minutes: number = parseInt((otpShowCode / 60).toString(), 0);
     const seconds: number = otpShowCode % 60;
     if (minutes > 0) {
@@ -700,7 +701,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
             <div className="flex  text-xl border-b border-primary font-sans">
               <div className="flex bg-primary rounded-tr-xl text-white">
                 <ShoppingCartIcon className="h-5 my-auto text-white pr-1" />
-                Мой заказ
+                {tr("my_order")}
                 <div className="text-white font-bold px-2">
                   {" "}
                   x{data && data.lineItems ? data?.lineItems.length : 0}
@@ -866,17 +867,19 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
         <div className="flex bottom-0 w-full">
           <div className="flex text-center bg-teal-500 w-full h-full">
             <div
-              className="text-2xl text-white bg-black px-[150px]  h-[120px] flex flex-col justify-around"
+              className="text-2xl text-white bg-black px-[150px]  w-1/2 flex flex-col justify-around py-9"
               onClick={openCancelModal}
             >
-              <div className="text-[40px] font-medium">Отменить</div>
+              <div className="text-[40px] font-medium">
+                {tr("profile_address_cancel")}
+              </div>
             </div>
             <div
-              className="w-full bg-greenPrimary text-white text-2xl h-[120px] flex flex-col justify-around"
+              className=" bg-greenPrimary text-white text-2xl w-1/2 flex flex-col justify-around py-9"
               onClick={() => checkRecommended()}
             >
               <div className="flex items-end mx-auto space-x-4">
-                <div className="text-[40px] font-medium">к оплате:</div>{" "}
+                <div className="text-[40px] font-medium">{tr("to_pay")}:</div>{" "}
                 <div className="text-[50px] font-medium">
                   {!isEmpty &&
                     data.totalPrice &&
@@ -1033,13 +1036,13 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                         className="text-4xl font-medium bg-gray-300 py-5 text-black outline-none w-full h-36 font-sans"
                         onClick={() => closeModal()}
                       >
-                        Нет, спасибо
+                        {tr("no_thanks")}
                       </button>
                       <button
                         className="text-4xl font-medium bg-primary py-5 text-white outline-none w-full h-36 font-sans"
                         onClick={() => closeModal()}
                       >
-                        Готово
+                        {tr("ready")}
                       </button>
                     </div>
                   </div>

@@ -14,7 +14,6 @@ import dynamic from "next/dynamic";
 import Footer from "@components/footer";
 import Layout from "@components/Layout";
 import { useUI } from "@components/ui/context";
-import { useTranslation } from "next-export-i18n";
 import currency from "currency.js";
 import { useCarousel } from "@webeetle/react-headless-hooks";
 import { chunk } from "lodash";
@@ -77,7 +76,6 @@ function Payme({
   products: any[];
   categories: any[];
 }) {
-  const { t: tr } = useTranslation("common");
   const router = useRouter();
   return <PaymeComponent />;
 }

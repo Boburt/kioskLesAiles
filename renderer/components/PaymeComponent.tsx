@@ -7,16 +7,18 @@ import dynamic from "next/dynamic";
 import SimpleBar from "simplebar-react";
 import { useSelectedLanguage } from "next-export-i18n";
 import { useUI } from "@components/ui/context";
+import { useTranslation } from "next-export-i18n";
 
 const PaymeComponent = () => {
   const { lang: locale } = useSelectedLanguage();
   const { categoryId, setCategoryId } = useUI();
   const [isActice, setIsActive] = useState(true);
+  const { t: tr } = useTranslation("common");
 
   return (
     <div className="bg-primary h-full text-white">
       <div className="text-white font-bold text-6xl m-auto pt-80 px-[232px] text-center font-serif pb-28">
-        Отсканируйте QR-код и оплатите заказ
+        {tr("scan_the_qr")}
       </div>
       <div className="m-auto w-max text-center">
         <div className="text-4xl font-sans font-medium">к оплате:</div>
