@@ -291,6 +291,7 @@ function Cart() {
     result = JSON.parse(result);
 
     if (result === false) {
+      setIsSubmittingForm(false);
       setSubmitError(errors.opt_code_is_incorrect);
     } else {
       clearInterval(otpTimerRef);

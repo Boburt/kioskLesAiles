@@ -2,11 +2,11 @@ import { FC, memo, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { LinkItem } from "@commerce/types/headerMenu";
 import Image from "next/image";
-import { Link } from "react-scroll";
 import dynamic from "next/dynamic";
 import SimpleBar from "simplebar-react";
 import { useSelectedLanguage } from "next-export-i18n";
 import { useUI } from "@components/ui/context";
+import Link from "next/link";
 
 const DontHaveEnaughtPoints = () => {
   const { lang: locale } = useSelectedLanguage();
@@ -21,9 +21,11 @@ const DontHaveEnaughtPoints = () => {
       <div className="m-auto w-max text-center">
         <img src="/assets/notEnaught.png" alt="" />
       </div>
-      <div className="bg-black bottom-0 fixed py-20 text-4xl text-center text-white w-full font-sans font-medium">
-        Оплатить другим способом
-      </div>
+      <Link href="/payment">
+        <a className="bg-black bottom-0 fixed py-20 text-4xl text-center text-white w-full font-sans font-medium">
+          Оплатить другим способом
+        </a>
+      </Link>
     </div>
   );
 };
