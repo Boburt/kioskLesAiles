@@ -20,7 +20,8 @@ axios.defaults.withCredentials = true;
 
 const OnlinePayment = () => {
   const { lang: locale } = useSelectedLanguage();
-  const { categoryId, setCategoryId, user, setUserData } = useUI();
+  const { categoryId, setCategoryId, user, setUserData, setOrderData } =
+    useUI();
   const [isActice, setIsActive] = useState(true);
 
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
@@ -114,16 +115,20 @@ const OnlinePayment = () => {
       // setUserData(data.user)
       localStorage.removeItem("basketId");
 
-      const hashids = new Hashids(
-        "order",
-        15,
-        "abcdefghijklmnopqrstuvwxyz1234567890"
-      );
+      // const hashids = new Hashids(
+      //   "order",
+      //   15,
+      //   "abcdefghijklmnopqrstuvwxyz1234567890"
+      // );
 
       localStorage.removeItem("mijoz");
       setUserData(null);
-      router.push(`/order/${hashids.decode(data.order.id)}`);
+      setOrderData(data);
+      setTimeout(() => {
+        router.push(`/payment/wait_payment`);
+      }, 200);
     } catch (e) {
+      console.log(e);
       // toast.error(e.response.data.error.message, {
       //   position: toast.POSITION.BOTTOM_RIGHT,
       //   hideProgressBar: true,
@@ -169,7 +174,10 @@ const OnlinePayment = () => {
           </div>
         )}
         <div className="gap-5 grid grid-cols-2 m-auto w-[688px] pt-[546px]">
-          <button className="items-center text-5xl text-gray-600 bg-white active:bg-greenPrimary  m-auto rounded-3xl font-semibold font-sans">
+          <button
+            className="items-center text-5xl text-gray-600 bg-white active:bg-greenPrimary  m-auto rounded-3xl font-semibold font-sans"
+            onClick={() => submitCardOrder("payme")}
+          >
             <img
               src="/assets/payme.png"
               alt=""
@@ -178,7 +186,10 @@ const OnlinePayment = () => {
               className="py-14 ml-[70px] mr-16"
             />
           </button>
-          <button className="flex items-center text-5xl text-gray-600 bg-white active:bg-greenPrimary my-7  m-auto rounded-3xl font-semibold font-sans">
+          <button
+            onClick={() => submitCardOrder("click")}
+            className="flex items-center text-5xl text-gray-600 bg-white active:bg-greenPrimary my-7  m-auto rounded-3xl font-semibold font-sans"
+          >
             <img
               src="/assets/click.png"
               alt=""

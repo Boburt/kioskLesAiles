@@ -21,7 +21,7 @@ import { chunk } from "lodash";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/solid";
 import ProductSection from "@components/ProductSection";
 import OnlinePayment from "@components/OnlinePayment";
-import PaymeComponent from "@components/PaymeComponent";
+import WaitingPaymentComponent from "@components/WaitingPaymentComponent";
 
 export async function getStaticProps({
   preview,
@@ -79,7 +79,7 @@ function Payme({
 }) {
   const { t: tr } = useTranslation("common");
   const router = useRouter();
-  return <PaymeComponent />;
+  return <WaitingPaymentComponent />;
 }
 
 Payme.Layout = Layout;

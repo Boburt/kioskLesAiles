@@ -918,6 +918,16 @@ video {
   margin-right: 240px;
 }
 
+.mx-80 {
+  margin-left: 20rem;
+  margin-right: 20rem;
+}
+
+.mx-96 {
+  margin-left: 24rem;
+  margin-right: 24rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -1170,6 +1180,10 @@ video {
   height: 10rem;
 }
 
+.h-96 {
+  height: 24rem;
+}
+
 .max-h-\[180px\] {
   max-height: 180px;
 }
@@ -1270,6 +1284,10 @@ video {
 
 .w-48 {
   width: 12rem;
+}
+
+.w-96 {
+  width: 24rem;
 }
 
 .max-w-2xl {
@@ -1707,6 +1725,10 @@ video {
   padding: 3rem;
 }
 
+.p-7 {
+  padding: 1.75rem;
+}
+
 .px-\[232px\] {
   padding-left: 232px;
   padding-right: 232px;
@@ -1987,6 +2009,10 @@ video {
 
 .pt-7 {
   padding-top: 1.75rem;
+}
+
+.pt-40 {
+  padding-top: 10rem;
 }
 
 .text-left {

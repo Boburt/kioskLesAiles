@@ -10,7 +10,7 @@ let locationData: any = {
   house: "",
   entrance: "",
   door_code: "",
-  deliveryType: "deliver",
+  deliveryType: "table",
   location: [],
 };
 
@@ -96,6 +96,7 @@ export interface State {
   addressModal: boolean;
   addressId: number | null;
   categoryId: number | null;
+  orderData: AnyObject | null;
 }
 
 const initialState = {
@@ -115,6 +116,7 @@ const initialState = {
   addressModalMobile: false,
   addressId: null,
   categoryId: null,
+  orderData: null,
 };
 
 type Action =
@@ -195,6 +197,10 @@ type Action =
   | {
       type: "SET_CATEGORY_ID";
       value: number;
+    }
+  | {
+      type: "SET_ORDER_DATA";
+      value: AnyObject;
     };
 
 type MODAL_VIEWS =
@@ -372,6 +378,12 @@ function uiReducer(state: State, action: Action) {
         categoryId: action.value,
       };
     }
+    case "SET_ORDER_DATA": {
+      return {
+        ...state,
+        orderData: action.value,
+      };
+    }
   }
 }
 
@@ -503,6 +515,11 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
     [dispatch]
   );
 
+  const setOrderData = useCallback(
+    (value: AnyObject) => dispatch({ type: "SET_ORDER_DATA", value }),
+    [dispatch]
+  );
+
   const value = useMemo(
     () => ({
       ...state,
@@ -531,6 +548,7 @@ export const UIProvider: FC<UIProviderProps> = (props) => {
       hideAddressMobile,
       setAddressId,
       setCategoryId,
+      setOrderData,
     }),
     [state]
   );
