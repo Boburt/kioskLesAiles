@@ -42,9 +42,8 @@ interface AnyObject {
 }
 
 const errors: Errors = {
-  name_field_is_required:
-    "Мы Вас не нашли в нашей системе. Просьба указать своё имя.",
-  opt_code_is_incorrect: "Введённый код неверный или срок кода истёк",
+  name_field_is_required: "",
+  opt_code_is_incorrect: "",
 };
 
 let otpTimerRef: NodeJS.Timeout;
@@ -108,10 +107,11 @@ function Cart() {
     const channelData = await defaultChannel();
     setChannelName(channelData.name);
   };
-
   const { activeCity, locationData, setUserData, user } = useUI();
-
   const { t: tr } = useTranslation("common");
+  errors.name_field_is_required = tr("we_not_found_you");
+  errors.opt_code_is_incorrect = tr("code_has_expired");
+
   let cartId: string | null = null;
   if (typeof window !== "undefined") {
     cartId = localStorage.getItem("basketId");
@@ -837,7 +837,7 @@ function Cart() {
               router.push("/menu");
             }}
           >
-            <div className="text-4xl font-medium">Изменить заказ</div>
+            <div className="text-4xl font-medium">{tr("change_order")}</div>
           </div>
           <div
             className="w-full bg-greenPrimary text-white text-2xl h-[120px] flex flex-col justify-around"
@@ -850,7 +850,7 @@ function Cart() {
                 setCashBackFirstStepOpen(true);
               }}
             >
-              <div className="text-[40px] font-medium">Да, заказ верен</div>
+              <div className="text-[40px] font-medium">{tr("order_true")}</div>
             </div>
           </div>
         </div>
@@ -905,31 +905,33 @@ function Cart() {
                   {cashbackStep == "agreement" && (
                     <>
                       <div className="text-6xl pt-16 pb-16 px-28">
-                        Хотите получить кешбек 5%?
+                        {tr("want_to_get_cashback")}
                       </div>
                       <div className="text-5xl font-bold px-32">
-                        Чтобы получить кешбек, надо просто указать{" "}
+                        {tr("to_get_cashback_you")}{" "}
                         <span className="text-greenPrimary">
-                          номер телефона
+                          {tr("personal_phone")}
                         </span>{" "}
                         и{" "}
-                        <span className="text-greenPrimary">личные данные</span>{" "}
+                        <span className="text-greenPrimary">
+                          {tr("personal_data")}
+                        </span>{" "}
                       </div>
                       <div className="mt-16 text-5xl font-bold px-28 pb-56">
-                        Оплатить заработанными бонусами можно все товары
+                        {tr("you_may_pay_all")}
                       </div>
                       <div className="flex fixed w-full">
                         <button
                           className="text-4xl font-medium bg-gray-300 py-5 text-black outline-none w-full h-36 font-sans"
                           onClick={() => setCashBackFirstStepOpen(false)}
                         >
-                          Нет, спасибо
+                          {tr("no_thanks")}
                         </button>
                         <button
                           className="text-4xl font-medium bg-greenPrimary py-5 text-white outline-none w-full h-36 font-sans"
                           onClick={() => setCashbackStep("typing_phone")}
                         >
-                          Да, хочу
+                          {tr("yes_i_want")}
                         </button>
                       </div>
                     </>
@@ -938,7 +940,7 @@ function Cart() {
                     <form onSubmit={handleSubmit(onSubmitPhone)}>
                       <div>
                         <div className="text-6xl pt-16 pb-16 px-28">
-                          Введите номер телефона
+                          {tr("enter_phone_number")}
                         </div>
                         <div className="text-5xl font-bold mx-44 px-16 py-7 border bg-white rounded-2xl">
                           <Controller
@@ -1007,7 +1009,7 @@ function Cart() {
                                 </svg>
                               </div>
                             ) : (
-                              "Получить код"
+                              tr("get_code")
                             )}
                           </button>
                         </div>
@@ -1018,7 +1020,7 @@ function Cart() {
                     <form onSubmit={handlePasswordSubmit(submitPasswordForm)}>
                       <div>
                         <div className="text-6xl pt-16 pb-16 px-28">
-                          Введите код
+                          {tr("enter_code")}
                         </div>
                         <div>
                           <OtpInput
@@ -1080,7 +1082,7 @@ function Cart() {
                                 </svg>
                               </div>
                             ) : (
-                              "Подтвердить"
+                              tr("confirm")
                             )}
                           </button>
                         </div>
@@ -1091,13 +1093,13 @@ function Cart() {
                     <>
                       <div>
                         <div className="text-6xl pt-16 pb-5 px-28">
-                          Привет, {user.user.name}!
+                          {tr("profile_hello")}, {user.user.name}!
                         </div>
                         <div className="text-4xl mx-auto font-sans">
                           <DisplayPhone phone={user.user.phone} />
                         </div>
                         <div className="mt-16 bg-white rounded-3xl text-black mx-44 text-4xl font-sans py-7">
-                          У Вас{" "}
+                          {tr("you")}{" "}
                           {currency(userBalance, {
                             pattern: "# !",
                             separator: " ",
@@ -1105,10 +1107,10 @@ function Cart() {
                             symbol: ``,
                             precision: 0,
                           }).format()}{" "}
-                          баллов
+                          {tr("profile_bounuses_score")}
                         </div>
                         <div className="mt-16 text-4xl mx-44 font-sans">
-                          Накапливайте и оплачивайте баллами на
+                          {tr("earn_and_pay")}
                         </div>
                         <div className="mt-5 mx-44">
                           <img
@@ -1120,7 +1122,7 @@ function Cart() {
                         <div className="">
                           <Link href="/payment">
                             <a className="bg-greenPrimary flex font-medium font-sans h-36 items-center justify-around mt-32 outline-none relative text-4xl text-white w-full">
-                              Перейти к оплате
+                              {tr("proceed_to_checkout")}
                             </a>
                           </Link>
                         </div>

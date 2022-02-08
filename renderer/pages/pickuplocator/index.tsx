@@ -1,16 +1,18 @@
 import React from "react";
 import Layout from "@components/Layout";
+import useTranslation from "next-translate/useTranslation";
 
 function Locator() {
+  const { t: tr } = useTranslation("common");
   return (
     <>
       <div className="bg-primary h-full">
         <div className="pt-60">
           <div className="text-6xl font-bold font-serif text-center text-white mx-[240px]">
-            Принесём заказ на ваш стол!
+            {tr("order_to_your_table")}
           </div>
           <div className="text-white text-center mt-[70px] mx-[240px] text-5xl font-bold font-sans">
-            Возьмите локатор <br /> и введите номер локатора
+            {tr("take_the_locator")}
           </div>
         </div>
 
@@ -64,17 +66,19 @@ function Locator() {
         <div className="flex fixed bottom-0 w-full">
           <div className="flex text-center w-full h-full">
             <div
-              className=" text-white bg-black px-[160px]  h-[120px] flex flex-col justify-around"
+              className=" text-white bg-black flex flex-col justify-around w-1/2 py-9"
               //onClick={clearBasket}
             >
-              <div className="text-4xl font-medium">Нет, заберу сам</div>
+              <div className="text-[40px] font-medium">
+                {tr("take_it_myself")}
+              </div>
             </div>
             <div
-              className="w-full bg-greenPrimary text-white text-2xl h-[120px] flex flex-col justify-around"
+              className=" bg-greenPrimary text-white text-2xl  flex flex-col justify-around w-1/2 py-9"
               //onClick={() => checkRecommended()}
             >
               <div className="flex items-end mx-auto space-x-4">
-                <div className="text-[40px] font-medium">Подтвердить</div>
+                <div className="text-[40px] font-medium">{tr("confirm")}</div>
               </div>
             </div>
           </div>

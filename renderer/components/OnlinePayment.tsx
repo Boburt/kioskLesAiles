@@ -13,6 +13,7 @@ import getConfig from "next/config";
 import useCart from "@framework/cart/use-cart";
 import Hashids from "hashids";
 import { toast } from "react-toastify";
+import useTranslation from "next-translate/useTranslation";
 
 const { publicRuntimeConfig } = getConfig();
 let webAddress = publicRuntimeConfig.apiUrl;
@@ -23,6 +24,7 @@ const OnlinePayment = () => {
   const { categoryId, setCategoryId, user, setUserData, setOrderData } =
     useUI();
   const [isActice, setIsActive] = useState(true);
+  const { t: tr } = useTranslation("common");
 
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
 
@@ -202,7 +204,7 @@ const OnlinePayment = () => {
       </div>
       <Link href="/payment">
         <a className="bg-black text-white fixed left-0 bottom-0 py-9 px-52 font-medium text-[40px] font-sans">
-          Назад
+          {tr("back")}
         </a>
       </Link>
     </div>

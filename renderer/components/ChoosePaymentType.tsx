@@ -13,6 +13,7 @@ import getConfig from "next/config";
 import useCart from "@framework/cart/use-cart";
 import { toast } from "react-toastify";
 import Hashids from "hashids";
+import { useTranslation } from "next-export-i18n";
 
 const { publicRuntimeConfig } = getConfig();
 let webAddress = publicRuntimeConfig.apiUrl;
@@ -26,6 +27,7 @@ const ChoosePaymentType = () => {
 
   const [isLoadingCard, setIsLoadingCard] = useState(false);
   const [isLoadingCashBack, setIsLoadingCashBack] = useState(false);
+  const { t: tr } = useTranslation("common");
 
   const router = useRouter();
   let cartId: string | null = null;
@@ -241,7 +243,7 @@ const ChoosePaymentType = () => {
   return (
     <div className="bg-primary h-full">
       <div className="text-white font-bold text-6xl m-auto pt-80 px-[304px] text-center font-serif pb-28">
-        Выберите способы оплаты
+        {tr("choose_payment_methods")}
       </div>
 
       <button
@@ -280,7 +282,7 @@ const ChoosePaymentType = () => {
           height={40}
           className="py-14 ml-[70px] mr-16"
         />
-        <div>Оплата картой</div>
+        <div> {tr("payment_by_card")}</div>
       </button>
       <button
         onClick={() => router.push("/payment/online")}
@@ -293,7 +295,7 @@ const ChoosePaymentType = () => {
           height={40}
           className="py-14 ml-[70px] mr-16"
         />
-        <div>Оплата онлайн</div>
+        <div>{tr("payment_online")}</div>
       </button>
       <button
         onClick={submitCashBackOrder}
@@ -331,10 +333,10 @@ const ChoosePaymentType = () => {
           height={40}
           className="py-14 ml-[70px] mr-16"
         />
-        <div>Оплата бонусами</div>
+        <div>{tr("payment_by_bonuses")}</div>
       </button>
       <div className="bg-black text-white fixed left-0 bottom-0 py-9 px-52 font-medium text-[40px] font-sans">
-        Назад
+        {tr("back")}
       </div>
     </div>
   );
