@@ -11,6 +11,7 @@ import Link from "next/link";
 import { QRCode } from "react-qrcode-logo";
 
 let otpTimerRef: NodeJS.Timeout;
+let orderStatusTimerRef: NodeJS.Timeout;
 
 const WaitingPaymentComponent = () => {
   const { lang: locale } = useSelectedLanguage();
@@ -20,6 +21,8 @@ const WaitingPaymentComponent = () => {
   const router = useRouter();
 
   const otpTime = useRef(0);
+
+  console.log(orderData);
 
   const startTimeout = () => {
     otpTimerRef = setInterval(() => {
@@ -31,6 +34,15 @@ const WaitingPaymentComponent = () => {
         // router.push('/')
       }
     }, 1000);
+  };
+
+  const checkOrderStatus = () => {
+    orderStatusTimerRef = setInterval(() => {
+      if (orderData?.status === "paid") {
+        clearInterval(orderStatusTimerRef);
+        router.push("/");
+      }
+    }, 5000);
   };
 
   useEffect(() => {

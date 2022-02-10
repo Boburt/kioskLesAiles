@@ -11,6 +11,7 @@ import {
   useLanguageQuery,
   LanguageSwitcher,
 } from "next-export-i18n";
+import { useIdleTimer } from "react-idle-timer";
 
 function Home() {
   const {
@@ -38,6 +39,16 @@ function Home() {
     });
     router.push("/menu");
   };
+  const handleOnIdle = (event: any) => {
+    localStorage.removeItem("mijoz");
+    setUserData(null);
+    router.push(`/inactive`);
+  };
+  const { getRemainingTime, getLastActiveTime } = useIdleTimer({
+    timeout: 1000 * 60 * 5,
+    onIdle: handleOnIdle,
+    debounce: 500,
+  });
 
   return (
     <>

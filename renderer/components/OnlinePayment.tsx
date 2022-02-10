@@ -124,7 +124,7 @@ const OnlinePayment = () => {
       // );
 
       localStorage.removeItem("mijoz");
-      setUserData(null);
+      // setUserData(null);
       setOrderData(data);
       setTimeout(() => {
         router.push(`/payment/wait_payment`);

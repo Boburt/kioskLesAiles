@@ -879,7 +879,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
               onClick={() => checkRecommended()}
             >
               <div className="flex items-end mx-auto space-x-4">
-                <div className="text-[40px] font-medium">{tr("to_pay")}:</div>{" "}
+                <div className="text-[40px] font-medium">{tr("to_pay")}</div>{" "}
                 <div className="text-[50px] font-medium">
                   {!isEmpty &&
                     data.totalPrice &&

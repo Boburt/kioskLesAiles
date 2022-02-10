@@ -14,7 +14,7 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
 }) => {
   const { lang: locale } = useSelectedLanguage();
   const { categoryId, setCategoryId } = useUI();
-
+  console.log(categories);
   return (
     <div className="text-center items-center space-y-3 h-[calc(100vh-550px)]">
       {categories.map((item: any) => {
@@ -26,7 +26,14 @@ const CategoriesMenu: FC<{ categories: any[]; channelName: string }> = ({
             key={item.id}
             onClick={() => setCategoryId(item.id)}
           >
-            <img src="/assets/img_cat_menu.png" className="mx-auto pt-1" />
+            {item.asset ? (
+              <>
+                <img src={item.asset[0].link} className="mx-auto pt-1" />
+              </>
+            ) : (
+              <img src="/assets/img_cat_menu.png" className="mx-auto pt-1" />
+            )}
+
             <div
               className={`p-3 leading-4 text-2xl ${
                 categoryId == item.id ? "text-white" : ""

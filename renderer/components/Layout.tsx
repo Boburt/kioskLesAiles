@@ -12,7 +12,9 @@ import type { Page } from "@commerce/types/page";
 import { APILinkItem } from "@commerce/types/headerMenu";
 import { SocialIcons } from "@commerce/types/socialIcons";
 import { City } from "@commerce/types/cities";
+import { useIdleTimer } from "react-idle-timer";
 import Header from "./Header";
+import { useUI } from "./ui/context";
 
 interface Props {
   pageProps: {
@@ -40,7 +42,18 @@ const Layout: FC<Props> = ({
     ...pageProps
   },
 }) => {
-  const { locale = "ru", pathname, query } = useRouter();
+  const { locale = "ru", pathname, query, push } = useRouter();
+  const { setUserData } = useUI();
+  const handleOnIdle = (event: any) => {
+    localStorage.removeItem("mijoz");
+    setUserData(null);
+    push(`/inactive`);
+  };
+  const { getRemainingTime, getLastActiveTime } = useIdleTimer({
+    timeout: 1000 * 60 * 5,
+    onIdle: handleOnIdle,
+    debounce: 500,
+  });
   return (
     <CommerceProvider locale={locale}>
       <Header />
