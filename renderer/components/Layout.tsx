@@ -46,6 +46,7 @@ const Layout: FC<Props> = ({
   const { setUserData } = useUI();
   const handleOnIdle = (event: any) => {
     localStorage.removeItem("mijoz");
+    localStorage.removeItem("basketId");
     setUserData(null);
     push(`/inactive`);
   };

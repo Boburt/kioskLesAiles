@@ -29,9 +29,12 @@ import Cashback from "@components/Cashback";
 import SignInModal from "@components/SignInModal";
 import NumPad from "@components/NumPad";
 const NumberFormat = require("react-number-format");
-import styles from "./cart.module.css";
 import DisplayPhone from "@components/DisplayPhone";
 import Link from "next/link";
+import styles from "./cart.module.css";
+import KeyboardWrapper from "@components/KeyboardWrapper";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Errors {
   [key: string]: string;
@@ -133,6 +136,9 @@ function Cart() {
   const [showUserName, setShowUserName] = useState(false);
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
   const cashbackFirstStepRef = useRef(null);
+
+  const keyboard = useRef(null);
+
   const onSubmit = (data: Object) => console.log(JSON.stringify(data));
 
   const otpTime = useRef(0);
@@ -150,8 +156,6 @@ function Cart() {
     mode: "onChange",
   });
 
-  const authPhone = watch("phone");
-
   const {
     register: passwordFormRegister,
     handleSubmit: handlePasswordSubmit,
@@ -159,6 +163,20 @@ function Cart() {
   } = useForm({
     mode: "onChange",
   });
+
+  const {
+    register: newUserFormRegister,
+    handleSubmit: handleNewUserSubmit,
+    formState: newUserFormState,
+    watch: newUserWatch,
+    setValue: newUserSetValue,
+  } = useForm({
+    mode: "onChange",
+  });
+
+  const authPhone = watch("phone");
+  const authName = newUserWatch("name");
+  const authEmail = newUserWatch("email");
 
   const router = useRouter();
   const { locale } = router;
@@ -191,6 +209,23 @@ function Cart() {
       phone: authPhone,
     });
   };
+  console.log("authName", authName);
+
+  const newUserFormCheck = () => {
+    if (!authName) {
+      toast.error(tr("name_field_is_required"), {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+      });
+      return;
+    }
+    return onSubmitPhone({});
+  };
 
   const onSubmitPhone: SubmitHandler<AnyObject> = async (data) => {
     setSubmitError("");
@@ -204,6 +239,18 @@ function Cart() {
       withCredentials: true,
     });
     let { data: res } = csrfReq;
+    if (authName) {
+      data.name = authName;
+    }
+
+    if (authEmail) {
+      data.email = authEmail;
+    }
+
+    if (authPhone) {
+      data.phone = authPhone;
+    }
+
     const csrf = Buffer.from(res.result, "base64").toString("ascii");
 
     Cookies.set("X-XSRF-TOKEN", csrf);
@@ -231,7 +278,7 @@ function Cart() {
       setIsSubmittingForm(false);
       setSubmitError(errors[otpError]);
       if (otpError == "name_field_is_required") {
-        setShowUserName(true);
+        setCashbackStep("new_user");
       }
     } else if (success) {
       setIsSubmittingForm(false);
@@ -1129,12 +1176,215 @@ function Cart() {
                       </div>
                     </>
                   )}
+                  {cashbackStep == "new_user" && (
+                    <form onSubmit={handleNewUserSubmit(submitPasswordForm)}>
+                      <div>
+                        <div className="text-6xl pt-16 pb-16 px-28">
+                          {tr("set_user_data")}
+                        </div>
+                        <div>
+                          <div className="pl-32 py-7 rounded-xl bg-white mx-14 text-black text-4xl text-left flex justify-between mt-5">
+                            <DisplayPhone phone={authPhone} />
+                            <div
+                              className="px-10"
+                              onClick={() => {
+                                setCashbackStep("typing_phone");
+                              }}
+                            >
+                              <img src="/edit.png" alt="" />
+                            </div>
+                          </div>
+                          <div
+                            onClick={() => {
+                              setCashbackStep("typing_name");
+                            }}
+                            className="pl-32 py-7 rounded-xl bg-white mx-14 text-black text-4xl text-left flex justify-between mt-5"
+                          >
+                            <div>
+                              {authName ? authName : tr("set_user_name")}
+                            </div>
+                          </div>
+                          <div
+                            onClick={() => {
+                              setCashbackStep("typing_email");
+                            }}
+                            className="pl-32 py-7 rounded-xl bg-white mx-14 text-black text-4xl text-left flex justify-between mt-5"
+                          >
+                            {authEmail ? authEmail : "E-mail"}
+                          </div>
+                        </div>
+                        <div className="mt-24">
+                          <button
+                            className="text-4xl relative font-medium bg-greenPrimary py-5 text-white outline-none w-full h-36 font-sans"
+                            onClick={handleNewUserSubmit(newUserFormCheck)}
+                            disabled={isSubmittingForm}
+                          >
+                            {isSubmittingForm ? (
+                              <div className="h-full w-full absolute flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]">
+                                <svg
+                                  className="animate-spin text-white h-14"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  ></path>
+                                </svg>
+                              </div>
+                            ) : (
+                              tr("save")
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  )}
+                  {cashbackStep == "typing_name" && (
+                    <form onSubmit={handleNewUserSubmit(submitPasswordForm)}>
+                      <div>
+                        <div className="text-6xl pt-16 pb-16 px-28">
+                          {tr("set_user_name")}
+                        </div>
+                        <div>
+                          <div className="pl-32 py-7 rounded-xl bg-white mx-14 text-black text-4xl text-left flex justify-between mt-5">
+                            <input
+                              type="text"
+                              {...newUserFormRegister("name", {
+                                required: true,
+                                value: authName,
+                              })}
+                              readOnly={true}
+                              placeholder={tr("set_user_name")}
+                            />
+                          </div>
+                          <div className="mt-5 mx-14">
+                            <KeyboardWrapper
+                              keyboardRef={keyboard}
+                              onChange={(value) => {
+                                newUserSetValue("name", value);
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="mt-24">
+                          <button
+                            className="text-4xl relative font-medium bg-greenPrimary py-5 text-white outline-none w-full h-36 font-sans"
+                            onClick={() => setCashbackStep("new_user")}
+                            disabled={isSubmittingForm}
+                          >
+                            {isSubmittingForm ? (
+                              <div className="h-full w-full absolute flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]">
+                                <svg
+                                  className="animate-spin text-white h-14"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  ></path>
+                                </svg>
+                              </div>
+                            ) : (
+                              tr("save")
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  )}
+                  {cashbackStep == "typing_email" && (
+                    <form onSubmit={handleNewUserSubmit(submitPasswordForm)}>
+                      <div>
+                        <div className="text-6xl pt-16 pb-16 px-28">
+                          {tr("set_user_name")}
+                        </div>
+                        <div>
+                          <div className="pl-32 py-7 rounded-xl bg-white mx-14 text-black text-4xl text-left flex justify-between mt-5">
+                            <input
+                              type="text"
+                              {...newUserFormRegister("email", {
+                                required: true,
+                                value: authEmail,
+                              })}
+                              readOnly={true}
+                              placeholder={tr("set_user_email")}
+                            />
+                          </div>
+                          <div className="mt-5 mx-14">
+                            <KeyboardWrapper
+                              keyboardRef={keyboard}
+                              onChange={(value) => {
+                                newUserSetValue("email", value);
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="mt-24">
+                          <button
+                            className="text-4xl relative font-medium bg-greenPrimary py-5 text-white outline-none w-full h-36 font-sans"
+                            onClick={() => setCashbackStep("new_user")}
+                            disabled={isSubmittingForm}
+                          >
+                            {isSubmittingForm ? (
+                              <div className="h-full w-full absolute flex items-center justify-around bg-gray-300 top-0 bg-opacity-60 left-0 rounded-[15px]">
+                                <svg
+                                  className="animate-spin text-white h-14"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  ></path>
+                                </svg>
+                              </div>
+                            ) : (
+                              tr("save")
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  )}
                 </div>
               </div>
             </Transition.Child>
           </div>
         </Dialog>
       </Transition>
+      <ToastContainer />
     </>
   );
 }

@@ -9,13 +9,20 @@ import { useUI } from "@components/ui/context";
 import currency from "currency.js";
 import Link from "next/link";
 import { QRCode } from "react-qrcode-logo";
+import axios from "axios";
+import getConfig from "next/config";
+import Cookies from "js-cookie";
+import Hashids from "hashids";
 
 let otpTimerRef: NodeJS.Timeout;
 let orderStatusTimerRef: NodeJS.Timeout;
 
+const { publicRuntimeConfig } = getConfig();
+let webAddress = publicRuntimeConfig.apiUrl;
+axios.defaults.withCredentials = true;
 const WaitingPaymentComponent = () => {
   const { lang: locale } = useSelectedLanguage();
-  const { categoryId, setCategoryId, orderData } = useUI();
+  const { categoryId, setCategoryId, orderData, setOrderData } = useUI();
   const [isActice, setIsActive] = useState(true);
   const [otpShowCode, setOtpShowCode] = useState(0);
   const router = useRouter();
@@ -31,16 +38,35 @@ const WaitingPaymentComponent = () => {
         setOtpShowCode(otpTime.current);
       } else {
         clearInterval(otpTimerRef);
-        // router.push('/')
+        clearInterval(orderStatusTimerRef);
+        setOrderData(null);
+        router.push("/payment/not_payed");
       }
     }, 1000);
   };
 
-  const checkOrderStatus = () => {
-    orderStatusTimerRef = setInterval(() => {
-      if (orderData?.status === "paid") {
-        clearInterval(orderStatusTimerRef);
-        router.push("/");
+  const checkOrderStatus = async () => {
+    orderStatusTimerRef = setInterval(async () => {
+      // if (orderData?.status === "paid") {
+      //   clearInterval(orderStatusTimerRef);
+      //   router.push("/");
+      // }
+      const otpToken = Cookies.get("opt_token");
+      const { data: order } = await axios.get(
+        `${webAddress}/api/orders?id=${orderData.order.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${otpToken}`,
+          },
+        }
+      );
+      if (order.status != "awaiting-payment") {
+        const hashids = new Hashids(
+          "order",
+          15,
+          "abcdefghijklmnopqrstuvwxyz1234567890"
+        );
+        router.push(`/order/${hashids.decode(orderData.order.id)}`);
       }
     }, 5000);
   };
@@ -49,6 +75,7 @@ const WaitingPaymentComponent = () => {
     otpTime.current = 180;
     setOtpShowCode(180);
     startTimeout();
+    checkOrderStatus();
   }, []);
 
   const otpTimerText = useMemo(() => {
@@ -57,10 +84,14 @@ const WaitingPaymentComponent = () => {
     const seconds: number = otpShowCode % 60;
     if (minutes > 0) {
       text += minutes + ":";
+    } else {
+      text += "0:";
     }
 
     if (seconds > 0) {
-      text += seconds;
+      text += seconds < 10 ? "0" + seconds : seconds;
+    } else {
+      text += "00";
     }
     return text;
   }, [otpShowCode]);
@@ -102,16 +133,13 @@ const WaitingPaymentComponent = () => {
             </div>
           </div>
           <div className="bg-white flex justify-around mt-5 py-8 px-4 rounded-2xl text-black w-96 mx-auto">
-            <div className="font-medium font-sans text-3xl">
+            <div className="font-medium font-sans text-3xl flex-grow">
               Осталось времени:
             </div>
-            <div className="font-sans font-bold text-5xl">{otpTimerText}</div>
+            <div className="flex-grow font-bold font-sans text-5xl w-20">
+              {otpTimerText}
+            </div>
           </div>
-          <Link href="/menu">
-            <a className="bg-black text-white fixed left-0 bottom-0 py-9 px-52 font-medium text-[40px] font-sans">
-              Назад
-            </a>
-          </Link>
         </>
       )}
     </div>

@@ -8273,6 +8273,11 @@ react-select@^4.3.1:
     react-input-autosize "^3.0.0"
     react-transition-group "^4.3.0"
 
+react-simple-keyboard@^3.4.58:
+  version "3.4.58"
+  resolved "https://registry.yarnpkg.com/react-simple-keyboard/-/react-simple-keyboard-3.4.58.tgz#9a983fed2c5409d5ae21d55b6ca8c78222e620a8"
+  integrity sha512-eeQ/k8CNEWCapRmVBGYSE6eYkZH7XvP/s4Np2DY6PoiBzuoGz/ddGHCWkrDAmtzE2M0D9ck2+K38l8xxw5Eokw==
+
 react-slick@^0.28.1:
   version "0.28.1"
   resolved "https://registry.yarnpkg.com/react-slick/-/react-slick-0.28.1.tgz#12c18d991b59432df9c3757ba540a227b3fb85b9"
@@ -8953,6 +8958,11 @@ signedsource@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/signedsource/-/signedsource-1.0.0.tgz#1ddace4981798f93bd833973803d80d52e93ad6a"
   integrity sha1-HdrOSYF5j5O9gzlzgD2A1S6TrWo=
+
+simple-keyboard@^3.4.46:
+  version "3.4.46"
+  resolved "https://registry.yarnpkg.com/simple-keyboard/-/simple-keyboard-3.4.46.tgz#301e2543d659a2f892366195f226af4be368a0e8"
+  integrity sha512-LFA4ljcHIZKJw2ij7RpEP5j6JstZhhjHjftHuzG+mqC0xSTAZDRcywte7yNy2sxL20fY0T0VJ4mRrBgYn8pBzg==
 
 simple-swizzle@^0.2.2:
   version "0.2.2"

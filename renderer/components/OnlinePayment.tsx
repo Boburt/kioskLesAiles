@@ -12,7 +12,7 @@ import axios from "axios";
 import getConfig from "next/config";
 import useCart from "@framework/cart/use-cart";
 import Hashids from "hashids";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import useTranslation from "next-translate/useTranslation";
 
 const { publicRuntimeConfig } = getConfig();
@@ -101,7 +101,7 @@ const OnlinePayment = () => {
             sms_sub: false,
             email_sub: false,
             sourceType,
-            terminal_id: 16,
+            terminal_id: 14,
           },
           basket_id: cartId,
         },
@@ -207,6 +207,7 @@ const OnlinePayment = () => {
           {tr("back")}
         </a>
       </Link>
+      <ToastContainer />
     </div>
   );
 };
