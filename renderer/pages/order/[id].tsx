@@ -24,7 +24,10 @@ const OrderSuccess = () => {
   const { t: tr } = useTranslation("common");
 
   const printOrder = () => {
-    postPrint(orderData);
+    if (orderData) {
+      
+      postPrint(orderData.order);
+    }
   };
 
   useEffect(() => {

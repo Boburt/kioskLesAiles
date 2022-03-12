@@ -87,23 +87,6 @@ export default (
   console.log(browserOptions)
   win = new BrowserWindow(browserOptions);
   remoteMain.enable(win.webContents)
-  win.webContents.setWindowOpenHandler(({ url }) => {
-    console.log(url)
-    // if (url === 'about:blank') {
-    //   return {
-    //     action: 'allow',
-    //     overrideBrowserWindowOptions: {
-    //       frame: false,
-    //       fullscreenable: false,
-    //       backgroundColor: 'black',
-    //       webPreferences: {
-    //         preload: 'my-child-window-preload-script.js'
-    //       }
-    //     }
-    //   }
-    // }
-    return { action: 'deny' }
-  })
 
   win.on("close", saveState);
 

@@ -45,10 +45,10 @@ const Layout: FC<Props> = ({
   const { locale = "ru", pathname, query, push } = useRouter();
   const { setUserData } = useUI();
   const handleOnIdle = (event: any) => {
-    // localStorage.removeItem("mijoz");
-    // localStorage.removeItem("basketId");
-    // setUserData(null);
-    // push(`/inactive`);
+    localStorage.removeItem("mijoz");
+    localStorage.removeItem("basketId");
+    setUserData(null);
+    push(`/inactive`);
   };
   const { getRemainingTime, getLastActiveTime } = useIdleTimer({
     timeout: 1000 * 60 * 5,

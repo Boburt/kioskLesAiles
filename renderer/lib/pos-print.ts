@@ -102,6 +102,10 @@ const postPrint = (order: any) => {
     },
     {
       type: "text",
+      value: "<br />",
+    },
+    {
+      type: "text",
       value: `${order.user.data.name}`,
       css: {
         "font-size": "13px",

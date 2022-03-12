@@ -29,6 +29,13 @@ const Inactive: FC = () => {
           <img src="/inactive/slide2.jpg" alt="" />
         </div>
       </Slider>
+      <style global jsx>
+        {`
+        .slick-slider {
+          overflow-x: hidden;
+        }
+        `}
+      </style>
     </div>
   );
 };
