@@ -1,8 +1,54 @@
+import currency from "currency.js";
+import Hashids from "hashids";
+import { DateTime } from "luxon";
+const awesomePhonenumber = require("awesome-phonenumber");
 
 const postPrint = (order: any) => {
   const remote = require("@electron/remote");
   const path = require("path");
+
   // console.log(process.versions.electron);
+
+  const hashids = new Hashids(
+    "order",
+    15,
+    "abcdefghijklmnopqrstuvwxyz1234567890"
+  );
+
+  let orderId = hashids.decode(order.id);
+  let userPhone = order.contact_details.phone;
+  let userPhoneNumber = awesomePhonenumber(userPhone, "UZ");
+  let userPhoneNumberFormatted = userPhoneNumber.getNumber("international");
+  userPhone = userPhoneNumberFormatted;
+
+  let createdAt = order.created_at;
+  let createdAtFormatted = DateTime.fromISO(createdAt)
+    .toLocal()
+    .toFormat("HH:mm dd.MM.yyyy");
+
+  let basketTable: any[] = [];
+
+  order.lines.data.map((item: any) => {
+    basketTable.push([
+      {
+        type: "text",
+        value: item.description,
+        css: { "text-align": "left" },
+      },
+      { type: "text", value: item.quantity, css: { "text-align": "right" } },
+      {
+        type: "text",
+        value: currency(item.line_total / 100, {
+          pattern: "# !",
+          separator: " ",
+          decimal: ".",
+          symbol: ``,
+          precision: 0,
+        }).format(),
+        css: { "text-align": "right" },
+      },
+    ]);
+  });
 
   const { PosPrinter } = remote.require("electron-15-pos-printer");
   const data = [
@@ -46,7 +92,7 @@ const postPrint = (order: any) => {
     },
     {
       type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-      value: "Заказ № 427",
+      value: `Заказ № ${orderId}`,
 
       css: {
         "font-size": "13px",
@@ -56,7 +102,7 @@ const postPrint = (order: any) => {
     },
     {
       type: "text",
-      value: "Даврон Юлдашев",
+      value: `${order.user.data.name}`,
       css: {
         "font-size": "13px",
         "font-family": "sans-serif",
@@ -64,7 +110,7 @@ const postPrint = (order: any) => {
     },
     {
       type: "text",
-      value: "+998 90 951-40-19",
+      value: `${userPhone}`,
       css: {
         "font-size": "30px",
         "font-family": "sans-serif",
@@ -85,15 +131,15 @@ const postPrint = (order: any) => {
           },
           {
             type: "text",
-            value: "17:10 03.02.2022",
+            value: `${createdAtFormatted}`,
             css: { "text-align": "right" },
-          }
+          },
         ],
       ],
-      style: 'border: 0',
-      tableBodyStyle: 'border: 0',
-      tableFooterStyle: 'border: 0',
-      tableHeaderStyle: 'border: 0',
+      style: "border: 0",
+      tableBodyStyle: "border: 0",
+      tableFooterStyle: "border: 0",
+      tableHeaderStyle: "border: 0",
       css: {
         "font-size": "13px",
         "font-family": "sans-serif",
@@ -111,28 +157,7 @@ const postPrint = (order: any) => {
         { type: "text", value: "Кол-во", css: { "text-align": "right" } },
         { type: "text", value: "Сумма", css: { "text-align": "right" } },
       ],
-      tableBody: [
-        [
-          { type: "text", value: "Лестер чиз", css: { "text-align": "left" } },
-          { type: "text", value: 1, css: { "text-align": "right" } },
-          { type: "text", value: "22 000", css: { "text-align": "right" } },
-        ],
-        [
-          { type: "text", value: "Лонгер чиз", css: { "text-align": "left" } },
-          { type: "text", value: 1, css: { "text-align": "right" } },
-          { type: "text", value: "18 000", css: { "text-align": "right" } },
-        ],
-        [
-          { type: "text", value: "Майонез", css: { "text-align": "left" } },
-          { type: "text", value: 1, css: { "text-align": "right" } },
-          { type: "text", value: "3 000", css: { "text-align": "right" } },
-        ],
-        [
-          { type: "text", value: "Кетчуп", css: { "text-align": "left" } },
-          { type: "text", value: 1, css: { "text-align": "right" } },
-          { type: "text", value: "2 000", css: { "text-align": "right" } },
-        ],
-      ],
+      tableBody: basketTable,
       css: {
         "font-size": "13px",
         "font-family": "sans-serif",
@@ -144,94 +169,122 @@ const postPrint = (order: any) => {
       value: "<br />",
     },
     {
-        type: "table",
-        tableBody: [
-            [{
-                type: "text",
-                value: "Итого к оплате:",
-                css: {
-                    "text-align": "left",
-                    "font-weight": "bold",
-                    "font-size": "20px",
-                    "font-family": "sans-serif"
-                }
+      type: "table",
+      tableBody: [
+        [
+          {
+            type: "text",
+            value: "Итого к оплате:",
+            css: {
+              "text-align": "left",
+              "font-weight": "bold",
+              "font-size": "20px",
+              "font-family": "sans-serif",
             },
-            {
-                type: "text",
-                value: "45 000",
-                css: {
-                    "text-align": "right",
-                    "font-weight": "bold",
-                    "font-size": "20px",
-                    "font-family": "sans-serif"
-                }
-            }]
+          },
+          {
+            type: "text",
+            value: currency(order.order_total / 100, {
+              pattern: "# !",
+              separator: " ",
+              decimal: ".",
+              symbol: ``,
+              precision: 0,
+            }).format(),
+            css: {
+              "text-align": "right",
+              "font-weight": "bold",
+              "font-size": "20px",
+              "font-family": "sans-serif",
+            },
+          },
         ],
-        tableBodyStyle: 'border: 0',
-        tableFooterStyle: 'border: 0',
-        tableHeaderStyle: 'border: 0',
+      ],
+      tableBodyStyle: "border: 0",
+      tableFooterStyle: "border: 0",
+      tableHeaderStyle: "border: 0",
     },
     {
-        type: "table",
-        tableBody: [
-            [{
-                type: "text",
-                value: "С учётом НДС (15%):",
-                css: {
-                    "text-align": "left",
-                    "font-size": "13px",
-                    "font-family": "sans-serif"
-                }
+      type: "table",
+      tableBody: [
+        [
+          {
+            type: "text",
+            value: "С учётом НДС (15%):",
+            css: {
+              "text-align": "left",
+              "font-size": "13px",
+              "font-family": "sans-serif",
             },
-            {
-                type: "text",
-                value: "5 870",
-                css: {
-                    "text-align": "right",
-                    "font-size": "13px",
-                    "font-family": "sans-serif"
-                }
-            }]
+          },
+          {
+            type: "text",
+            value: currency(
+              (((order.order_total / 100) * 15) / 115).toFixed(0),
+              {
+                pattern: "# !",
+                separator: " ",
+                decimal: ".",
+                symbol: ``,
+                precision: 0,
+              }
+            ).format(),
+            css: {
+              "text-align": "right",
+              "font-size": "13px",
+              "font-family": "sans-serif",
+            },
+          },
         ],
-        tableBodyStyle: 'border: 0',
-        tableFooterStyle: 'border: 0',
-        tableHeaderStyle: 'border: 0',
+      ],
+      tableBodyStyle: "border: 0",
+      tableFooterStyle: "border: 0",
+      tableHeaderStyle: "border: 0",
     },
     {
       type: "text",
       value: "<br /><br />",
     },
     {
-        type: "text",
-        value: "Комментарий к заказу:",
-        css: {
-            "text-align": "left",
-            "font-size": "13px",
-            "font-family": "sans-serif"
-        }
+      type: "text",
+      value: "Комментарий к заказу:",
+      css: {
+        "text-align": "left",
+        "font-size": "13px",
+        "font-family": "sans-serif",
+      },
     },
     {
-        type: "text",
-        value: "Доп. номер: 998071181 Мне нужны приборы",
-        css: {
-            "text-align": "left",
-            "font-weight": "bold",
-            "font-size": "25px",
-            "font-family": "sans-serif"
-        }
+      type: "text",
+      value: order.notes,
+      css: {
+        "text-align": "left",
+        "font-weight": "bold",
+        "font-size": "25px",
+        "font-family": "sans-serif",
+      },
     },
     {
       type: "text",
       value: "<br /><br />",
     },
     {
-        type: "text",
-        value: "Счет будет пополнен на 2 250,00 бон. (5%)",
-        css: {
-            "text-align": "left",
-            "font-size": "13px",
-            "font-family": "sans-serif"
+      type: "text",
+      value: `Счет будет пополнен на ${currency(
+        ((order.order_total / 100) * 0.05).toFixed(0),
+        {
+          pattern: "# !",
+          separator: " ",
+          decimal: ".",
+          symbol: ``,
+          precision: 2,
         }
+      ).format()} бон. (5%)`,
+      css: {
+        "text-align": "left",
+        "font-size": "13px",
+        "font-family": "sans-serif",
+      },
     },
     {
       type: "text",
@@ -240,8 +293,7 @@ const postPrint = (order: any) => {
   ];
 
   let webContents = remote.getCurrentWebContents();
-  let printers = webContents.getPrinters(); //list the printers
-  console.log(data);
+  let printers = webContents.getPrinters();
 
   const options = {
     preview: false, // Preview in window or print
@@ -252,7 +304,6 @@ const postPrint = (order: any) => {
     timeOutPerLine: 400,
     silent: true,
   };
-  console.log(options);
   // setTimeout(() => {
   PosPrinter.print(data, options)
     .then(() => {})

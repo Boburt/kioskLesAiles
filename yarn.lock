@@ -2935,6 +2935,11 @@ avvio@^7.1.2:
     fastq "^1.6.1"
     queue-microtask "^1.1.2"
 
+awesome-phonenumber@^2.70.0:
+  version "2.70.0"
+  resolved "https://registry.yarnpkg.com/awesome-phonenumber/-/awesome-phonenumber-2.70.0.tgz#81ed3abd1cecd08f974563b0973275f4c0f51efc"
+  integrity sha512-VlYfAmfPYKhNqr87zoMEBCDCQvtdlRysvMSfDsZV+KaSse+gZMnRImWa049Eb1l1CfrAtzFXLzSRgXI1qfPwXA==
+
 axios@^0.21.1:
   version "0.21.4"
   resolved "https://registry.npmjs.org/axios/-/axios-0.21.4.tgz"
