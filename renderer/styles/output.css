@@ -913,14 +913,14 @@ video {
   margin-bottom: 3rem;
 }
 
-.mx-\[240px\] {
-  margin-left: 240px;
-  margin-right: 240px;
-}
-
 .mx-14 {
   margin-left: 3.5rem;
   margin-right: 3.5rem;
+}
+
+.mx-\[240px\] {
+  margin-left: 240px;
+  margin-right: 240px;
 }
 
 .mb-2 {
@@ -1992,16 +1992,16 @@ video {
   padding-bottom: 1.25rem;
 }
 
+.pl-32 {
+  padding-left: 8rem;
+}
+
 .pt-60 {
   padding-top: 15rem;
 }
 
 .pt-7 {
   padding-top: 1.75rem;
-}
-
-.pl-32 {
-  padding-left: 8rem;
 }
 
 .text-left {
