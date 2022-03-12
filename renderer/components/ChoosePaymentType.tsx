@@ -21,7 +21,7 @@ axios.defaults.withCredentials = true;
 
 const ChoosePaymentType = () => {
   const { lang: locale } = useSelectedLanguage();
-  const { categoryId, setCategoryId, user, setUserData } = useUI();
+  const { categoryId, setCategoryId, user, setUserData, setOrderData } = useUI();
 
   const [isActice, setIsActive] = useState(true);
 
@@ -126,6 +126,7 @@ const ChoosePaymentType = () => {
 
       localStorage.removeItem("mijoz");
       setUserData(null);
+      setOrderData(data);
       router.push(`/order/${hashids.decode(data.order.id)}`);
     } catch (e) {
       // toast.error(e.response.data.error.message, {
