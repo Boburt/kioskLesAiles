@@ -90,7 +90,6 @@ export default (
   win = new BrowserWindow(browserOptions);
   remoteMain.enable(win.webContents);
 
-  win.loadFile(path.join(__dirname, "index.html"));
   win.on("close", saveState);
 
   return win;

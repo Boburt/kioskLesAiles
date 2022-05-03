@@ -55,6 +55,7 @@ function Home() {
     <>
       <div className="bg-primary grid grid-flow-row auto-rows-max font-serif h-[calc(100vh-1px)]">
         <div className="flex ml-auto space-x-3 pt-10 pr-10">
+          <div className="text-xl">Settings</div>
           <LanguageSwitcher lang="ru">
             <div className="flex items-center text-sm px-4 py-2 leading-none border rounded-xl text-black border-white hover:border-transparent hover:text-teal-500 hover:bg-gray-500 mt-4 lg:mt-0 bg-white space-x-2">
               <Ru className="w-4 h-4 rounded-full" />

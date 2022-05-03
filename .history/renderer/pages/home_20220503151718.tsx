@@ -12,7 +12,6 @@ import {
   LanguageSwitcher,
 } from "next-export-i18n";
 import { useIdleTimer } from "react-idle-timer";
-import preferences from "./preferences";
 
 function Home() {
   const {
