@@ -58,15 +58,6 @@ export default (
                    */
                   help: "Укажите ID филиала",
                 },
-                {
-                  label: "Процент кешбека",
-                  key: "cashback_percent",
-                  type: "text",
-                  /**
-                   * Optional text to be displayed beneath the field.
-                   */
-                  help: "Укажите процент кешбека",
-                },
               ],
             },
           ],

@@ -39,33 +39,75 @@ export default (
     sections: [
       {
         id: "lists",
-        label: "Основные настройки",
-        icon: "settings-gear-63",
+        label: "Lists",
+        icon: "notes",
         form: {
           groups: [
             {
               /**
                * Group heading is optional.
                */
-              // label: "About You",
+              label: "About You",
               fields: [
                 {
-                  label: "ID филиала",
-                  key: "terminal_id",
+                  label: "First Name",
+                  key: "first_name",
                   type: "text",
                   /**
                    * Optional text to be displayed beneath the field.
                    */
-                  help: "Укажите ID филиала",
+                  help: "What is your first name?",
                 },
                 {
-                  label: "Процент кешбека",
-                  key: "cashback_percent",
+                  label: "Last Name",
+                  key: "last_name",
                   type: "text",
-                  /**
-                   * Optional text to be displayed beneath the field.
-                   */
-                  help: "Укажите процент кешбека",
+                  help: "What is your last name?",
+                },
+                {
+                  label: "Gender",
+                  key: "gender",
+                  type: "dropdown",
+                  options: [
+                    { label: "Male", value: "male" },
+                    { label: "Female", value: "female" },
+                    { label: "Unspecified", value: "unspecified" },
+                  ],
+                  help: "What is your gender?",
+                },
+                {
+                  label: "Which of the following foods do you like?",
+                  key: "foods",
+                  type: "checkbox",
+                  options: [
+                    { label: "Ice Cream", value: "ice_cream" },
+                    { label: "Carrots", value: "carrots" },
+                    { label: "Cake", value: "cake" },
+                    { label: "Spinach", value: "spinach" },
+                  ],
+                  help: "Select one or more foods that you like.",
+                },
+                {
+                  label: "Coolness",
+                  key: "coolness",
+                  type: "slider",
+                  min: 0,
+                  max: 9001,
+                },
+                {
+                  label: "Eye Color",
+                  key: "eye_color",
+                  type: "color",
+                  format: "hex", // can be hex, hsl or rgb
+                  help: "Your eye color",
+                },
+                {
+                  label: "Ipc button",
+                  key: "resetButton",
+                  type: "button",
+                  buttonLabel: "Restart to apply changes",
+                  help: "This button sends on a custom ipc channel",
+                  hideLabel: false,
                 },
               ],
             },

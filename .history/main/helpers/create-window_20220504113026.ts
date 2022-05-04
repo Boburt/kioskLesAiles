@@ -1,6 +1,5 @@
 import {
   screen,
-  app,
   BrowserWindow,
   BrowserWindowConstructorOptions,
 } from "electron";
@@ -38,8 +37,11 @@ export default (
     defaults: {},
     sections: [
       {
-        id: "lists",
-        label: "Основные настройки",
+        id: "main",
+        label: "Главные настройки",
+        /**
+         * See the list of available icons below.
+         */
         icon: "settings-gear-63",
         form: {
           groups: [
@@ -47,25 +49,16 @@ export default (
               /**
                * Group heading is optional.
                */
-              // label: "About You",
+              label: "Настройки",
               fields: [
                 {
-                  label: "ID филиала",
-                  key: "terminal_id",
+                  label: "Путь к order.txt",
+                  key: "file_path",
                   type: "text",
                   /**
                    * Optional text to be displayed beneath the field.
                    */
-                  help: "Укажите ID филиала",
-                },
-                {
-                  label: "Процент кешбека",
-                  key: "cashback_percent",
-                  type: "text",
-                  /**
-                   * Optional text to be displayed beneath the field.
-                   */
-                  help: "Укажите процент кешбека",
+                  help: "Укажите путь к файлу order.txt",
                 },
               ],
             },
@@ -141,6 +134,8 @@ export default (
       nodeIntegration: true,
       contextIsolation: false,
       ...options.webPreferences,
+
+      preload: path.join(__dirname, "./preload.js"),
     },
   };
 
@@ -148,7 +143,7 @@ export default (
   win = new BrowserWindow(browserOptions);
   remoteMain.enable(win.webContents);
 
-  // win.loadFile(path.join(__dirname, "index.html"));
+  win.loadFile(path.join(__dirname, "index.html"));
   win.on("close", saveState);
 
   return win;

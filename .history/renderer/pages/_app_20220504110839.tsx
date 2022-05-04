@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ManagedUIContext pageProps={pageProps}>
-      <ShortcutProvider>
+      <ShortcutProvider pageProps={pageProps}>
         <Layout pageProps={pageProps}>
           <Component {...pageProps} />
         </Layout>

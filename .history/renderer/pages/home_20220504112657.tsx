@@ -61,7 +61,6 @@ function Home(props: any) {
   const initPreferences = () => {
     // we should check it like this
     const ipcRenderer = electron.ipcRenderer || false;
-    console.log(ipcRenderer);
     if (ipcRenderer) {
       ipcRenderer.send("showPreferences");
     }

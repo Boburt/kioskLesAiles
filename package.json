@@ -81,6 +81,7 @@
     "react-grid-carousel": "^1.0.1",
     "react-hook-form": "^7.26.0",
     "react-idle-timer": "^4.6.4",
+    "react-keybind": "^0.9.4",
     "react-merge-refs": "^1.1.0",
     "react-number-format": "^4.9.1",
     "react-otp-input": "^2.4.0",

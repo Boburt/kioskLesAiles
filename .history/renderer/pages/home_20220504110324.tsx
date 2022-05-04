@@ -12,8 +12,6 @@ import {
   LanguageSwitcher,
 } from "next-export-i18n";
 import { useIdleTimer } from "react-idle-timer";
-import { withShortcut } from "react-keybind";
-import electron from "electron";
 
 declare global {
   interface Window {
@@ -59,14 +57,8 @@ function Home(props: any) {
   });
 
   const initPreferences = () => {
-    // we should check it like this
-    const ipcRenderer = electron.ipcRenderer || false;
-    console.log(ipcRenderer);
-    if (ipcRenderer) {
-      ipcRenderer.send("showPreferences");
-    }
-    // let preferences = window.api.getPreferences();
-    // window.api.showPreferences();
+    let preferences = window.api.getPreferences();
+    window.api.showPreferences();
   };
 
   useEffect(() => {
@@ -80,7 +72,8 @@ function Home(props: any) {
     );
     return () => {
       const { shortcut } = props;
-      shortcut.unregisterShortcut(["ctrl+shift+e", "cmd+shift+e"]);
+      shortcut.unregisterShortcut(["ctrl+n", "cmd+n"]);
+      shortcut.unregisterShortcut(["ctrl+s", "cmd+s"]);
     };
   }, []);
 
@@ -141,4 +134,4 @@ function Home(props: any) {
   );
 }
 
-export default withShortcut(Home);
+export default Home;

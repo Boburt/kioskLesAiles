@@ -39,8 +39,8 @@ export default (
     sections: [
       {
         id: "lists",
-        label: "Основные настройки",
-        icon: "settings-gear-63",
+        label: "Lists",
+        icon: "notes",
         form: {
           groups: [
             {
@@ -57,15 +57,6 @@ export default (
                    * Optional text to be displayed beneath the field.
                    */
                   help: "Укажите ID филиала",
-                },
-                {
-                  label: "Процент кешбека",
-                  key: "cashback_percent",
-                  type: "text",
-                  /**
-                   * Optional text to be displayed beneath the field.
-                   */
-                  help: "Укажите процент кешбека",
                 },
               ],
             },

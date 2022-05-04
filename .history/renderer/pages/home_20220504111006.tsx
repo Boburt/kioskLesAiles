@@ -13,7 +13,6 @@ import {
 } from "next-export-i18n";
 import { useIdleTimer } from "react-idle-timer";
 import { withShortcut } from "react-keybind";
-import electron from "electron";
 
 declare global {
   interface Window {
@@ -59,14 +58,8 @@ function Home(props: any) {
   });
 
   const initPreferences = () => {
-    // we should check it like this
-    const ipcRenderer = electron.ipcRenderer || false;
-    console.log(ipcRenderer);
-    if (ipcRenderer) {
-      ipcRenderer.send("showPreferences");
-    }
-    // let preferences = window.api.getPreferences();
-    // window.api.showPreferences();
+    let preferences = window.api.getPreferences();
+    window.api.showPreferences();
   };
 
   useEffect(() => {

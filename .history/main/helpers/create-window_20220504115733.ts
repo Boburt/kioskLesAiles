@@ -38,8 +38,11 @@ export default (
     defaults: {},
     sections: [
       {
-        id: "lists",
-        label: "Основные настройки",
+        id: "main",
+        label: "Главные настройки",
+        /**
+         * See the list of available icons below.
+         */
         icon: "settings-gear-63",
         form: {
           groups: [
@@ -47,25 +50,27 @@ export default (
               /**
                * Group heading is optional.
                */
-              // label: "About You",
+              label: "Настройки",
               fields: [
                 {
-                  label: "ID филиала",
+                  label: "Favorite foods",
                   key: "terminal_id",
-                  type: "text",
-                  /**
-                   * Optional text to be displayed beneath the field.
-                   */
-                  help: "Укажите ID филиала",
+                  type: "list",
+                  size: 15,
+                  help: "A list of your favorite foods",
+                  addItemValidator: /^[A-Za-z ]+$/.toString(),
+                  addItemLabel: "Add favorite food",
                 },
                 {
-                  label: "Процент кешбека",
-                  key: "cashback_percent",
-                  type: "text",
-                  /**
-                   * Optional text to be displayed beneath the field.
-                   */
-                  help: "Укажите процент кешбека",
+                  label: "Best places to visit",
+                  key: "terminal_id",
+                  type: "list",
+                  size: 10,
+                  style: {
+                    width: "75%",
+                  },
+                  help: "An ordered list of nice places to visit",
+                  orderable: true,
                 },
               ],
             },

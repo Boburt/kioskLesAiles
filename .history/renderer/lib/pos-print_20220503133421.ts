@@ -1,5 +1,4 @@
 import currency from "currency.js";
-import { ipcRenderer } from "electron";
 import Hashids from "hashids";
 import { DateTime } from "luxon";
 const awesomePhonenumber = require("awesome-phonenumber");
@@ -52,8 +51,6 @@ const postPrint = (order: any) => {
   });
 
   const { PosPrinter } = remote.require("electron-15-pos-printer");
-
-  const preferences = ipcRenderer.sendSync("getPreferences");
   const data = [
     // {
     //   type: "image",
@@ -278,10 +275,7 @@ const postPrint = (order: any) => {
     {
       type: "text",
       value: `Счет будет пополнен на ${currency(
-        (
-          (order.order_total / 100) *
-          (parseInt(preferences.lists.cashback_percent) / 100)
-        ).toFixed(0),
+        ((order.order_total / 100) * 0.05).toFixed(0),
         {
           pattern: "# !",
           separator: " ",
@@ -289,7 +283,7 @@ const postPrint = (order: any) => {
           symbol: ``,
           precision: 2,
         }
-      ).format()} бон. (${preferences.lists.cashback_percent}%)`,
+      ).format()} бон. (5%)`,
       css: {
         "text-align": "left",
         "font-size": "13px",

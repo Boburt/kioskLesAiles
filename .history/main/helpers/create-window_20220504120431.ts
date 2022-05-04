@@ -39,33 +39,24 @@ export default (
     sections: [
       {
         id: "lists",
-        label: "Основные настройки",
-        icon: "settings-gear-63",
+        label: "Lists",
+        icon: "notes",
         form: {
           groups: [
             {
               /**
                * Group heading is optional.
                */
-              // label: "About You",
+              label: "About You",
               fields: [
                 {
-                  label: "ID филиала",
-                  key: "terminal_id",
+                  label: "First Name",
+                  key: "first_name",
                   type: "text",
                   /**
                    * Optional text to be displayed beneath the field.
                    */
-                  help: "Укажите ID филиала",
-                },
-                {
-                  label: "Процент кешбека",
-                  key: "cashback_percent",
-                  type: "text",
-                  /**
-                   * Optional text to be displayed beneath the field.
-                   */
-                  help: "Укажите процент кешбека",
+                  help: "What is your first name?",
                 },
               ],
             },

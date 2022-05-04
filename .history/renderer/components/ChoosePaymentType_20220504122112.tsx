@@ -65,8 +65,9 @@ const ChoosePaymentType = () => {
     axios.defaults.headers.common["XCSRF-TOKEN"] = csrf;
   };
 
+  const preferences = ipcRenderer.sendSync("getPreferences");
+
   const submitCardOrder = async () => {
-    const preferences = ipcRenderer.sendSync("getPreferences");
     setIsLoadingCard(true);
     await setCredentials();
     const otpToken = Cookies.get("opt_token");
