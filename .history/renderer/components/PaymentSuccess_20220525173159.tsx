@@ -7,11 +7,7 @@ import dynamic from "next/dynamic";
 import SimpleBar from "simplebar-react";
 import { useSelectedLanguage } from "next-export-i18n";
 import { useUI } from "@components/ui/context";
-import {
-  useTranslation,
-  useLanguageQuery,
-  LanguageSwitcher,
-} from "next-export-i18n";
+import useTranslation from "next-export-i18n";
 
 const PaymentSuccess = () => {
   const { lang: locale } = useSelectedLanguage();

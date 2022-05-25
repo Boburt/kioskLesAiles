@@ -16,11 +16,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import getConfig from "next/config";
 import { useRouter } from "next/router";
-import {
-  useTranslation,
-  useLanguageQuery,
-  LanguageSwitcher,
-} from "next-export-i18n";
+import useTranslation from "next-translate/useTranslation";
 import { useUI } from "@components/ui/context";
 import { Dialog, Transition } from "@headlessui/react";
 import OtpInput from "react-otp-input";

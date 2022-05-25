@@ -1,10 +1,6 @@
 import React from "react";
 import Layout from "@components/Layout";
-import {
-  useTranslation,
-  useLanguageQuery,
-  LanguageSwitcher,
-} from "next-export-i18n";
+import useTranslation from "next-translate/useTranslation";
 
 function Locator() {
   const { t: tr } = useTranslation("common");

@@ -12,10 +12,19 @@ export async function getStaticProps({
   locales,
 }: GetStaticPropsContext) {
   const config = { locale, locales };
+  const productsPromise = commerce.getAllProducts({
+    variables: { first: 6 },
+    config,
+    preview,
+    // Saleor provider only
+    ...({ featured: true } as any),
+  });
   const pagesPromise = commerce.getAllPages({ config, preview });
   const siteInfoPromise = commerce.getSiteInfo({ config, preview });
+  const { products }: { products: any[] } = await productsPromise;
   const { pages } = await pagesPromise;
   const {
+    categories,
     brands,
     topMenu,
     footerInfoMenu,
@@ -31,6 +40,8 @@ export async function getStaticProps({
 
   return {
     props: {
+      products,
+      categories,
       brands,
       pages,
       topMenu,
@@ -42,7 +53,13 @@ export async function getStaticProps({
   };
 }
 
-function dontEnaughtPoints({}: { products: any[]; categories: any[] }) {
+function dontEnaughtPoints({
+  products,
+  categories,
+}: {
+  products: any[];
+  categories: any[];
+}) {
   const { t: tr } = useTranslation("common");
   const router = useRouter();
   return <DontHaveEnaughtPoints />;

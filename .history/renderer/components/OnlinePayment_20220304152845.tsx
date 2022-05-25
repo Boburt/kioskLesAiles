@@ -13,11 +13,7 @@ import getConfig from "next/config";
 import useCart from "@framework/cart/use-cart";
 import Hashids from "hashids";
 import { toast, ToastContainer } from "react-toastify";
-import {
-  useTranslation,
-  useLanguageQuery,
-  LanguageSwitcher,
-} from "next-export-i18n";
+import useTranslation from "next-translate/useTranslation";
 
 const { publicRuntimeConfig } = getConfig();
 let webAddress = publicRuntimeConfig.apiUrl;

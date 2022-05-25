@@ -8,11 +8,7 @@ import { useSelectedLanguage } from "next-export-i18n";
 import { useUI } from "@components/ui/context";
 import Layout from "@components/Layout";
 import Link from "next/link";
-import {
-  useTranslation,
-  useLanguageQuery,
-  LanguageSwitcher,
-} from "next-export-i18n";
+import useTranslation from "next-export-i18n";
 import postPrint from "@lib/pos-print";
 
 const OrderSuccess = () => {

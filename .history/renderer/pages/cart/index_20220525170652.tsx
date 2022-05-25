@@ -111,7 +111,7 @@ function Cart() {
     setChannelName(channelData.name);
   };
   const { activeCity, locationData, setUserData, user } = useUI();
-  const { t: tr } = useTranslation("common");
+  const { t: tr } = useTranslation();
   errors.name_field_is_required = tr("we_not_found_you");
   errors.opt_code_is_incorrect = tr("code_has_expired");
 

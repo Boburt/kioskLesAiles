@@ -72,7 +72,7 @@ module.exports = withOptimizedImages({
   handleImages: ["jpeg", "png", "svg", "webp", "gif"],
   removeOriginalExtension: false,
   optimizeImages: true,
-  optimizeImagesInDev: true,
+  optimizeImagesInDev: false,
   mozjpeg: {
     quality: 80,
   },

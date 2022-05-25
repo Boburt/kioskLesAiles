@@ -111,9 +111,9 @@ function Cart() {
     setChannelName(channelData.name);
   };
   const { activeCity, locationData, setUserData, user } = useUI();
-  const { t: tr } = useTranslation("common");
-  errors.name_field_is_required = tr("we_not_found_you");
-  errors.opt_code_is_incorrect = tr("code_has_expired");
+  const { t } = useTranslation("common");
+  errors.name_field_is_required = t("we_not_found_you");
+  errors.opt_code_is_incorrect = t("code_has_expired");
 
   let cartId: string | null = null;
   if (typeof window !== "undefined") {
@@ -213,7 +213,7 @@ function Cart() {
 
   const newUserFormCheck = () => {
     if (!authName) {
-      toast.error(tr("name_field_is_required"), {
+      toast.error(t("name_field_is_required"), {
         position: "bottom-center",
         autoClose: 2000,
         hideProgressBar: false,
@@ -661,7 +661,7 @@ function Cart() {
     return (
       <div className="bg-white flex py-20 text-xl text-primary font-bold px-10">
         <div>
-          {tr("isNotWorkTime")}{" "}
+          {t("isNotWorkTime")}{" "}
           {locale == "uz" ? configData.workTimeUz : configData.workTimeRu}
         </div>
       </div>
@@ -697,12 +697,12 @@ function Cart() {
       {isEmpty && (
         <div className="flex flex-col items-center mt-2 text-center text-gray-400 text-sm pb-4">
           {/* <img src="/cart_empty.png" width={130} height={119} /> */}
-          <div className="text-2xl">{tr("basket_empty")}</div>
+          <div className="text-2xl">{t("basket_empty")}</div>
           <button
             className="bg-primary text-white p-3 mt-4 rounded-xl"
             onClick={() => router.push(`/menu`)}
           >
-            {tr("back_to_menu")}
+            {t("back_to_menu")}
           </button>
         </div>
       )}
@@ -711,7 +711,7 @@ function Cart() {
           <div className="mt-12 px-32 relative">
             <div className="text-center">
               <div className="text-7xl font-serif font-bold">
-                {tr("approveCartBeforePay")}
+                {t("approveCartBeforePay")}
               </div>
             </div>
             {!isFirstSlide && (
@@ -884,7 +884,7 @@ function Cart() {
               router.push("/menu");
             }}
           >
-            <div className="text-4xl font-medium">{tr("change_order")}</div>
+            <div className="text-4xl font-medium">{t("change_order")}</div>
           </div>
           <div
             className="w-full bg-greenPrimary text-white text-2xl h-[120px] flex flex-col justify-around"
@@ -897,7 +897,7 @@ function Cart() {
                 setCashBackFirstStepOpen(true);
               }}
             >
-              <div className="text-[40px] font-medium">{tr("order_true")}</div>
+              <div className="text-[40px] font-medium">{t("order_true")}</div>
             </div>
           </div>
         </div>
@@ -952,33 +952,33 @@ function Cart() {
                   {cashbackStep == "agreement" && (
                     <>
                       <div className="text-6xl pt-16 pb-16 px-28">
-                        {tr("want_to_get_cashback")}
+                        {t("want_to_get_cashback")}
                       </div>
                       <div className="text-5xl font-bold px-32">
-                        {tr("to_get_cashback_you")}{" "}
+                        {t("to_get_cashback_you")}{" "}
                         <span className="text-greenPrimary">
-                          {tr("personal_phone")}
+                          {t("personal_phone")}
                         </span>{" "}
                         и{" "}
                         <span className="text-greenPrimary">
-                          {tr("personal_data")}
+                          {t("personal_data")}
                         </span>{" "}
                       </div>
                       <div className="mt-16 text-5xl font-bold px-28 pb-56">
-                        {tr("you_may_pay_all")}
+                        {t("you_may_pay_all")}
                       </div>
                       <div className="flex fixed w-full">
                         <button
                           className="text-4xl font-medium bg-gray-300 py-5 text-black outline-none w-full h-36 font-sans"
                           onClick={() => setCashBackFirstStepOpen(false)}
                         >
-                          {tr("no_thanks")}
+                          {t("no_thanks")}
                         </button>
                         <button
                           className="text-4xl font-medium bg-greenPrimary py-5 text-white outline-none w-full h-36 font-sans"
                           onClick={() => setCashbackStep("typing_phone")}
                         >
-                          {tr("yes_i_want")}
+                          {t("yes_i_want")}
                         </button>
                       </div>
                     </>
@@ -987,7 +987,7 @@ function Cart() {
                     <form onSubmit={handleSubmit(onSubmitPhone)}>
                       <div>
                         <div className="text-6xl pt-16 pb-16 px-28">
-                          {tr("enter_phone_number")}
+                          {t("enter_phone_number")}
                         </div>
                         <div className="text-5xl font-bold mx-44 px-16 py-7 border bg-white rounded-2xl">
                           <Controller
@@ -1056,7 +1056,7 @@ function Cart() {
                                 </svg>
                               </div>
                             ) : (
-                              tr("get_code")
+                              t("get_code")
                             )}
                           </button>
                         </div>
@@ -1067,7 +1067,7 @@ function Cart() {
                     <form onSubmit={handlePasswordSubmit(submitPasswordForm)}>
                       <div>
                         <div className="text-6xl pt-16 pb-16 px-28">
-                          {tr("enter_code")}
+                          {t("enter_code")}
                         </div>
                         <div>
                           <OtpInput
@@ -1088,7 +1088,7 @@ function Cart() {
                             className="text-xl text-white mt-10 outline-none focus:outline-none border-b pb-0.5"
                             onClick={(e) => getNewCode(e)}
                           >
-                            {tr("get_code_again")}
+                            {t("get_code_again")}
                           </button>
                         )}
                         <div className="bg-white text-black font-medium text-4xl font-sans mx-44 p-12 my-12 rounded-2xl">
@@ -1129,7 +1129,7 @@ function Cart() {
                                 </svg>
                               </div>
                             ) : (
-                              tr("confirm")
+                              t("confirm")
                             )}
                           </button>
                         </div>
@@ -1140,13 +1140,13 @@ function Cart() {
                     <>
                       <div>
                         <div className="text-6xl pt-16 pb-5 px-28">
-                          {tr("profile_hello")}, {user.user.name}!
+                          {t("profile_hello")}, {user.user.name}!
                         </div>
                         <div className="text-4xl mx-auto font-sans">
                           <DisplayPhone phone={user.user.phone} />
                         </div>
                         <div className="mt-16 bg-white rounded-3xl text-black mx-44 text-4xl font-sans py-7">
-                          {tr("you")}{" "}
+                          {t("you")}{" "}
                           {currency(userBalance, {
                             pattern: "# !",
                             separator: " ",
@@ -1154,10 +1154,10 @@ function Cart() {
                             symbol: ``,
                             precision: 0,
                           }).format()}{" "}
-                          {tr("profile_bounuses_score")}
+                          {t("profile_bounuses_score")}
                         </div>
                         <div className="mt-16 text-4xl mx-44 font-sans">
-                          {tr("earn_and_pay")}
+                          {t("earn_and_pay")}
                         </div>
                         <div className="mt-5 mx-44">
                           <img
@@ -1169,7 +1169,7 @@ function Cart() {
                         <div className="">
                           <Link href="/payment">
                             <a className="bg-greenPrimary flex font-medium font-sans h-36 items-center justify-around mt-32 outline-none relative text-4xl text-white w-full">
-                              {tr("proceed_to_checkout")}
+                              {t("proceed_to_checkout")}
                             </a>
                           </Link>
                         </div>
@@ -1180,7 +1180,7 @@ function Cart() {
                     <form onSubmit={handleNewUserSubmit(submitPasswordForm)}>
                       <div>
                         <div className="text-6xl pt-16 pb-16 px-28">
-                          {tr("set_user_data")}
+                          {t("set_user_data")}
                         </div>
                         <div>
                           <div className="pl-32 py-7 rounded-xl bg-white mx-14 text-black text-4xl text-left flex justify-between mt-5">
@@ -1201,7 +1201,7 @@ function Cart() {
                             className="pl-32 py-7 rounded-xl bg-white mx-14 text-black text-4xl text-left flex justify-between mt-5"
                           >
                             <div>
-                              {authName ? authName : tr("set_user_name")}
+                              {authName ? authName : t("set_user_name")}
                             </div>
                           </div>
                           <div
@@ -1243,7 +1243,7 @@ function Cart() {
                                 </svg>
                               </div>
                             ) : (
-                              tr("save")
+                              t("save")
                             )}
                           </button>
                         </div>
@@ -1254,7 +1254,7 @@ function Cart() {
                     <form onSubmit={handleNewUserSubmit(submitPasswordForm)}>
                       <div>
                         <div className="text-6xl pt-16 pb-16 px-28">
-                          {tr("set_user_name")}
+                          {t("set_user_name")}
                         </div>
                         <div>
                           <div className="pl-32 py-7 rounded-xl bg-white mx-14 text-black text-4xl text-left flex justify-between mt-5">
@@ -1265,7 +1265,7 @@ function Cart() {
                                 value: authName,
                               })}
                               readOnly={true}
-                              placeholder={tr("set_user_name")}
+                              placeholder={t("set_user_name")}
                             />
                           </div>
                           <div className="mt-5 mx-14">
@@ -1307,7 +1307,7 @@ function Cart() {
                                 </svg>
                               </div>
                             ) : (
-                              tr("save")
+                              t("save")
                             )}
                           </button>
                         </div>
@@ -1318,7 +1318,7 @@ function Cart() {
                     <form onSubmit={handleNewUserSubmit(submitPasswordForm)}>
                       <div>
                         <div className="text-6xl pt-16 pb-16 px-28">
-                          {tr("set_user_name")}
+                          {t("set_user_name")}
                         </div>
                         <div>
                           <div className="pl-32 py-7 rounded-xl bg-white mx-14 text-black text-4xl text-left flex justify-between mt-5">
@@ -1329,7 +1329,7 @@ function Cart() {
                                 value: authEmail,
                               })}
                               readOnly={true}
-                              placeholder={tr("set_user_email")}
+                              placeholder={t("set_user_email")}
                             />
                           </div>
                           <div className="mt-5 mx-14">
@@ -1371,7 +1371,7 @@ function Cart() {
                                 </svg>
                               </div>
                             ) : (
-                              tr("save")
+                              t("save")
                             )}
                           </button>
                         </div>

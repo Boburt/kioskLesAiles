@@ -3,7 +3,7 @@ import commerce from "@lib/api/commerce";
 import useCart from "@framework/cart/use-cart";
 import Image from "next/image";
 import { XIcon, MinusIcon, PlusIcon, TrashIcon } from "@heroicons/react/solid";
-import useTranslation from "next-translate/useTranslation";
+import useTranslation from "next-export-i18n";
 import getConfig from "next/config";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";

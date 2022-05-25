@@ -26,12 +26,12 @@ if (isProd) {
         `${process.env.API_URL}/api/get_langs?lang=${lang}`
       );
       const { result } = await res.json();
+      console.log("lang result", result);
       // async write result to file
       const file = path.join(__dirname, `../i18n/${lang}.json`);
       const data = JSON.stringify(result);
       writeFile(file, data, (err) => {
         if (err) {
-          console.log("Error writing file", err);
           throw err;
         }
       });

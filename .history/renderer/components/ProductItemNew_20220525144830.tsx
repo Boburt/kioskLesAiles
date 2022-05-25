@@ -346,7 +346,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
   return (
     <>
       <div
-        className={`py-3 overflow-hidden h-[312px] rounded-xl group items-center justify-between flex flex-col shadow-lg`}
+        className={`py-3 overflow-hidden h-[312px] bg-productBg rounded-xl group items-center justify-between flex flex-col shadow-lg`}
         id={`prod-${store.id}`}
       >
         <div className=" h-[170px] overflow-hidden w-full">
@@ -557,7 +557,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
                         </div>
                       )}
                       <div
-                        className="my-7 mx-10"
+                        className="mt-7 text-2x1 grid grid-cols-3 gap-4"
                         dangerouslySetInnerHTML={{
                           __html: store?.attribute_data?.description
                             ? store?.attribute_data?.description[channelName][
