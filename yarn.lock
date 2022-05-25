@@ -1134,9 +1134,15 @@
     "global-tunnel-ng" "^2.7.1"
 
 "@electron/remote@^2.0.5":
+<<<<<<< HEAD
   "integrity" "sha512-Ot8VsYCwAJ+9DgqRuYCiAobS8TVKvnXJMncR14/28ORso1iWFG0X6geyk3hc13N48Oc/WJnPYlYI3o7g5Ja2Qg=="
   "resolved" "https://registry.npmjs.org/@electron/remote/-/remote-2.0.5.tgz"
   "version" "2.0.5"
+=======
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@electron/remote/-/remote-2.0.8.tgz#85ff321f0490222993207106e2f720273bb1a5c3"
+  integrity sha512-P10v3+iFCIvEPeYzTWWGwwHmqWnjoh8RYnbtZAb3RlQefy4guagzIwcWtfftABIfm6JJTNQf4WPSKWZOpLmHXw==
+>>>>>>> 1d78c095a0efeb6b99b9560f573092b3c85de59e
 
 "@electron/universal@1.0.5":
   "integrity" "sha512-zX9O6+jr2NMyAdSkwEUlyltiI4/EBLu2Ls/VD3pUQdi3cAYeYfdQnT2AJJ38HE4QxLccbU13LSpccw1IWlkyag=="

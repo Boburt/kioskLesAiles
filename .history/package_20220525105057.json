@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "leskiosk",
+  "name": "LesKiosk",
   "description": "My application description",
   "version": "1.0.13",
   "author": "LesAilesKiosk",
@@ -110,7 +110,7 @@
     "use-reducer-async": "^2.0.2"
   },
   "devDependencies": {
-    "@electron/remote": "^2.0.5",
+    "@electron/remote": "^2.0.8",
     "@graphql-codegen/cli": "^1.21.5",
     "@graphql-codegen/schema-ast": "^1.18.3",
     "@graphql-codegen/typescript": "^1.22.2",
