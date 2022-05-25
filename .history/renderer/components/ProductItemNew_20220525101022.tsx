@@ -356,8 +356,6 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
               src={store.image}
               alt={store?.attribute_data?.name[channelName][locale || "ru"]}
               className="h-44 transform motion-safe:group-hover:scale-105 transition duration-500 mx-auto"
-              height={300}
-              width={400}
               onClick={() => {
                 setOpen(true);
               }}

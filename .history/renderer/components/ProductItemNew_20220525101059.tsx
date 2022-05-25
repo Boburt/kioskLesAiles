@@ -32,7 +32,6 @@ import { PlusIcon, XIcon } from "@heroicons/react/solid";
 import styles from "./ProductItemNew.module.css";
 import { ChevronDownIcon, MinusIcon } from "@heroicons/react/outline";
 import Hashids from "hashids";
-import { Im } from "react-flags-select";
 // import SessionContext from 'react-storefront/session/SessionContext'
 
 type ProductItem = {
@@ -352,12 +351,10 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       >
         <div className=" h-[170px] overflow-hidden w-full">
           {store.image ? (
-            <Image
+            <img
               src={store.image}
               alt={store?.attribute_data?.name[channelName][locale || "ru"]}
               className="h-44 transform motion-safe:group-hover:scale-105 transition duration-500 mx-auto"
-              height={300}
-              width={400}
               onClick={() => {
                 setOpen(true);
               }}
