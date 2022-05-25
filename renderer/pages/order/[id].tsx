@@ -10,11 +10,6 @@ import Layout from "@components/Layout";
 import Link from "next/link";
 import useTranslation from "next-translate/useTranslation";
 import postPrint from "@lib/pos-print";
-const remote = require("@electron/remote");
-// console.log(process.versions.electron);
-
-const { PosPrinter } = remote.require("electron-pos-printer");
-const path = require("path");
 
 const OrderSuccess = () => {
   const { orderData } = useUI();
@@ -25,7 +20,6 @@ const OrderSuccess = () => {
 
   const printOrder = () => {
     if (orderData) {
-      
       postPrint(orderData.order);
     }
   };
