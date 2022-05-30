@@ -337,19 +337,19 @@ function Cart() {
     let {
       data: { result },
     }: { data: { result: any } } = ress;
-    alert(
-      JSON.stringify({
-        phone: authPhone,
-        code: otpCode,
-        result,
-      })
-    );
     result = Buffer.from(result, "base64");
     result = result.toString();
     result = JSON.parse(result);
 
     if (result === false) {
       setIsSubmittingForm(false);
+      alert(
+        JSON.stringify({
+          phone: authPhone,
+          code: otpCode,
+          result,
+        })
+      );
       setSubmitError(errors.opt_code_is_incorrect);
     } else {
       clearInterval(otpTimerRef);
