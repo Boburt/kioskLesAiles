@@ -72,8 +72,8 @@ const WaitingPaymentComponent = () => {
   };
 
   useEffect(() => {
-    otpTime.current = 60;
-    setOtpShowCode(60);
+    otpTime.current = 180;
+    setOtpShowCode(180);
     startTimeout();
     checkOrderStatus();
   }, []);
