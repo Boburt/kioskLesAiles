@@ -42,7 +42,7 @@ const ChoosePaymentType = () => {
   });
 
   const setCredentials = async () => {
-    let csrf = localStorage.getItem("X-XSRF-TOKEN");
+    let csrf = Cookies.get("X-XSRF-TOKEN");
     if (!csrf) {
       const csrfReq = await axios(`${webAddress}/api/keldi`, {
         method: "GET",
