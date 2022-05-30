@@ -318,7 +318,7 @@ function Cart() {
   const submitPasswordForm: SubmitHandler<AnyObject> = async (data) => {
     setSubmitError("");
     setIsSubmittingForm(true);
-    const otpToken = Cookies.get("opt_token");
+    const otpToken = localStorage.getItem("opt_token");
     let ress = await axios.post(
       `${webAddress}/api/auth_otp`,
       {
