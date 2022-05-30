@@ -31,9 +31,9 @@ const Inactive: FC = () => {
       </Slider>
       <style global jsx>
         {`
-          .slick-slider {
-            overflow-x: hidden !important;
-          }
+        .slick-slider {
+          overflow-x: hidden;
+        }
         `}
       </style>
     </div>

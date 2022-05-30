@@ -121,9 +121,7 @@ const WaitingPaymentComponent = () => {
             {tr("scan_the_qr")}
           </div>
           <div className="m-auto w-max text-center">
-            <div className="text-4xl font-sans font-medium">
-              {tr("to_pay")}:
-            </div>
+            <div className="text-4xl font-sans font-medium">к оплате:</div>
             <div className="font-sans font-bold text-7xl">
               {currency(orderData.order.order_total / 100, {
                 pattern: "# !",
@@ -153,7 +151,7 @@ const WaitingPaymentComponent = () => {
           </div>
           <div className="bg-white flex justify-around mt-5 py-8 px-4 rounded-2xl text-black w-96 mx-auto">
             <div className="font-medium font-sans text-3xl flex-grow">
-              {tr("time_left")}:
+              Осталось времени:
             </div>
             <div className="flex-grow font-bold font-sans text-5xl w-20">
               {otpTimerText}
