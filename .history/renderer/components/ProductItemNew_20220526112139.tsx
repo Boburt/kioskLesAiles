@@ -8,7 +8,7 @@ import React, {
   useRef,
   useEffect,
 } from "react";
-import Img from "react-optimized-image";
+import Image from "next/image";
 import ProductOptionSelector from "./ProductOptionSelector";
 import currency from "currency.js";
 import { Dialog, Transition } from "@headlessui/react";
@@ -32,6 +32,7 @@ import { PlusIcon, XIcon } from "@heroicons/react/solid";
 import styles from "./ProductItemNew.module.css";
 import { ChevronDownIcon, MinusIcon } from "@heroicons/react/outline";
 import Hashids from "hashids";
+import Img from "react-optimized-image";
 
 type ProductItem = {
   product: Product;
@@ -342,7 +343,6 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       mobHeightImg = 250;
     }
   }
-
   return (
     <>
       <div
@@ -351,7 +351,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       >
         <div className=" h-[170px] overflow-hidden w-full">
           {store.image ? (
-            <img
+            <Img
               src={store.image}
               alt={store?.attribute_data?.name[channelName][locale || "ru"]}
               className="h-44 transform motion-safe:group-hover:scale-105 transition duration-500 mx-auto"

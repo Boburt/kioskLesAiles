@@ -13,7 +13,11 @@ const isShopify = provider === "shopify";
 const isSaleor = provider === "saleor";
 const isSwell = provider === "swell";
 const isVendure = provider === "vendure";
-module.exports = {
+const withOptimizedImages = require("next-optimized-images");
+const optimizedImages = require("next-optimized-images");
+const withPlugins = require('next-compose-plugins');
+module.exports = withPlugins([
+  {
   ...withCommerceConfig({
     commerce,
     publicRuntimeConfig: {
@@ -62,6 +66,13 @@ module.exports = {
       };
     }
     return config;
-  },
-};
+    },
+  [optimizedImages, {
+    images: {
+      // for example
+      handleImages: ['jpeg', 'png', 'svg', 'webp', 'gif', 'ico']
+    }
+  }]
+}
+])
 console.log("next.config.js", JSON.stringify(module.exports, null, 2));

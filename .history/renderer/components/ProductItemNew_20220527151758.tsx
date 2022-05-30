@@ -351,7 +351,7 @@ const ProductItemNew: FC<ProductItem> = ({ product, channelName }) => {
       >
         <div className=" h-[170px] overflow-hidden w-full">
           {store.image ? (
-            <img
+            <Img
               src={store.image}
               alt={store?.attribute_data?.name[channelName][locale || "ru"]}
               className="h-44 transform motion-safe:group-hover:scale-105 transition duration-500 mx-auto"

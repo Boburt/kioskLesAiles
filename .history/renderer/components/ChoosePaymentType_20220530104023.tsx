@@ -244,27 +244,6 @@ const ChoosePaymentType = () => {
     }
   };
 
-  const clearBasket = async () => {
-    if (cartId) {
-      const { data: basket } = await axios.get(
-        `${webAddress}/api/baskets/${cartId}/clear`
-      );
-      const basketResult = {
-        id: basket.data.id,
-        createdAt: "",
-        currency: { code: basket.data.currency },
-        taxesIncluded: basket.data.tax_total,
-        lineItems: basket.data.lines,
-        lineItemsSubtotalPrice: basket.data.sub_total,
-        subtotalPrice: basket.data.sub_total,
-        totalPrice: basket.data.total,
-      };
-
-      await mutate(basketResult, false);
-      router.push("/home");
-    }
-  };
-
   return (
     <div className="bg-primary h-full">
       <div className="text-white font-bold text-6xl m-auto pt-80 px-[304px] text-center font-serif pb-28">
@@ -360,11 +339,8 @@ const ChoosePaymentType = () => {
         />
         <div>{tr("payment_by_bonuses")}</div>
       </button> */}
-      <div
-        className="bg-black text-white fixed left-0 bottom-0 py-9 px-52 font-medium text-[40px] font-sans"
-        onClick={() => clearBasket()}
-      >
-        {tr("cancel_the_order")}
+      <div className="bg-black text-white fixed left-0 bottom-0 py-9 px-52 font-medium text-[40px] font-sans">
+        {tr("back")}
       </div>
     </div>
   );

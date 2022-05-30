@@ -261,7 +261,6 @@ const ChoosePaymentType = () => {
       };
 
       await mutate(basketResult, false);
-      router.push("/home");
     }
   };
 
@@ -362,9 +361,9 @@ const ChoosePaymentType = () => {
       </button> */}
       <div
         className="bg-black text-white fixed left-0 bottom-0 py-9 px-52 font-medium text-[40px] font-sans"
-        onClick={() => clearBasket()}
+        onClick={() => clearBasket}
       >
-        {tr("cancel_the_order")}
+        {tr("Отменить заказ")}
       </div>
     </div>
   );

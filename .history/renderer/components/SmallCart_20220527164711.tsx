@@ -867,7 +867,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
         )}
 
         {/* <div className="flex bottom-0 w-full"> */}
-        <div className="flex text-center  w-full justify-center items-center text-4xl">
+        <div className="flex text-center  w-full justify-center items-center text-3xl">
           <div
             className="text-white bg-black w-full h-full py-12"
             onClick={openCancelModal}

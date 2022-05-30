@@ -347,10 +347,9 @@ function Cart() {
     } else {
       clearInterval(otpTimerRef);
       setUserData(result);
-      // await checkUserBalance();
+      await checkUserBalance();
       setIsSubmittingForm(false);
-      router.push("/payment");
-      // setCashbackStep("success");
+      setCashbackStep("success");
       // setIsShowPasswordForm(false);
       // if (router.query && router.query.backUrl) {
       //   let backUrl: string = router.query.backUrl as string;

@@ -867,20 +867,22 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
         )}
 
         {/* <div className="flex bottom-0 w-full"> */}
-        <div className="flex text-center  w-full justify-center items-center text-4xl">
+        <div className="flex text-center  w-full h-full justify-center items-center">
           <div
-            className="text-white bg-black w-full h-full py-12"
+            className="text-2xl text-white bg-black w-full"
             onClick={openCancelModal}
           >
-            <div className="font-medium">{tr("profile_address_cancel")}</div>
+            <div className="text-[40px] font-medium">
+              {tr("profile_address_cancel")}
+            </div>
           </div>
           <div
-            className="bg-greenPrimary py-12 text-white w-full flex"
+            className=" bg-greenPrimary text-white w-full"
             onClick={() => checkRecommended()}
           >
             <div className="flex items-end mx-auto space-x-4">
-              <div className="font-medium">{tr("to_pay")}</div>{" "}
-              <div className="font-medium">
+              <div className="text-[40px] font-medium">{tr("to_pay")}</div>{" "}
+              <div className="text-[50px] font-medium">
                 {!isEmpty &&
                   data.totalPrice &&
                   currency(data.totalPrice, {

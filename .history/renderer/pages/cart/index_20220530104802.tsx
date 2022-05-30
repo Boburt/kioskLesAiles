@@ -347,7 +347,7 @@ function Cart() {
     } else {
       clearInterval(otpTimerRef);
       setUserData(result);
-      // await checkUserBalance();
+      await checkUserBalance();
       setIsSubmittingForm(false);
       router.push("/payment");
       // setCashbackStep("success");

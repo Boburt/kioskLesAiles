@@ -347,10 +347,9 @@ function Cart() {
     } else {
       clearInterval(otpTimerRef);
       setUserData(result);
-      // await checkUserBalance();
+      await checkUserBalance();
       setIsSubmittingForm(false);
-      router.push("/payment");
-      // setCashbackStep("success");
+      setCashbackStep("success");
       // setIsShowPasswordForm(false);
       // if (router.query && router.query.backUrl) {
       //   let backUrl: string = router.query.backUrl as string;
@@ -898,8 +897,7 @@ function Cart() {
             <div
               className="flex items-end mx-auto space-x-4"
               onClick={() => {
-                //agreement
-                setCashbackStep("typing_phone");
+                setCashbackStep("success");
                 setCashBackFirstStepOpen(true);
               }}
             >

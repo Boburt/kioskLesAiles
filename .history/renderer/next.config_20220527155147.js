@@ -13,6 +13,7 @@ const isShopify = provider === "shopify";
 const isSaleor = provider === "saleor";
 const isSwell = provider === "swell";
 const isVendure = provider === "vendure";
+const withOptimizedImages = require("next-optimized-images");
 module.exports = {
   ...withCommerceConfig({
     commerce,
