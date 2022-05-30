@@ -141,7 +141,6 @@ const WaitingPaymentComponent = () => {
                   size={285}
                 />
               </div>
-              <br />
               <div>{paymentLink}</div>
             </div>
             <div className="bg-white flex justify-around py-8 rounded-2xl">
