@@ -343,14 +343,13 @@ function Cart() {
 
     if (result === false) {
       setIsSubmittingForm(false);
-      alert("Неверный код");
       setSubmitError(errors.opt_code_is_incorrect);
     } else {
       clearInterval(otpTimerRef);
       setUserData(result);
       // await checkUserBalance();
       setIsSubmittingForm(false);
-      alert("Вы успешно авторизовались");
+      alert("dsadsa");
       router.push("/payment");
       // setCashbackStep("success");
       // setIsShowPasswordForm(false);
