@@ -33,7 +33,6 @@ const Inactive: FC = () => {
         {`
           .slick-slider {
             overflow-x: hidden !important;
-            height: 100vh;
           }
         `}
       </style>
