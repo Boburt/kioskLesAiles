@@ -257,7 +257,7 @@ function Cart() {
 
     const csrf = Buffer.from(res.result, "base64").toString("ascii");
 
-    Cookies.set("X-XSRF-TOKEN", csrf);
+    localStorage.setItem("X-XSRF-TOKEN", csrf);
     axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
     axios.defaults.headers.common["X-CSRF-TOKEN"] = csrf;
     axios.defaults.headers.common["XCSRF-TOKEN"] = csrf;
@@ -289,7 +289,7 @@ function Cart() {
       success = Buffer.from(success, "base64");
       success = success.toString();
       success = JSON.parse(success);
-      Cookies.set("opt_token", success.user_token);
+      localStorage.setItem("opt_token", success.user_token);
       localStorage.setItem("opt_token", success.user_token);
       otpTime.current = result?.time_to_answer;
       setOtpShowCode(otpTime.current);
@@ -360,7 +360,7 @@ function Cart() {
   };
 
   const checkUserBalance = async () => {
-    const userToken = Cookies.get("opt_token");
+    const userToken = localStorage.getItem("opt_token");
     const res = await axios.get(`${webAddress}/api/cashback/balance`, {
       headers: {
         "Content-Type": "application/json",
@@ -403,7 +403,7 @@ function Cart() {
   };
 
   const setCredentials = async () => {
-    let csrf = Cookies.get("X-XSRF-TOKEN");
+    let csrf = localStorage.getItem("X-XSRF-TOKEN");
     if (!csrf) {
       const csrfReq = await axios(`${webAddress}/api/keldi`, {
         method: "GET",
@@ -523,7 +523,7 @@ function Cart() {
     await setCredentials();
 
     let basketId = localStorage.getItem("basketId");
-    const otpToken = Cookies.get("opt_token");
+    const otpToken = localStorage.getItem("opt_token");
 
     let basketResult = {};
 
