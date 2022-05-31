@@ -83,7 +83,8 @@ const WaitingPaymentComponent = () => {
 
   const getPaymentLink = async () => {
     const otpToken = localStorage.getItem("opt_token");
-    const { data: order } = await axios.get(
+
+    const { data } = await axios.get(
       `${webAddress}/api/orders?id=${orderData.order.id}`,
       {
         headers: {
@@ -91,10 +92,11 @@ const WaitingPaymentComponent = () => {
         },
       }
     );
-
-    if (order.transaction.payment_link != null) {
-      setPaymentLink(order.transaction.payment_link);
-    }
+    data.then((res: any) => {
+      if (res.data.status === 200) {
+        setPaymentLink(data.order.transaction.payment_link);
+      }
+    });
   };
 
   useEffect(() => {
@@ -103,7 +105,7 @@ const WaitingPaymentComponent = () => {
     startTimeout();
     checkOrderStatus();
     getPaymentLink();
-  }, []);
+  }, [paymentLink]);
 
   const otpTimerText = useMemo(() => {
     let text = "";

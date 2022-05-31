@@ -92,7 +92,7 @@ const WaitingPaymentComponent = () => {
       }
     );
 
-    if (order.transaction.payment_link != null) {
+    if (order.transaction.payment_link) {
       setPaymentLink(order.transaction.payment_link);
     }
   };
@@ -149,6 +149,8 @@ const WaitingPaymentComponent = () => {
                   size={285}
                 />
               </div>
+              <br />
+              <div>{paymentLink}</div>
             </div>
             <div className="bg-white flex justify-around py-8 rounded-2xl">
               <img

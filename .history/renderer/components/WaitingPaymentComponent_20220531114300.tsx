@@ -91,10 +91,11 @@ const WaitingPaymentComponent = () => {
         },
       }
     );
-
-    if (order.transaction.payment_link != null) {
-      setPaymentLink(order.transaction.payment_link);
-    }
+    order.then((res: any) => {
+      if (res.data.status === 200) {
+        setPaymentLink(order.transaction.payment_link);
+      }
+    });
   };
 
   useEffect(() => {
@@ -103,7 +104,7 @@ const WaitingPaymentComponent = () => {
     startTimeout();
     checkOrderStatus();
     getPaymentLink();
-  }, []);
+  }, [paymentLink]);
 
   const otpTimerText = useMemo(() => {
     let text = "";
