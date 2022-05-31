@@ -723,7 +723,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                           <div className="h-11 w-11 flex relative">
                             <div className="w-5 relative overflow-hidden">
                               <div>
-                                <Image
+                                <img
                                   src={
                                     lineItem?.variant?.product?.assets?.length
                                       ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`
@@ -731,14 +731,13 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                   }
                                   width="40"
                                   height="40"
-                                  layout="fixed"
                                   className="absolute rounded-full"
                                 />
                               </div>
                             </div>
                             <div className="w-5 relative overflow-hidden">
                               <div className="absolute right-0">
-                                <Image
+                                <img
                                   src={
                                     lineItem?.child[0].variant?.product?.assets
                                       ?.length
@@ -747,7 +746,6 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                   }
                                   width="40"
                                   height="40"
-                                  layout="fixed"
                                   className="rounded-full"
                                 />
                               </div>
@@ -763,7 +761,7 @@ const SmallCart: FC<SmallCartProps> = ({ channelName }) => {
                                     onClick={() => destroyLine(lineItem.id)}
                                   />
                                 </div>
-                                <Image
+                                <img
                                   src={
                                     lineItem?.variant?.product?.assets?.length
                                       ? `${webAddress}/storage/${lineItem?.variant?.product?.assets[0]?.location}/${lineItem?.variant?.product?.assets[0]?.filename}`

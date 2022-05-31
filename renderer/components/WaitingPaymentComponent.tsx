@@ -103,7 +103,7 @@ const WaitingPaymentComponent = () => {
     startTimeout();
     checkOrderStatus();
     getPaymentLink();
-  }, []);
+  }, [paymentLink]);
 
   const otpTimerText = useMemo(() => {
     let text = "";
