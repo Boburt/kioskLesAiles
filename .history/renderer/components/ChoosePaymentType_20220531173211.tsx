@@ -117,6 +117,7 @@ const ChoosePaymentType = () => {
           withCredentials: true,
         }
       );
+      alert(JSON.stringify(data));
       setIsLoadingCard(false);
       // setUserData(data.user)
       localStorage.removeItem("basketId");
