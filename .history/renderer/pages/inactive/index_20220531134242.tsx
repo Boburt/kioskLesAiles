@@ -13,7 +13,6 @@ const Inactive: FC = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    adaptiveHeight: true,
   };
   const router = useRouter();
   const activeWork = () => {
@@ -35,6 +34,7 @@ const Inactive: FC = () => {
           .slick-list,
           .slick-slider {
             overflow-x: hidden !important;
+            height: 1920px !important;
           }
         `}
       </style>
