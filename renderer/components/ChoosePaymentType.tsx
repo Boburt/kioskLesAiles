@@ -104,11 +104,12 @@ const ChoosePaymentType = () => {
             sms_sub: false,
             email_sub: false,
             sourceType,
-            terminal_id: preferences.lists.terminal_id,
+            // terminal_id: preferences.lists.terminal_id,
           },
           basket_id: cartId,
         })
       );
+      return;
       const { data } = await axios.post(
         `${webAddress}/api/orders`,
         {
