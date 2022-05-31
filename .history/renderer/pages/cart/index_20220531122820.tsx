@@ -1022,6 +1022,7 @@ function Cart() {
                         <div className="bg-white text-black font-medium text-4xl font-sans mx-44 p-12 my-12 rounded-2xl">
                           <NumPad
                             onChange={(value: string) => {
+                              console.log(value);
                               setValue("phone", "+998" + value);
                               // setPhoneFieldValue(value);
                             }}

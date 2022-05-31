@@ -14,6 +14,7 @@ const NumPad: FC<Props> = ({ onChange, maxLength = 30 }) => {
     } else if (value === "=") {
       onChange(currentText);
     } else if (value == "slice") {
+      console.log(currentText.length);
       setCurrentText(currentText.slice(0, -1));
       onChange(currentText.slice(0, -1));
     } else {
