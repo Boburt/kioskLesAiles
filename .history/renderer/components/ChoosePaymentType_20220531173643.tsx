@@ -73,42 +73,6 @@ const ChoosePaymentType = () => {
     let sourceType = "kiosk";
 
     try {
-      alert(
-        JSON.stringify({
-          formData: {
-            address: "",
-            flat: "",
-            house: "",
-            entrance: "",
-            door_code: "",
-            deliveryType: "pickup",
-            location: [],
-            label: "",
-            name: user?.user?.name,
-            phone: user?.user?.phone,
-            email: "",
-            comment_to_address: "",
-            comment_to_order: "",
-            change: "",
-            notes: "",
-            card_number: "",
-            card_month: "",
-            holder_name: "",
-            cvv_code: "",
-            delivery_day: "",
-            delivery_time: "",
-            delivery_schedule: "now",
-            addressId: null,
-            additional_phone: "",
-            pay_type: "offline",
-            sms_sub: false,
-            email_sub: false,
-            sourceType,
-            terminal_id: preferences.lists.terminal_id,
-          },
-          basket_id: cartId,
-        })
-      );
       const { data } = await axios.post(
         `${webAddress}/api/orders`,
         {
@@ -153,6 +117,7 @@ const ChoosePaymentType = () => {
           withCredentials: true,
         }
       );
+      alert(JSON.stringify(data));
       setIsLoadingCard(false);
       // setUserData(data.user)
       localStorage.removeItem("basketId");
@@ -173,15 +138,15 @@ const ChoosePaymentType = () => {
       //   position: toast.POSITION.BOTTOM_RIGHT,
       //   hideProgressBar: true,
       // });
-      // toast(e.response.data.error.message, {
-      //   position: "bottom-center",
-      //   autoClose: 5000,
-      //   hideProgressBar: false,
-      //   closeOnClick: false,
-      //   pauseOnHover: true,
-      //   draggable: false,
-      //   progress: undefined,
-      // });
+      toast(e.response.data.error.message, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+      });
       setIsLoadingCard(false);
     }
   };
