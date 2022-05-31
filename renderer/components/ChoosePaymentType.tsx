@@ -132,6 +132,8 @@ const ChoosePaymentType = () => {
       setOrderData(data);
       router.push(`/order/${hashids.decode(data.order.id)}`);
     } catch (e) {
+      
+      alert(JSON.stringify(e));
       // toast.error(e.response.data.error.message, {
       //   position: toast.POSITION.BOTTOM_RIGHT,
       //   hideProgressBar: true,
