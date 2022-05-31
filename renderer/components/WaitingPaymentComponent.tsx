@@ -55,7 +55,7 @@ const WaitingPaymentComponent = () => {
       //   clearInterval(orderStatusTimerRef);
       //   router.push("/");
       // }
-      const otpToken = Cookies.get("opt_token");
+      const otpToken = localStorage.getItem("opt_token");
       const { data: order } = await axios.get(
         `${webAddress}/api/orders?id=${orderData.order.id}`,
         {
@@ -82,7 +82,7 @@ const WaitingPaymentComponent = () => {
   };
 
   const getPaymentLink = async () => {
-    const otpToken = Cookies.get("opt_token");
+    const otpToken = localStorage.getItem("opt_token");
     const { data: order } = await axios.get(
       `${webAddress}/api/orders?id=${orderData.order.id}`,
       {
@@ -149,8 +149,6 @@ const WaitingPaymentComponent = () => {
                   size={285}
                 />
               </div>
-              <br />
-              <div>{paymentLink}</div>
             </div>
             <div className="bg-white flex justify-around py-8 rounded-2xl">
               <img
