@@ -15,12 +15,6 @@ import {
 } from "next-export-i18n";
 import postPrint from "@lib/pos-print";
 
-declare global {
-  interface Window {
-    davr: any; // 👈 turn off type checking
-  }
-}
-
 const OrderSuccess = () => {
   const { orderData } = useUI();
   const { lang: locale } = useSelectedLanguage();
@@ -36,7 +30,6 @@ const OrderSuccess = () => {
 
   useEffect(() => {
     printOrder();
-    window.davr = printOrder;
   }, []);
 
   return (
