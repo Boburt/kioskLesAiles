@@ -316,6 +316,16 @@ const postPrint = (order: any) => {
         "text-align": "center",
       },
     },
+    {
+      type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
+      value: "***************************<br/>",
+
+      css: {
+        "font-size": "30px",
+        "font-family": "sans-serif",
+        "text-align": "center",
+      },
+    },
   ];
 
   let webContents = remote.getCurrentWebContents();
