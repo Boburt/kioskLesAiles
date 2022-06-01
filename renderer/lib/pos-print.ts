@@ -98,7 +98,7 @@ const postPrint = (order: any) => {
       value: `Заказ №`,
 
       css: {
-        "font-size": "13px",
+        "font-size": "30px",
         "font-family": "sans-serif",
         "text-align": "center",
       },
@@ -108,7 +108,7 @@ const postPrint = (order: any) => {
       value: `${orderId}`,
 
       css: {
-        "font-size": "100px",
+        "font-size": "80px",
         "font-family": "sans-serif",
         "text-align": "center",
       },
@@ -307,8 +307,14 @@ const postPrint = (order: any) => {
     //   },
     // },
     {
-      type: "text",
-      value: "<br /> <br /> <br /> <br /> <br /> <br />",
+      type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
+      value: `Спасибо за покупку`,
+
+      css: {
+        "font-size": "30px",
+        "font-family": "sans-serif",
+        "text-align": "center",
+      },
     },
   ];
 
