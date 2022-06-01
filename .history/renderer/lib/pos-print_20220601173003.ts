@@ -55,24 +55,24 @@ const postPrint = (order: any) => {
 
   const preferences = ipcRenderer.sendSync("getPreferences");
   const data = [
-    {
-      type: "image",
-      path: path.join(__dirname, "assets/main_logo.svg"), // file path
-      position: "center", // position of image: 'left' | 'center' | 'right'
-      width: "auto", // width of image in px; default: auto
-      height: "60px", // width of image in px; default: 50 or '50px'
-    },
     // {
-    //   type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-    //   value:
-    //     "@lesailesbestbot orqali buyurtma bering<br>va 5% lik cashbackni qo'lga kiriting.",
-
-    //   css: {
-    //     "font-size": "13px",
-    //     "font-family": "sans-serif",
-    //     "text-align": "center",
-    //   },
+    //   type: "image",
+    //   path: path.join(__dirname, "assets/main_logo.svg"), // file path
+    //   position: "center", // position of image: 'left' | 'center' | 'right'
+    //   width: "auto", // width of image in px; default: auto
+    //   height: "60px", // width of image in px; default: 50 or '50px'
     // },
+    {
+      type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
+      value:
+        "@lesailesbestbot orqali buyurtma bering<br>va 5% lik cashbackni qo'lga kiriting.",
+
+      css: {
+        "font-size": "13px",
+        "font-family": "sans-serif",
+        "text-align": "center",
+      },
+    },
     {
       type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
       value: "***************************<br/>",
@@ -83,19 +83,9 @@ const postPrint = (order: any) => {
         "text-align": "center",
       },
     },
-    // {
-    //   type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-    //   value: "Накладная",
-
-    //   css: {
-    //     "font-size": "13px",
-    //     "font-family": "sans-serif",
-    //     "text-align": "center",
-    //   },
-    // },
     {
       type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-      value: `Заказ №`,
+      value: "Накладная",
 
       css: {
         "font-size": "13px",
@@ -105,10 +95,10 @@ const postPrint = (order: any) => {
     },
     {
       type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-      value: `${orderId}`,
+      value: `Заказ № ${orderId}`,
 
       css: {
-        "font-size": "100px",
+        "font-size": "13px",
         "font-family": "sans-serif",
         "text-align": "center",
       },

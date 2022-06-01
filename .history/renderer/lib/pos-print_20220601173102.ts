@@ -83,19 +83,9 @@ const postPrint = (order: any) => {
         "text-align": "center",
       },
     },
-    // {
-    //   type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-    //   value: "Накладная",
-
-    //   css: {
-    //     "font-size": "13px",
-    //     "font-family": "sans-serif",
-    //     "text-align": "center",
-    //   },
-    // },
     {
       type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-      value: `Заказ №`,
+      value: "Накладная",
 
       css: {
         "font-size": "13px",
@@ -105,10 +95,10 @@ const postPrint = (order: any) => {
     },
     {
       type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-      value: `${orderId}`,
+      value: `Заказ № ${orderId}`,
 
       css: {
-        "font-size": "100px",
+        "font-size": "13px",
         "font-family": "sans-serif",
         "text-align": "center",
       },
