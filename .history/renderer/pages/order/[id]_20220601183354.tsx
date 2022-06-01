@@ -16,8 +16,6 @@ import {
 import postPrint from "@lib/pos-print";
 import axios from "axios";
 import getConfig from "next/config";
-import Cookies from "js-cookie";
-import Hashids from "hashids";
 
 const { publicRuntimeConfig } = getConfig();
 let webAddress = publicRuntimeConfig.apiUrl;
@@ -44,25 +42,18 @@ const OrderSuccess = () => {
 
   const loadOrder = async () => {
     setTimeout(async () => {
-      const hashids = new Hashids(
-        "order",
-        15,
-        "abcdefghijklmnopqrstuvwxyz1234567890"
-      );
       const otpToken = localStorage.getItem("opt_token");
       const { data: orderData } = await axios.get(
-        `${webAddress}/api/orders?id=${hashids.encode(id!.toString())}`,
+        `${webAddress}/api/orders?id=${id}`,
         {
           headers: {
             Authorization: `Bearer ${otpToken}`,
           },
         }
       );
-      setOrder(orderData);
+      setOrder(orderData.order);
       setIsLoading(false);
       printOrder();
-      localStorage.removeItem("opt_token");
-      Cookies.remove("opt_token");
     }, 5500);
   };
 
@@ -104,7 +95,7 @@ const OrderSuccess = () => {
             {tr("your_order")}
           </div>
           <div className="text-greenPrimary font-bold text-[200px] m-auto pt-7 text-center font-serif">
-            № {order.tablo_order_id}
+            № {id}
           </div>
           <div className="text-white font-bold text-6xl m-auto pt-14 text-center font-serif px-72">
             {tr("go_to_the_pickup")}

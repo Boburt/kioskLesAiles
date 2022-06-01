@@ -104,7 +104,7 @@ const OrderSuccess = () => {
             {tr("your_order")}
           </div>
           <div className="text-greenPrimary font-bold text-[200px] m-auto pt-7 text-center font-serif">
-            № {order.tablo_order_id}
+            № {id}
           </div>
           <div className="text-white font-bold text-6xl m-auto pt-14 text-center font-serif px-72">
             {tr("go_to_the_pickup")}

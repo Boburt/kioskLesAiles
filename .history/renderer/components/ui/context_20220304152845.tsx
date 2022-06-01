@@ -281,8 +281,8 @@ function uiReducer(state: State, action: Action) {
       } catch (e) {}
       if (action.value == null) {
         localStorage.removeItem("mijoz");
-        // localStorage.removeItem("opt_token");
-        // Cookies.remove("opt_token");
+        localStorage.removeItem("opt_token");
+        Cookies.remove("opt_token");
       }
       return {
         ...state,
