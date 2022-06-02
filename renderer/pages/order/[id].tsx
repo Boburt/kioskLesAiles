@@ -18,6 +18,7 @@ import axios from "axios";
 import getConfig from "next/config";
 import Cookies from "js-cookie";
 import Hashids from "hashids";
+import { ipcRenderer } from "electron";
 
 const { publicRuntimeConfig } = getConfig();
 let webAddress = publicRuntimeConfig.apiUrl;
@@ -36,13 +37,15 @@ const OrderSuccess = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [order, setOrder] = useState<any>();
 
-  const printOrder = () => {
-    if (order) {
-      postPrint(order);
-    }
+  const printOrder = (orderData: any) => {
+    console.log('print')
+    console.log(orderData)
+      postPrint(orderData);
   };
 
   const loadOrder = async () => {
+    const preferences = ipcRenderer.sendSync("getPreferences");
+    console.log(preferences);
     setTimeout(async () => {
       const hashids = new Hashids(
         "order",
@@ -60,10 +63,10 @@ const OrderSuccess = () => {
       );
       setOrder(orderData);
       setIsLoading(false);
-      printOrder();
+      printOrder(orderData);
       localStorage.removeItem("opt_token");
       Cookies.remove("opt_token");
-    }, 5500);
+    }, preferences.lists.order_time);
   };
 
   useEffect(() => {

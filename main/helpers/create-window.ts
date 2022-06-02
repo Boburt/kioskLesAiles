@@ -67,6 +67,15 @@ export default (
                    */
                   help: "Укажите процент кешбека",
                 },
+                {
+                  label: "Время обработки заказа",
+                  key: "order_time",
+                  type: "text",
+                  /**
+                   * Optional text to be displayed beneath the field.
+                   */
+                  help: "Время обработки заказа в миллисекундах",
+                },
               ],
             },
           ],

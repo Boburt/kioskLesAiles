@@ -16,8 +16,9 @@ const postPrint = (order: any) => {
     "abcdefghijklmnopqrstuvwxyz1234567890"
   );
 
-  let orderId = order.tablo_id;
-  let userPhone = order.contact_details.phone;
+  let orderId = order.tablo_order_id;
+  console.log("orderID", order);
+  let userPhone = order.contact_phone;
   let userPhoneNumber = awesomePhonenumber(userPhone, "UZ");
   let userPhoneNumberFormatted = userPhoneNumber.getNumber("international");
   userPhone = userPhoneNumberFormatted;
@@ -28,18 +29,19 @@ const postPrint = (order: any) => {
     .toFormat("HH:mm dd.MM.yyyy");
 
   let basketTable: any[] = [];
+  console.log("basketTable",basketTable);
 
-  order.lines.data.map((item: any) => {
+  order.basket.lines.map((item: any) => {
     basketTable.push([
       {
         type: "text",
-        value: item.description,
+        value: item.variant.product.attribute_data.name.chopar.ru,
         css: { "text-align": "left" },
       },
       { type: "text", value: item.quantity, css: { "text-align": "right" } },
       {
         type: "text",
-        value: currency(item.line_total / 100, {
+        value: currency(item.total, {
           pattern: "# !",
           separator: " ",
           decimal: ".",
@@ -53,7 +55,6 @@ const postPrint = (order: any) => {
 
   const { PosPrinter } = remote.require("electron-15-pos-printer");
 
-  const preferences = ipcRenderer.sendSync("getPreferences");
   const data = [
     {
       type: "image",
@@ -119,7 +120,7 @@ const postPrint = (order: any) => {
     },
     {
       type: "text",
-      value: `${order.user.data.name}`,
+      value: `${order.user.name}`,
       css: {
         "font-size": "13px",
         "font-family": "sans-serif",
@@ -333,7 +334,7 @@ const postPrint = (order: any) => {
 
   const options = {
     preview: false, // Preview in window or print
-    margin: "0 0 100px 0", // margin of content body
+    margin: "0 0 0 0", // margin of content body
     copies: 1, // Number of copies to print
     width: "320px",
     printerName: "CUSTOM VKP80 II", // printerName: string, check it at webContent.getPrinters()
@@ -342,9 +343,11 @@ const postPrint = (order: any) => {
   };
   // setTimeout(() => {
   PosPrinter.print(data, options)
-    .then(() => {})
+    .then(() => {
+      // console.log(data)
+    })
     .catch((error: any) => {
-      console.error(error);
+      // console.error(error);
     });
 };
 

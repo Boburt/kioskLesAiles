@@ -80,17 +80,19 @@ const WaitingPaymentComponent = () => {
   };
 
   const getPaymentLink = async () => {
-    const otpToken = localStorage.getItem("opt_token");
-    const { data: order } = await axios.get(
-      `${webAddress}/api/orders?id=${orderData.order.id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${otpToken}`,
-        },
-      }
-    );
+    setTimeout(async () => {
+      const otpToken = localStorage.getItem("opt_token");
+      const { data: order } = await axios.get(
+        `${webAddress}/api/orders?id=${orderData.order.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${otpToken}`,
+          },
+        }
+      );
+      setPaymentLink(order.transaction.payment_link);
+    }, 3000)
 
-    setPaymentLink(order.transaction.payment_link);
   };
 
   useEffect(() => {
